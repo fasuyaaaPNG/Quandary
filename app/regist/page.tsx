@@ -7,7 +7,7 @@ export default function Regist() {
       <div className="content">
         <div className="info">
           <p className="register">
-            Create your ass
+            Create your account
           </p>
         </div>
         <form action="">
