@@ -35,7 +35,7 @@
 
 input:focus {
     outline: none;
-    border: 0.4vw solid #e68c3a;
+    border: 0.4vw solid #223F61;
 }
 
 .email, .password, .repassword {
@@ -48,18 +48,25 @@ input:focus {
     width: 85vw;
     height: 12vw;
     box-shadow: 0 1vw 2vw rgba(0, 0, 0, 0.1);
+    background-color: #F5F5F5;
 }
 
 .submit {
-    border: 1px solid #e68c3a;
+    border: 1px solid #223F61;
     color: white;
-    background-color: #e68c3a;
+    background-color: #223F61;
     border-radius: 9vw;
     padding: 0;
     height: 12vw;
     font-size: 3.5vw;
     padding-top: 3vw;
     margin-bottom: 3vw;
+}
+
+.submit:hover {
+    border: 1px solid #4B77A9;
+    color: white;
+    background-color: #4B77A9;
 }
 
 .enter {
@@ -70,9 +77,13 @@ input:focus {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #93B6EE;
+    background-color: #7EA3F0;
     border-radius: 9vw;
     height: 12vw;
+}
+
+.google:hover {
+    background-color: #93B6EE;
 }
   
 .iconback {
