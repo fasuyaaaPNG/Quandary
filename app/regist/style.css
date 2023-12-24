@@ -33,13 +33,17 @@
     margin-bottom: 4vw;
 }
 
+input:focus {
+    border: 1px solid #e68c3a;
+}
+
 .email, .password, .repassword {
     border: 1px solid rgb(255, 255, 255);
     padding-left: 3vw;
     border-radius: 3vw;
     color: rgba(0, 0, 0, 0.5);
     margin-bottom: 4vw;
-    font-size: 4.2vw;
+    font-size: 3.5vw;
     width: 85vw;
     height: 12vw;
     box-shadow: 0 1vw 2vw rgba(0, 0, 0, 0.1);
