@@ -35,7 +35,7 @@ export default function Regist() {
       </div>
       <div className="already">
         <p>
-          Already have an account? <a href="" className="signin">Sign in</a>
+          Already have an account? <a href="/login" className="signin">Sign in</a>
         </p>
       </div>
     </div>
