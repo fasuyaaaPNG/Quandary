@@ -37,7 +37,7 @@ body {
     margin-bottom: 4vw;
 }
 
-input:focus {
+:focus-within .input {
     border: 0.4vw solid #e68c3a;
 }
 
