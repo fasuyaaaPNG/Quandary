@@ -34,7 +34,7 @@
 }
 
 input:focus {
-    border: 0.2vw solid #e68c3a;
+    border: 0.4vw solid #e68c3a;
 }
 
 .email, .password, .repassword {
