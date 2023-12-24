@@ -1,0 +1,116 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 2vw;
+    margin-left: auto; 
+    margin-right: auto; 
+    width: 90vw; 
+    height: 98vh;
+    padding-left: 3vw;
+    padding-right: 3vw;
+}
+
+.content {
+    text-align: center;
+    position: relative;
+    bottom: 38vw;
+}
+
+.logoAtas {
+    position: relative;
+    bottom: 16vw;
+}
+
+.info {
+    text-align: left;
+    font-family: 'Poppins', sans-serif;
+    font-size: 3.5vw;
+    font-weight: 500;
+    margin-bottom: 4vw;
+}
+
+.input {
+    margin-bottom: 4vw;
+}
+
+input:focus {
+    border: 0.2vw solid #e68c3a;
+}
+
+.email, .password, .repassword {
+    border: 1px solid rgb(255, 255, 255);
+    padding-left: 3vw;
+    border-radius: 3vw;
+    color: rgba(0, 0, 0, 0.5);
+    margin-bottom: 4vw;
+    font-size: 3.5vw;
+    width: 85vw;
+    height: 12vw;
+    box-shadow: 0 1vw 2vw rgba(0, 0, 0, 0.1);
+}
+
+.submit {
+    border: 1px solid #e68c3a;
+    color: white;
+    background-color: #e68c3a;
+    border-radius: 9vw;
+    padding: 0;
+    height: 12vw;
+    font-size: 3.5vw;
+    padding-top: 3vw;
+    margin-bottom: 3vw;
+}
+
+.enter {
+    width: 70vw;
+}
+
+.google {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #93B6EE;
+    border-radius: 9vw;
+    height: 12vw;
+}
+  
+.iconback {
+    background-color: rgb(255, 255, 255);
+    border-radius: 50%; 
+    padding: 1vw;
+    position: absolute;
+    left: 5vw;
+    bottom: 2.5vw;
+}
+  
+.withgoogle {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    
+}
+ 
+.with {
+    color: #fff;
+    padding-top: 3.5vw;
+    cursor: pointer;
+    width: 70vw;
+    font-size: 3.5vw;
+}
+
+.icon {
+    width: 5vw;
+}
+
+.notyet {
+    font-size: 3.5vw;
+    text-align: center;
+    position: relative;
+    bottom: 10vw;
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.signin {
+    color: #223F61;
+}
+
