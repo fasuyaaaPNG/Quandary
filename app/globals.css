@@ -7,7 +7,14 @@
   --background-start-rgb: 243, 242, 238;
   --background-end-rgb: 243, 242, 238;
 }
-
+@media (prefers-color-scheme: dark) {
+  
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 243, 242, 238;
+  --background-end-rgb: 243, 242, 238;
+}
+  
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
@@ -18,3 +25,4 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+}
