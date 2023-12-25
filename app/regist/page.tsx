@@ -8,7 +8,7 @@ const Regist = () => {
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [formError, setFormError] = useState('')
+  const [formError, setFormError] = useState<string | null>(null);
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,14 +55,11 @@ const Regist = () => {
       }
     }
   
-    if (data) {
-      setFormError('Account created');
-      const errorContainer = document.getElementById('error');
-      if (errorContainer) {
-        errorContainer.classList.add('error-show');
-      }
-    }
+    else {
+      window.open('https://quandary-net.vercel.app/login', '_self');
+      console.log(data)
   };
+}
   
   const [logo, setlogo] = useState('/assets/LoginRegister/QUANDARY.png');
   const [google, setgoogle] = useState('/assets/LoginRegister/google.png');
