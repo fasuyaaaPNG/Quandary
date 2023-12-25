@@ -10,7 +10,7 @@ const Regist = () => {
   const [password, setPassword] = useState('')
   const [formError, setFormError] = useState('')
   
-  const handleSubmit = async (e: { preventDefault: () => void; }) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
   
     if (!username || !email || !password) {
