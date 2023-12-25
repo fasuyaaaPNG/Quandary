@@ -146,7 +146,7 @@ input:focus {
 .error-show {
     position: absolute;
     bottom: -15vw;
-    left: 25vw;
+    left: 26vw;
     font-size: 4vw;
     text-align: center;
     margin-left: 0;
@@ -157,6 +157,7 @@ input:focus {
         position: absolute;
         width: 5vw;
         right: 42vw;
+        align-content: center;
     }
 }
 
