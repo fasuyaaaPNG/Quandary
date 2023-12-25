@@ -1,3 +1,5 @@
+import "./style.css"
+
 const Redirect = () => {
     return (
         <h1>test</h1>
