@@ -118,6 +118,7 @@ const Regist = () => {
             </button>
           </div>
           <div id="error">
+            <img className="alert" src="/assets/LoginRegister/alert.png" alt="" />
             {formError && <p>{formError}</p>}
           </div>
         </form>

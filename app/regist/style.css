@@ -146,11 +146,22 @@ input:focus {
 .error-show {
     position: absolute;
     bottom: -15vw;
-    left: 20.5vw;
+    left: 25vw;
     font-size: 4vw;
     text-align: center;
     margin-left: 0;
     animation: fadeIn 1s;
+    .alert {
+        display: block;
+        animation: fadeIn 1s;
+        position: absolute;
+        width: 5vw;
+        right: 42vw;
+    }
+}
+
+.alert {
+    display: none;
 }
 
 @keyframes fadeIn {
@@ -177,6 +188,7 @@ input:focus {
     0% { opacity: 0; }
     100% { opacity: 1; }
 }
+
 
 @media screen and (min-width: 1024px) and (max-width: 1920px) {
     .container {
@@ -415,4 +427,7 @@ input:focus {
         100% { opacity: 1; }
     }
 
+    .alert {
+        display: none;
+    }
 }
