@@ -14,61 +14,53 @@ const Regist = () => {
     e.preventDefault();
   
     if (!username || !email || !password) {
-      setFormError('Please fill all fields');
-
+      setFormError('All fields are required');
       const errorContainer = document.getElementById('error');
       if (errorContainer) {
         errorContainer.classList.add('error-show');
       }
       return;
     }
-  
-    // Cek apakah email sudah ada dalam database
+
     const { data: existingUser, error: existingUserError } = await supabase
       .from('Users')
       .select('email')
-      .eq('email', email)
-      .single();
+      .eq('email', email);
   
     if (existingUserError) {
-      console.error('Error checking existing user:', existingUserError.message);
-      setFormError('');
+      console.error(existingUserError);
+      setFormError('Error checking existing email');
       return;
     }
   
-    if (existingUser) {
+    if (existingUser && existingUser.length > 0) {
       setFormError('Email already exists');
-  
-      // Add a class to the error container for styling
       const errorContainer = document.getElementById('error');
       if (errorContainer) {
         errorContainer.classList.add('error-show');
       }
-  
       return;
     }
-  
-    // Jika email belum ada, lakukan penyisipan data
+
     const { data, error } = await supabase
       .from('Users')
       .insert([{ username, email, password }]);
   
     if (error) {
-      console.error('Error inserting user:', error.message);
-      setFormError('Please fill in all the fields correctly');
-  
-      // Add a class to the error container for styling
-      const errorContainer = document.querySelector('error');
+      console.error(error);
+      setFormError('Error creating user');
+      const errorContainer = document.getElementById('error');
       if (errorContainer) {
         errorContainer.classList.add('error-show');
       }
-  
-      return;
     }
   
     if (data) {
-      console.log('User inserted successfully:', data);
       setFormError('Account created');
+      const errorContainer = document.getElementById('error');
+      if (errorContainer) {
+        errorContainer.classList.add('error-show');
+      }
     }
   };
   
@@ -132,10 +124,10 @@ const Regist = () => {
             {formError && <p>{formError}</p>}
           </div>
         </form>
-        <div className="google" tabIndex={-1}>
-          <a href="" className="withgoogle" tabIndex={-1}>
-            <div className="iconback" tabIndex={-1}>
-              <img src={google} alt="" tabIndex={-1} className="icon"/>
+        <div className="google">
+          <a href="" className="withgoogle">
+            <div className="iconback">
+              <img src={google} alt="" className="icon"/>
             </div>
             <button className="with">
               Sign up with Google
