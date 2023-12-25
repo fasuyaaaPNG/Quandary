@@ -223,6 +223,7 @@ input:focus {
         outline: none;
         border: 0.2vw solid #4197E1;
         font-size: 1.3vw;
+        transition: all 0.2s ease-in-out;
     }
 
     .password, .email {
@@ -262,6 +263,7 @@ input:focus {
         color: white;
         background-color: #7DC2FF;
         cursor: pointer;
+        transition: all 0.2s ease-in-out;
     }
     
     .enter {
@@ -287,6 +289,7 @@ input:focus {
     .google:hover {
         background-color: #93B6EE;
         cursor: pointer;
+        transition: all 0.2s ease-in-out;
     }
       
     .iconback {
@@ -302,7 +305,6 @@ input:focus {
         display: flex;
         align-items: center;
         text-decoration: none;
-        
     }
      
     .with {

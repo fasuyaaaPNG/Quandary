@@ -1,44 +1,83 @@
-import "./style.css";
+'use client';
 
-export default function login () {
-    return (
-        <>
-            <div className="container">
-      <img src="/assets/LoginRegister/QUANDARY.png" alt="" className="logoAtas" />
+import "./style.css";
+import { useState, useEffect } from 'react';
+
+export default function Regist() {
+
+  const [logo, setlogo] = useState('/assets/LoginRegister/QUANDARY.png');
+  const [google, setgoogle] = useState('/assets/LoginRegister/google.png');
+      
+  useEffect(() => {
+    const handleResize = () => {
+      const screenWidth = window.innerWidth;
+
+     
+      if (screenWidth >= 1024 && screenWidth <= 1920) {
+        setlogo('/assets/LoginRegister/QUANDARY_dark.png');
+        setgoogle('/assets/LoginRegister/google_dark.svg');
+      } else {
+        setlogo('/assets/LoginRegister/QUANDARY.png');
+        setgoogle('/assets/LoginRegister/google.png');
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  return (
+    <div className="container">
+      <img src={logo}  alt="" className="logoAtas" />
+      <img src="/assets/LoginRegister/background.jpg" className="background" alt="" />
       <div className="content">
+        <div className="start">
+          <p>
+            WELCOME BACK
+          </p>
+        </div>
         <div className="info">
           <p className="register">
             Login to your account
           </p>
         </div>
+        <div className="already2">
+        <p>
+          New user? <a href="/regist" className="signin">Sign up</a>
+        </p>
+      </div>
         <form action="">
           <div className="input">
+            <input type="text" placeholder="Username" className="username" />
             <input type="email" placeholder="Email" className="email" />
             <input type="password" placeholder="Password" className="password" />
           </div>
           <div className="submit">
             <button className="enter">
-              Sign in
+              Login
             </button>
           </div>
         </form>
         <div className="google">
           <a href="" className="withgoogle">
             <div className="iconback">
-              <img src="/assets/LoginRegister/google.png" alt="" className="icon"/>
+              <img src={google} alt="" className="icon"/>
             </div>
             <button className="with">
-              Continue with Google
+              Login with Google
             </button>
           </a>
         </div>
       </div>
-      <div className="notyet">
+      <div className="already">
         <p>
-            don't have an account yet? <a href="/regist" className="signin">Sign up</a>
+          Don't have an account yet? <a href="/regist" className="signin">Sign up</a>
         </p>
       </div>
     </div>
-        </>
-    )
+  )
 }
