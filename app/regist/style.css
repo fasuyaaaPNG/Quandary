@@ -143,6 +143,41 @@ input:focus {
     color: #223F61;
 }
 
+.error-show {
+    position: absolute;
+    bottom: -15vw;
+    left: 20.5vw;
+    font-size: 4vw;
+    text-align: center;
+    margin-left: 0;
+    animation: fadeIn 1s;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@-moz-keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@-webkit-keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@-o-keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@-ms-keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
 @media screen and (min-width: 1024px) and (max-width: 1920px) {
     .container {
         display: flex;
