@@ -68,7 +68,7 @@ const Regist = () => {
   
     if (data) {
       console.log('User inserted successfully:', data);
-      setFormError('');
+      setFormError('Account created');
     }
   };
   
