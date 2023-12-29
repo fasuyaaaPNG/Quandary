@@ -13,7 +13,7 @@ const Redirect = () => {
 
      
       if (screenWidth >= 1024 && screenWidth <= 1920) {
-        setbackground('/assets/Redirect/background_landscape.png');
+        setbackground('/assets/Redirect/background_landscape.jpg');
       } else {
         setbackground('/assets/Redirect/background_redirect.jpg');
       }
