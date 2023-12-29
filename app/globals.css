@@ -30,8 +30,8 @@ body {
 @media screen and (min-width: 1024px) {
   :root {
     --foreground-rgb: 0, 0, 0;
-    --background-start-rgb: 39,43,55;
-    --background-end-rgb: 39,43,55;
+    --background-start-rgb: 23,23,23;
+    --background-end-rgb: 23,23,23;
   }
     
   body {
