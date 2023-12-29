@@ -7,6 +7,30 @@ body {
     overflow: hidden;
 }
 
+@keyframes animasi {
+    0% {
+        opacity: 0;
+        top: 25vw;
+    }
+    10% {
+        opacity: 0.7;
+    }
+    30% {
+        opacity: 1;
+        top: 25vw;
+        width: 19vw;
+    }
+}
+
+@keyframes animasiText {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
 .background {
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -37,6 +61,8 @@ body {
     width: 20vw;
     left: 32.5vw;
     top: 57vw;
+    animation-name: animasi;
+    animation-duration: 3s;
 }
 
 .text {
@@ -44,6 +70,10 @@ body {
     position: relative;
     top: 65vw;
     color: white;
+    animation: animasiText 1s ease 2s forwards;
+    animation-duration: 1s;
+    animation-delay: 2s;
+    opacity: 0;
 }
 
 .textAtas {
@@ -58,6 +88,30 @@ body {
 
 @media screen and (min-width: 1024px) and (max-width: 1920px) {
     
+    @keyframes animasi {
+        0% {
+            opacity: 0;
+            top: 25vw;
+        }
+        10% {
+            opacity: 0.7;
+        }
+        30% {
+            opacity: 1;
+            top: 25vw;
+            width: 19vw;
+        }
+    }
+    
+    @keyframes animasiText {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+
     .container {
         display: flex;
         flex-direction: column;
@@ -77,13 +131,19 @@ body {
         left: 50%;
         top: 20vw;
         transform: translate(-50%, -50%);
+        animation-name: animasi;
+        animation-duration: 3s;
     }
 
     .text {
-        text-align: enter;
+        text-align: center;
         position: relative;
         top: 24vw;
         color: #1C1E21;
+        animation: animasiText 1s ease 2s forwards;
+        animation-duration: 1s;
+        animation-delay: 2s;
+        opacity: 0;
     }
     
     .textAtas {
