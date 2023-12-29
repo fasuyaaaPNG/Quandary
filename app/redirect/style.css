@@ -7,3 +7,39 @@ body {
     margin: 0;
     overflow: hidden;
 }
+
+.container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 2vw;
+    margin-left: auto; 
+    margin-right: auto; 
+    width: 90vw; 
+    height: 98vh;
+    padding-left: 3vw;
+    padding-right: 3vw;
+}
+
+.logo {
+    position: relative;
+    width: 20vw;
+    left: 32.5vw;
+    top: 57vw;
+}
+
+.text {
+    text-align: center;
+    position: relative;
+    top: 65vw;
+    color: white;
+}
+
+.textAtas {
+    font-size: 5vw;
+    margin-bottom: 1.5vw;
+    font-weight: 600;
+}
+
+.textBawah {
+    font-size: 3.5vw;
+}
