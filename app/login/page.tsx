@@ -32,7 +32,7 @@ export default function Regist() {
 
   return (
     <div className="container">
-      <img src={logo}  alt="" className="background" />
+      <img src={logo}  alt="" className="logoAtas" />
       <img src="/assets/LoginRegister/background.jpg" className="background" alt="" />
       <div className="content">
         <div className="start">

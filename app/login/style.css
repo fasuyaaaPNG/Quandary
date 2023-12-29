@@ -1,3 +1,13 @@
+@keyframes animasi {
+    0% {
+        opacity: 0;
+        
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
 .container {
     display: flex;
     flex-direction: column;
@@ -8,6 +18,8 @@
     height: 98vh;
     padding-left: 3vw;
     padding-right: 3vw;
+    animation-name: animasi;
+    animation-duration: 1s;
 }
 
 .content {
@@ -144,6 +156,16 @@ input:focus {
 }
 
 @media screen and (min-width: 1024px) and (max-width: 1920px) {
+    @keyframes animasi {
+        0% {
+            opacity: 0;
+            
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+    
     .container {
         display: flex;
         flex-direction: column;
@@ -153,6 +175,8 @@ input:focus {
         height: 95vh;
         padding-left: 3vw;
         padding-right: 3vw;
+        animation-name: animasi;
+        animation-duration: 1s;
     }
     
     .content {
@@ -168,7 +192,6 @@ input:focus {
         position: absolute;
         left: 45vw;
         bottom: 0.3vw;
-
     }
 
     .logoAtas {
