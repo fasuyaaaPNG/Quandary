@@ -86,6 +86,23 @@ body {
     font-size: 3.5vw;
 }
 
+@media screen and (width: 960px) {
+    .logo {
+        position: relative;
+        left: 28vw;
+    }
+
+    .textAtas {
+        font-size: 4.5vw;
+        margin-bottom: 1.5vw;
+        font-weight: 500;
+    }
+    
+    .textBawah {
+        font-size: 3vw;
+    }
+}
+
 @media screen and (min-width: 1024px) and (max-width: 1920px) {
     
     @keyframes animasi {
