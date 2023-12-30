@@ -155,6 +155,21 @@ input:focus {
     color: #223F61;
 }
 
+@media screen and (width: 960px) {
+    .username, .email, .password {
+        border: 1px solid rgb(255, 255, 255);
+        padding-left: 3vw;
+        border-radius: 3vw;
+        color: rgba(0, 0, 0, 0.5);
+        margin-bottom: 4vw;
+        font-size: 3.5vw;
+        width: 73vw;
+        height: 12vw;
+        box-shadow: 0 1vw 2vw rgba(0, 0, 0, 0.1);
+        background-color: #F5F5F5;
+    }
+}
+
 @media screen and (min-width: 1024px) and (max-width: 1920px) {
     @keyframes animasi {
         0% {
