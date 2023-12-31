@@ -2,12 +2,28 @@
 
 import "./style.css";
 import { useState, useEffect } from 'react';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { useRouter } from 'next/navigation'
+// @ts-ignore 
+import type { Database } from '@/lib/database.types';
 
-export default function Regist() {
+export default function Login() {
 
   const [logo, setlogo] = useState('/assets/LoginRegister/QUANDARY.png');
   const [google, setgoogle] = useState('/assets/LoginRegister/google.png');
-      
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const router = useRouter()
+  const supabase = createClientComponentClient<Database>()    
+
+  const handleSignIn = async () => {
+    await supabase.auth.signInWithPassword({
+      email,
+      password,
+    })
+    router.refresh()
+  }
+
   useEffect(() => {
     const handleResize = () => {
       const screenWidth = window.innerWidth;
@@ -52,7 +68,6 @@ export default function Regist() {
       </div>
         <form action="">
           <div className="input">
-            <input type="text" placeholder="Username" className="username" />
             <input type="email" placeholder="Email" className="email" />
             <input type="password" placeholder="Password" className="password" />
           </div>
