@@ -1,0 +1,46 @@
+.background {
+    background-color: #111111;
+    color: #FFFFFF;
+    height: 100vh;
+}
+
+img {
+    width: 70vw;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 8%;
+}
+
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.text {
+    font-family: 'Poppins', sans-serif;
+}
+
+.textAtas {
+    font-weight: 500;
+    font-size: 6vw;
+    margin-bottom: 0.5vw;
+}
+
+.textBawah {
+    font-family: 400;
+    font-size: 4.5vw;
+}
+
+.error {
+    font-family: 'Concert One', sans-serif;
+    rotate: -28deg;
+    font-size: 6vw;
+    position: absolute;
+    left: 18vw;
+    bottom: 43vw;
+
+}
