@@ -1,0 +1,113 @@
+.container {
+    border: 1px solid red;
+    display: flex;
+    flex-direction: column;
+    margin-top: 2vw;
+    margin-left: auto; 
+    margin-right: auto; 
+    width: 90vw; 
+    height: 98vh;
+    padding-left: 3vw;
+    padding-right: 3vw;
+    position: relative;
+    z-index: 1;
+}
+
+.searchProfil {
+    position: fixed;
+    height: 25vw;
+}
+
+.search {
+    background-color: #F6F6F6;
+    box-shadow: 0vw 0.1vw 1vw 0vw rgba(0, 0, 0, 0.25);
+    margin-top: 7vw;
+    width: 65vw;
+    border-radius: 3vw;
+    position: relative; 
+}
+
+.searchIcon {
+    position: absolute; 
+    left: 4vw; 
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.searchBar {
+    width: 65vw;
+    height: 10vw;
+    border-radius: 3vw;
+    padding-left: 11vw;
+    font-size: 3vw;
+}
+
+.profil {
+    border-radius: 13vw;
+}
+
+.profilImage {
+    float: right;
+    width: 12vw;
+    position: relative;
+    bottom: 11vw;
+    left: 17vw;
+}
+
+.wellcomeBanner {
+    position: fixed;
+    top: 41vw;
+    left: 15%;
+    transform: translate(-9%, -50%);
+}
+
+.banner {
+    width: 100vw;
+}
+
+.tranding {
+    position: fixed;
+    display: flex;
+    justify-content: flex-start; 
+    font-size: 3vw;
+    top: 59vw;
+    left: 9vw;
+}
+
+.tranding1, .tranding2, .tranding3 {
+    margin-right: 2vw;
+}
+
+.tranding1 {
+    background-color: #7FA1F8;
+    height: 7vw;
+    padding-top: 1.5vw;
+    padding-bottom: 5vw;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    color: #FFFFFF;
+    border-radius: 2vw;
+}
+
+.tranding2, .tranding3 {
+    background-color: #BCCFFF;
+    height: 7vw;
+    padding-top: 1.5vw;
+    padding-bottom: 5vw;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    color: #5484FFCC;
+    border-radius: 2vw;
+}
+
+.navbar {
+    display: block;
+    border: 1px solid #141421;
+    background-color: #141421;
+    width: 100vw;
+    height: 20vw;
+    position: fixed;
+    bottom: 15vw;
+    z-index: 2;
+    transform: translate(0%, 75%);
+}
