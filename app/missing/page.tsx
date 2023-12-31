@@ -16,7 +16,7 @@ export default function Missing() {
                           loop={false}
                           cursor
                           cursorStyle=''
-                          typeSpeed={160}
+                          typeSpeed={170}
                           deleteSpeed={150}
                           delaySpeed={1150}
                         />
