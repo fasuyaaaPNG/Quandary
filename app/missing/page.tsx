@@ -9,7 +9,7 @@ export default function Missing() {
         <>
             <div className="background">
               <div className="container">
-                  <img src="/assets/error/asset.jpg" draggable="false" className="logo" alt="" />
+                  <img src="/assets/error/asset.png" draggable="false" className="logo" alt="" />
                   <div className="text">
                       <p className="textAtas">
                         Oopss!

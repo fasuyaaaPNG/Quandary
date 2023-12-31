@@ -56,7 +56,7 @@ const Regist = () => {
     }
   
     else {
-      window.open('https://quandary-net.vercel.app/login', '_self');
+      window.open('https://quandary-net.vercel.app/auth/login', '_self');
       console.log(data)
   };
 }
@@ -103,7 +103,7 @@ const Regist = () => {
         </div>
         <div className="already2">
         <p>
-          Already have an account? <a href="/login" className="signin">Login</a>
+          Already have an account? <a href="/auth/login" className="signin">Login</a>
         </p>
       </div>
         <form onSubmit={handleSubmit}>
@@ -135,7 +135,7 @@ const Regist = () => {
       </div>
       <div className="already">
         <p>
-          Already have an account? <a href="/login" className="signin">Login</a>
+          Already have an account? <a href="/auth/login" className="signin">Login</a>
         </p>
       </div>
     </div>
