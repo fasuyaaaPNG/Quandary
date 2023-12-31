@@ -16,9 +16,9 @@ export default function Missing() {
                           loop={false}
                           cursor
                           cursorStyle=''
-                          typeSpeed={170}
-                          deleteSpeed={150}
-                          delaySpeed={1150}
+                          typeSpeed={180}
+                          deleteSpeed={140}
+                          delaySpeed={1120}
                         />
                     </p>
                   <div className="text">
