@@ -9,7 +9,7 @@ img {
     position: relative;
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 8%;
+    margin-bottom: 8vw;
 }
 
 .container {
@@ -35,12 +35,25 @@ img {
     font-size: 4.5vw;
 }
 
-.error {
-    font-family: 'Concert One', sans-serif;
-    rotate: -28deg;
-    font-size: 6vw;
-    position: absolute;
-    left: 18vw;
-    bottom: 43vw;
+@media screen and (min-width: 1024px) and (max-width: 1920px) {
+    .container {
+        height: 50vw;
+    }
 
+    img {
+        padding-top: 7.5vw;
+        width: 30vw;
+        margin-bottom: 2vw;
+    }
+
+    .textAtas {
+        font-weight: 500;
+        font-size: 4vw;
+        margin-bottom: 0.5vw;
+    }
+    
+    .textBawah {
+        font-family: 400;
+        font-size: 2.5vw;
+    }
 }

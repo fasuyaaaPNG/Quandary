@@ -10,31 +10,21 @@ export default function Missing() {
             <div className="background">
               <div className="container">
                   <img src="/assets/error/asset.jpg" className="logo" alt="" />
-                    <p className="error">
-                      <Typewriter
-                          words={['403', '404']}
-                          loop={false}
-                          cursor
-                          cursorStyle=''
-                          typeSpeed={180}
-                          deleteSpeed={140}
-                          delaySpeed={1120}
-                        />
-                    </p>
                   <div className="text">
                       <p className="textAtas">
                         Oopss!
                       </p>
                       <p className="textBawah">
-                        Looks like this page is <Typewriter
-                        words={['forbidden', 'missing']}
+                        Looks like this page is 
+                        <Typewriter
+                        words={[' missing', ' not found', ' 404']}
                         loop={false}
                         cursor
                         cursorStyle='_'
                         typeSpeed={60}
                         deleteSpeed={70}
-                        delaySpeed={1100}
-                      />
+                        delaySpeed={1500}
+                        />
                       </p>
                   </div>
               </div>
