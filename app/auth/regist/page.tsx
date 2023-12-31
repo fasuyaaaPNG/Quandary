@@ -2,7 +2,7 @@
 
 import "./style.css";
 import { useState, useEffect } from 'react';
-import supabase from "../server/supabaseClient";
+import supabase from "../../server/supabaseClient";
 
 const Regist = () => {
   const [username, setUsername] = useState('')
