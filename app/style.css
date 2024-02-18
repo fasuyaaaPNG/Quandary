@@ -157,7 +157,7 @@
     margin: auto;
     font-family: 'Poppins', sans-serif;
     position: relative;
-    bottom: 220vw;
+    bottom: 230vw;
 }
 
 .content2Judul {
@@ -206,7 +206,8 @@
 }
 
 .ilustContent2 {
-    width: 90vw;
+    width: 120vw;
     position: relative;
     bottom: 40vw;
+    left: 0vw;
 }
