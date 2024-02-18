@@ -1,3 +1,7 @@
+body {
+    overflow-x: hidden;
+}
+
 .backHitam {
     background-color: #171717;
     color: #EFEFEF;
@@ -28,12 +32,12 @@
     margin-right: auto;
     font-weight: 500;
     font-size: 4vw;
-    position: fixed;
+    position: sticky;
     width: 100vw;
     background-color: #171717;
     padding-bottom: 5vw;
-    top: 0vw;
-    z-index: 7;
+    top: -1vw;
+    z-index: 2;
 }
 
 .navHome, .navAbout {
@@ -41,12 +45,12 @@
 }
 
 .navLogin {
-    border: 0 0.5vw solid #F3F3F3 solid #EFEFEF;
+    border: 0.5vw solid #F3F3F3;
     padding-left: 5vw;
     padding-top: 1.5vw;
     padding-right: 5vw;
     padding-bottom: 1.5vw;
-    border-radius: 0.5vw solid #F3F3F3;
+    border-radius: 1vw;
 }
 
 .content1 {
@@ -157,7 +161,7 @@
     margin: auto;
     font-family: 'Poppins', sans-serif;
     position: relative;
-    bottom: 230vw;
+    bottom: 250vw;
 }
 
 .content2Judul {
@@ -171,13 +175,15 @@
 
 .garisKiri {
     position: relative;
-    bottom: 7.4vw;
+    bottom: 7.8vw;
+    width: 35vw;
 }
 
 .garisKanan {
     position: relative;
-    bottom: 32vw;
-    left: 67.5vw;
+    bottom: 46vw;
+    left: 64.5vw;
+    width: 35vw;
 }
 
 .decorLingkaran {
@@ -194,20 +200,27 @@
 
 .content2DeskJudul {
     margin-bottom: 4vw;
+    font-size: 3.5vw;
 }
 
 .content2DeskParaf1 {
     margin-bottom: 4vw;
     text-align: justify;
+    font-size: 3.5vw;
 }
 
 .content2DeskParaf2 {
     text-align: justify;
+    font-size: 3.5vw;
 }
 
 .ilustContent2 {
     width: 120vw;
     position: relative;
-    bottom: 40vw;
+    bottom: 57vw;
     left: 0vw;
+}
+
+.content2Desk {
+    width: 86vw;
 }
