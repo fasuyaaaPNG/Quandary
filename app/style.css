@@ -224,3 +224,143 @@ body {
 .content2Desk {
     width: 86vw;
 }
+
+.content3 {
+    position: relative;
+    bottom: 145vw;
+}
+
+.createPost {
+    border: 1vw solid #A183C8;
+    background-color: #A183C8;
+    width: 80vw;
+    height: 55vw;
+    border-radius: 8vw;
+    margin: auto;
+}
+
+.createPostText {
+    position: relative;
+    left: 5vw;
+    top: 7vw;
+    width: 37vw;
+}
+
+.createPostIcon {
+    width: 40vw;
+    position: relative;
+    left: 41vw;
+    bottom: 19vw;
+}
+
+.createPostTextDesk {
+    font-size: 3.5vw;
+    width: 60vw;
+    margin: auto;
+    position: relative;
+    bottom: 15vw;
+}
+
+.content4 {
+    position: relative;
+    bottom: 135vw;
+    overflow-x: hidden;
+    height: 120vw;
+    overflow-y: hidden  ;
+}
+
+.content4LingkaranBiru {
+    border: 1.5vw solid #F3F3F3;
+    background-color: #7FA1F8;
+    height: 55vw;
+    border-radius: 100%;
+    width: 55vw;
+    position: relative;
+    left: 50vw;
+    top: 28vw;
+}
+
+.content4LingkaranHitam {
+    border: 1.5vw solid #F3F3F3;
+    background-color: #171717;
+    height: 60vw;
+    border-radius: 100%;
+    width: 60vw;
+    position: relative;
+    left: 9vw;
+    top: 5vw;
+}
+
+.content4LingkaranBiruMuda {
+    border: 1.5vw solid #F3F3F3;
+    background-color: #BDC9E9;
+    height: 75vw;
+    border-radius: 100%;
+    width: 75vw;
+    position: relative;
+    right: 8vw;
+    bottom: 115vw;
+}
+
+.content4LingkaranBiruMudaIsi {
+    position: relative;
+    text-align: center;
+    margin: auto;
+    font-size: 9vw;
+    width: 50vw;
+    color: #000000;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    line-height: 8vw;
+    top: 29vw;
+}
+
+.content4LingkaranHitamIsi {
+    position: relative;
+    text-align: center;
+    margin: auto;
+    font-size: 7vw;
+    width: 50vw;
+    color: #F3F3F3;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    line-height: 7vw;
+    top: 26vw;
+}
+
+.content4LingkaranBiruIsi {
+    position: relative;
+    text-align: center;
+    margin: auto;
+    font-size: 9vw;
+    width: 50vw;
+    color: #F3F3F3;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    line-height: 8vw;
+    top: 29vw;
+}
+
+.content4LingkaranBiruIsi {
+    display: flex;
+    flex-direction: column;
+    width: max-content;
+    position: relative;
+    top: 20vw;
+    left: 2vw;
+    font-size: 9vw;
+}
+
+.content4LingkaranBiruIsiAtasIcon {
+    display: flex;
+    justify-content: space-between;
+    width: 25vw; 
+    left: 1.5vw;
+    position: relative;
+}
+
+.content4LingkaranBiruIsiIcon {
+    width: max-content;
+    position: relative;
+    text-align: center;
+}

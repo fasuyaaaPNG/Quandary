@@ -1,4 +1,5 @@
 import "./style.css"
+import { VscStarFull } from "react-icons/vsc";
 
 export default function Home() {
   return (
@@ -80,6 +81,52 @@ export default function Home() {
                   <p>
                     Quandary aims to be the go-to platform for anyone seeking to explore, understand, and engage in conversations about Indonesia. 
                   </p>
+                </div>
+              </div>
+            </div>
+            <div className="content3">
+              <div className="createPost">
+                <img src="/assets/Landing/createPost.svg" alt="" className="createPostText" />
+                <img src="/assets/Landing/createPostIcon.svg" alt="" className="createPostIcon" />
+                <p className="createPostTextDesk">
+                  Utilize our website's forum feature to create engaging posts and foster discussions within the community
+                </p>
+              </div>
+            </div>
+            <div className="content4">
+              <div className="content4LingkaranBiru">
+                <div className="content4LingkaranBiruIsi">
+                  <div className="content4LingkaranBiruIsiAtasIcon">
+                    <div className="content4LingkaranBiruIsiAtas">
+                      4.4
+                    </div>
+                    <div className="content4LingkaranBiruIsiIcon">
+                      <VscStarFull/>
+                    </div>
+                  </div>
+                  <div className="content4LingkaranBiruIsiBawah">
+                    rating
+                  </div>
+                </div>
+              </div>
+              <div className="content4LingkaranHitam">
+                <div className="content4LingkaranHitamIsi">
+                  <div className="content4LingkaranHitamIsiAtas">
+                    7 million+
+                  </div>
+                  <div className="content4LingkaranHitamIsiBawah">
+                    post
+                  </div>
+                </div>
+              </div>
+              <div className="content4LingkaranBiruMuda">
+                <div className="content4LingkaranBiruMudaIsi">
+                  <div className="content4LingkaranBiruMudaIsiAtas">
+                    200.000+
+                  </div>
+                  <div className="content4LingkaranBiruMudaIsiBawah">
+                    user
+                  </div>
                 </div>
               </div>
             </div>
