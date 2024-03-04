@@ -139,10 +139,73 @@ export default function Home() {
                     <img src="/assets/Landing/content5Cursor.svg" alt="" className="content5Cursor" />
                   </div>
                 </div>
-                <a href="/auth/regist" className="content5SignUp">
-                  Create Account
-                </a>
+                <div className="content5BorderSignUp">
+                  <a href="/auth/regist" className="content5SignUp">
+                    Create Account
+                  </a>
+                </div>
               </fieldset>
+            </div>
+            <div className="content6">
+              <h1 className="content6Judul">
+                give us advice
+              </h1>
+              <div className="decorLingkaran22">
+                <img src="/assets/Landing/lingkaran1.svg" alt="" className="decorLingkaran1" />
+                <img src="/assets/Landing/lingkaran2.svg" alt="" className="decorLingkaran2" />
+                <img src="/assets/Landing/lingkaran3.svg" alt="" className="decorLingkaran3" />
+              </div>
+              <div className="content6Form">
+                <form action="" className="content6Form">
+                  <fieldset className="Content6FormField Content6FormFieldName">
+                    <legend className="Content6FormLegendName">
+                      Name
+                    </legend>
+                    <input className="Content6FormLegendNameInput" type="text" />
+                  </fieldset>
+                  <fieldset className="Content6FormField Content6FormFieldEmail">
+                    <legend className="Content6FormLegendEmail">
+                      Email
+                    </legend>
+                    <input className="Content6FormLegendEmailInput" type="email" />
+                  </fieldset>
+                  <fieldset className="Content6FormField Content6FormFieldMessage">
+                    <legend className="Content6FormLegendMessage">
+                      Message
+                    </legend>
+                    <textarea name="" id="" cols={30} rows={10} className="Content6FormLegendMessageInput">
+                    </textarea>
+                  </fieldset>
+                  <button className="content6FormSubmit">
+                    Submit
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div className="footer">
+            <div className="isiFooter">
+              <img src="/assets/Landing/footerLogo.svg" alt="" className="logoFooter" />
+              <img src="/assets/Landing/footerPipe.svg" alt="" className="footerPipe" />
+            </div>
+            <div className="isiFooter2">
+              <div className="navFooter">
+                <a href="/" className="Home">
+                  Home
+                </a>
+                <a href="#About" className="About">
+                  About
+                </a>
+                <a href="/auth/login" className="SignIn">
+                  Sign In
+                </a>
+                <a href="/auth/regist" className="SignUp">
+                  Sign Up
+                </a>
+              </div>
+              <p className="copyright">
+                ©2024 Quandary All right reserved
+              </p>
             </div>
           </div>
         </div>

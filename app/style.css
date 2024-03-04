@@ -8,6 +8,7 @@ body {
 
 .backHitam {
     background-color: #171717;
+    height: 210vw;
     color: #EFEFEF;
     font-family: 'Poppins', sans-serif;
 }
@@ -156,6 +157,7 @@ body {
     width: 100vw;
     position: relative;
     right: 5vw;
+    height: 640vw
 }
 
 .content2 {
@@ -434,10 +436,184 @@ body {
     font-style: italic;
     font-size: 3.5vw;
     padding: 3vw 4vw 3vw 4vw;
+    border-radius: 7vw;
+}
+
+.content5BorderSignUp {
+    background-color: #F3F3F3;
+    padding: 2vw 2vw 2vw 2vw;
     position: relative;
     left: 40vw;
-    top: 4vw;
+    top: 6vw;
+    display: inline-block;
+    width: max-content;
     border-radius: 7vw;
-    border: 2vw solid #F3F3F3;
+}
+
+.content6 {
+    color: #171717;
+    /* border: 1px solid red; */
+    width: max-content;
+    margin: auto;
+    position: relative;
+    bottom: 96vw;
+}
+
+.content6Judul {
+    font-size: 5vw;
+    font-weight: 800;
+    margin-bottom: 3vw;
+    text-align: center;
+}
+
+.decorLingkaran22 {
+    display: flex;
+    width: 17vw;
+    justify-content: space-between;
+    position: relative;
+    rotate: 180deg;
+    margin: auto;
+    margin-bottom: 4vw;
+}
+
+.content6Form {
+    background-color: #171717;
+    height: 135vw;
+    padding-top: 2vw;
+    width: 90vw;
+    border-radius: 5vw;
+}
+
+.Content6FormLegendNameInput, .Content6FormLegendEmailInput, .Content6FormLegendMessageInput {
+    background-color: #171717;
+    color: white;
+    border: none;
     outline: none;
+    padding-top: 1.5vw;
+    /* border: 1px solid red; */
+    font-size: 3.5vw;
+}
+
+.Content6FormLegendName,.Content6FormLegendEmail,.Content6FormLegendMessage {
+    color: #FFFFFF;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    font-size: 3vw;
+}
+
+.Content6FormField {
+    padding: 0vw 4vw 0vw 4vw;
+    width: 70vw;
+    margin: auto;
+    border-radius: 3vw;
+    margin-bottom: 4vw;
+    height: 15vw;
+}
+
+.Content6FormFieldName {
+    border: 1vw solid #A183C8;
+}
+
+.Content6FormFieldEmail {
+    border: 1vw solid #BDC9E9;
+}
+
+.Content6FormFieldMessage {
+    border: 1vw solid #7FA1F8;
+    height: 65vw;
+}
+
+.Content6FormLegendMessageInput {
+    position: relative;
+    top: 2.5vw;
+}
+
+textarea {
+    resize: none;
+}
+
+.content6FormSubmit {
+    background-color: #F3F3F3;
+    margin: auto;
+    display: block;
+    font-size: 6vw;
+    position: relative;
+    top: 4vw;
+    border-radius: 15vw;
+    width: 45vw;
+    padding-left: 3vw;
+    padding-right: 3vw;
+    height: 13vw;
+    font-weight: 600;
+}
+
+.garisMiringKiri, .garisMiringKanan {
+    width: 20vw;
+}
+
+.garisMiringKiri {
+    position: relative;
+    right: 6vw;
+    bottom: 15vw;
+}
+
+.garisMiringKanan {
+    position: relative;
+    float: right;
+    left: 6vw;
+    bottom: 67vw;
+    transform: scaleX(-1);
+}
+
+.footer {
+    position: relative;
+    bottom: 0vw;
+    background-color: #171717;
+    border-top-left-radius: 12vw;
+    width: 101.9vw;
+    right: 7vw;
+    border-top-right-radius: 10vw;
+}
+
+.logoFooter {
+    /* border: 1px solid red; */
+    width: 50vw;
+    position: relative;
+    right: 2vw;
+}
+
+.footerPipe {
+    /* border: 1px solid red; */
+    height: 15vw;
+    position: relative;
+    right: 12vw;
+}
+
+.isiFooter {
+    width: max-content;
+    padding-top: 6vw;
+    display: flex;
+    padding-bottom: 2vw;
+    align-items: center;
+}
+
+.isiFooter2 {
+    /* border: 1px solid red; */
+    width: max-content;
+    position: relative;
+    display: flex;
+    left: 42vw;
+    bottom: 17vw;
+    font-size: 3.5vw;
+    flex-direction: column;
+    line-height: 7vw;
+    opacity: 70%;
+}
+
+.Home,.About,.SignIn {
+    margin-right: 3vw;
+}
+
+.copyright {
+    font-size: 3.3vw;
 }
