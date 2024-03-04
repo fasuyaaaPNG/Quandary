@@ -526,8 +526,8 @@ body {
 .Content6FormLegendMessageInput {
     position: relative;
     top: 2.5vw;
-    border: 1px solid red;
-    width: 63vw;
+    /* border: 1px solid red; */
+    width: 65vw;
 }
 
 textarea {
@@ -617,5 +617,5 @@ textarea {
 }
 
 .copyright {
-    font-size: 3.3vw;
+    font-size: 3.1vw;
 }
