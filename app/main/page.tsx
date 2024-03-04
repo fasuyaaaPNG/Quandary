@@ -1,5 +1,6 @@
 'use client'
 
+import { FaHouse, FaMagnifyingGlass, FaPlus, FaBell, FaRegUser } from "react-icons/fa6";
 import './style.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
@@ -253,31 +254,46 @@ const Home: React.FC = () => {
       <div className="navbar">
         <div className="round"></div>
         <div className="iconDesc">
-          <img src="/assets/main/icon/icon_home.png" className='iconImage' id="iconImage1" alt="" />
+          {/* <img src="/assets/main/icon/icon_home.png" className='iconImage' id="iconImage1" alt="" /> */}
+          <div className="iconImage" id="iconImage1">
+            <FaHouse size={20} />
+          </div>
           <p id='iconText1'>
             Home
           </p>
         </div>
         <div className="iconDesc">
-          <img src="/assets/main/icon/icon_search.png" className='iconImage' id='iconImage2' alt="" />
+          {/* <img src="/assets/main/icon/icon_search.png" className='iconImage' id='iconImage2' alt="" /> */}
+          <div className="iconImage" id="iconImage2">
+            <FaMagnifyingGlass size={20} />
+          </div>
           <p>
             Search
           </p>
         </div>
         <div className="iconDesc">
-          <img src="/assets/main/icon/icon_new post.png" className='iconImage' alt="" />
+          {/* <img src="/assets/main/icon/icon_new post.png" className='iconImage' alt="" /> */}
+          <div className="iconImage" id="iconImage3">
+            <FaPlus size={20} />
+          </div>
           <p>
             New Post
           </p>
         </div>
         <div className="iconDesc">
-          <img src="/assets/main/icon/icon_notip.png" className='iconImage' alt="" />
+          {/* <img src="/assets/main/icon/icon_notip.png" className='iconImage' alt="" /> */}
+          <div className="iconImage" id="iconImage4">
+            <FaBell size={20} />
+          </div>
           <p>
             Notify
           </p>
         </div>
         <div className="iconDesc">
-          <img src="/assets/main/icon/icon_profile.png" className='iconImage' alt="" />
+          {/* <img src="/assets/main/icon/icon_profile.png" className='iconImage' alt="" /> */}
+          <div className="iconImage" id="iconImage5">
+            <FaRegUser size={20} />
+          </div>
           <p>
             Account
           </p>
