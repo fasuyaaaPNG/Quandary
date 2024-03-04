@@ -173,7 +173,7 @@ export default function Home() {
                     <legend className="Content6FormLegendMessage">
                       Message
                     </legend>
-                    <textarea name="" id="" cols={0} rows={10} className="Content6FormLegendMessageInput">
+                    <textarea name="" id="" cols={0} rows={30} className="Content6FormLegendMessageInput">
                     </textarea>
                   </fieldset>
                   <button className="content6FormSubmit">
