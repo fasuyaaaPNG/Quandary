@@ -163,12 +163,19 @@
 
 .content {
     position: absolute;
-    /* border: 1px solid red; */
+    padding-left: 1vw;
+    padding-right: 1vw;
     width: 82vw;
     top: 35vw;
     height: calc(100% - 40vw); 
     z-index: -1;
     overflow-y: auto; 
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.content::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
 }
 
 .content::after {
