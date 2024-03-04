@@ -526,6 +526,8 @@ body {
 .Content6FormLegendMessageInput {
     position: relative;
     top: 2.5vw;
+    border: 1px solid red;
+    width: 60vw;
 }
 
 textarea {
@@ -572,7 +574,7 @@ textarea {
     border-top-left-radius: 12vw;
     width: 101.9vw;
     right: 7vw;
-    border-top-right-radius: 10vw;
+    border-top-right-radius: 8vw;
 }
 
 .logoFooter {
