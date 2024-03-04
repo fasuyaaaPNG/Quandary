@@ -8,18 +8,18 @@ export default function Home() {
         <div className="headerLogoNav">
           <img src="/assets/Landing/Logo.svg" className="headerLogo" alt="" />
           <div className="headerNav">
-            <a className="navHome">
+            <a className="navHome" href="/">
               Home
             </a>
-            <a className="navAbout">
+            <a className="navAbout" href="#About">
               About
             </a>  
-            <a className="navLogin">
+            <a className="navLogin" href="/auth/login">
               Log in
             </a>
           </div>
         </div>
-        <div className="container1">
+        <div className="container1" id="Home">
           <div className="content1">
             <div className="content1Title">
               <h1>
@@ -41,15 +41,10 @@ export default function Home() {
             </div>
             <div className="gridBox2">
               <div className="box3">
-                <div className="joinUs">
-                  <h1 className="joinUsText">
-                    Join Us
-                  </h1>
-                </div>
               </div>
             </div>
           </div>
-          <div className="garis1">
+          <div className="garis1" id="About">
           </div>
           <div className="whiteBackground">
             <img src="/assets/Landing/kiri.svg" className="garisKiri" alt="" />
@@ -129,6 +124,25 @@ export default function Home() {
                   </div>
                 </div>
               </div>
+            </div>
+            <div className="content5">
+              <fieldset className="content5Fieldset">
+                <legend className="content5Legend">
+                  Lets <span className="content5SpanDark">Join Now!!!</span>
+                </legend>
+                <div className="content5IsiIcon">
+                  <p className="content5Isi">
+                    Come on, create an account and share the beauty of Indonesian culture
+                  </p>
+                  <div className="content5Icon">
+                    <img src="/assets/Landing/content5Chat.svg" alt="" className="content5Chat" />
+                    <img src="/assets/Landing/content5Cursor.svg" alt="" className="content5Cursor" />
+                  </div>
+                </div>
+                <a href="/auth/regist" className="content5SignUp">
+                  Create Account
+                </a>
+              </fieldset>
             </div>
           </div>
         </div>
