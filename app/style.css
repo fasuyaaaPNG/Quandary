@@ -157,7 +157,7 @@ body {
     width: 100vw;
     position: relative;
     right: 5vw;
-    height: 640vw
+    height: 620vw
 }
 
 .content2 {
@@ -383,6 +383,7 @@ body {
 .content5Fieldset {
     border: 2vw solid #7FA1F8;
     border-radius: 5vw;
+    height: 50vw;
 }
 
 .content5Legend {
@@ -444,7 +445,7 @@ body {
     padding: 2vw 2vw 2vw 2vw;
     position: relative;
     left: 40vw;
-    top: 6vw;
+    top: 1vw;
     display: inline-block;
     width: max-content;
     border-radius: 7vw;
@@ -456,7 +457,7 @@ body {
     width: max-content;
     margin: auto;
     position: relative;
-    bottom: 96vw;
+    bottom: 105vw;
 }
 
 .content6Judul {
@@ -606,7 +607,7 @@ textarea {
     display: flex;
     left: 42vw;
     bottom: 17vw;
-    font-size: 3.5vw;
+    font-size: 3.3vw;
     flex-direction: column;
     line-height: 7vw;
     opacity: 70%;
