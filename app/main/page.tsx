@@ -47,10 +47,6 @@ const Home: React.FC = () => {
             <img src="/assets/image1.jpg" className="profil" alt="" />
           </div>
         </div>
-        {/* ucapan */}
-        <div className="wellcomeBanner">
-          <img src="/assets/main/wellcome.png" className='banner' alt="" />
-        </div>
         {/* tranding */}
         <div className="tranding">
           <div className="tranding1">

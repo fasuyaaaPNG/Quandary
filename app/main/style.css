@@ -79,7 +79,7 @@
     display: flex;
     justify-content: flex-start; 
     font-size: 3vw;
-    top: 59vw;
+    top: 25vw;
     left: 9vw;
 }
 
@@ -165,8 +165,8 @@
     position: absolute;
     /* border: 1px solid red; */
     width: 82vw;
-    top: 67vw;
-    height: calc(100% - 67vw); 
+    top: 35vw;
+    height: calc(100% - 40vw); 
     z-index: -1;
     overflow-y: auto; 
 }
