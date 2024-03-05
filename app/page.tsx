@@ -3,41 +3,51 @@
 import supabase from "./server/supabaseClient";
 import "./style.css"
 import { VscStarFull } from "react-icons/vsc";
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Home = () => {
-  const [nama, setNama] = useState('');
+  const [name_sender, setName_sender  ] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+
+  const notifySuccsess = () => toast.success('😋 Advice successfully sent!', {
+    position: "top-right",
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    theme: "light",
+    });
+
+  const notifyError = () => toast.error('😰 Advice not sent!', {
+    position: "top-right",
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    theme: "light",
+    });
 
   const advice = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const { data: existing, error: existingError } = await supabase
-      .from('Advice')
-      .select('nama, email, message')
-      .eq('email', email);
+    try {
+      const { error } = await supabase
+        .from('Advice')
+        .insert([{ name_sender, email, message }]);
+      
+      if (error) {
+        throw error;
+      }
 
-    if (existingError) {
-      console.error(existingError);
-      return;
+      notifySuccsess();
+      setName_sender('');
+      setEmail('');
+      setMessage('');
+      
+    } catch (error) {
+      notifyError();
     }
-
-    if (existing && existing.length > 0) {
-      console.error('Email already exists');
-      return;
-    }
-
-    const { error } = await supabase
-      .from('Advice')
-      .insert([{ nama, email, message }]);
-
-    if (error) {
-      console.error(error);
-      return;
-    }
-
-    console.log('Advice submitted successfully');
   };
 
   return (
@@ -196,16 +206,20 @@ const Home = () => {
               <div className="content6Form">
                 <form onSubmit={advice} className="content6Form">
                   <fieldset className="Content6FormField Content6FormFieldName">
-                    <legend className="Content6FormLegendName">Name</legend>
+                    <legend className="Content6FormLegendName">
+                      Name
+                    </legend>
                     <input
                       className="Content6FormLegendNameInput"
-                      value={nama}
-                      onChange={(e) => setNama(e.target.value)}
+                      value={name_sender}
+                      onChange={(e) => setName_sender(e.target.value)}
                       type="text"
                     />
                   </fieldset>
                   <fieldset className="Content6FormField Content6FormFieldEmail">
-                    <legend className="Content6FormLegendEmail">Email</legend>
+                    <legend className="Content6FormLegendEmail">
+                      Email
+                    </legend>
                     <input
                       className="Content6FormLegendEmailInput"
                       value={email}
@@ -214,7 +228,9 @@ const Home = () => {
                     />
                   </fieldset>
                   <fieldset className="Content6FormField Content6FormFieldMessage">
-                    <legend className="Content6FormLegendMessage">Message</legend>
+                    <legend className="Content6FormLegendMessage">
+                      Message
+                    </legend>
                     <textarea
                       name=""
                       id=""
@@ -225,10 +241,11 @@ const Home = () => {
                       className="Content6FormLegendMessageInput"
                     ></textarea>
                   </fieldset>
-                  <button type="submit" className="content6FormSubmit">
+                  <button className="content6FormSubmit">
                     Submit
                   </button>
                 </form>
+                <ToastContainer />
               </div>
             </div>
           </div>
