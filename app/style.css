@@ -2,10 +2,6 @@ html {
     scroll-behavior: smooth;
 }
 
-body {
-    overflow-x: hidden;
-}
-
 .backHitam {
     background-color: #171717;
     height: 210vw;
