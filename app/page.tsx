@@ -214,6 +214,7 @@ const Home = () => {
                       value={name_sender}
                       onChange={(e) => setName_sender(e.target.value)}
                       type="text"
+                      required
                     />
                   </fieldset>
                   <fieldset className="Content6FormField Content6FormFieldEmail">
@@ -225,6 +226,7 @@ const Home = () => {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       type="email"
+                      required
                     />
                   </fieldset>
                   <fieldset className="Content6FormField Content6FormFieldMessage">
@@ -239,7 +241,9 @@ const Home = () => {
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
                       className="Content6FormLegendMessageInput"
-                    ></textarea>
+                      required
+                    >
+                    </textarea>
                   </fieldset>
                   <button className="content6FormSubmit">
                     Submit
