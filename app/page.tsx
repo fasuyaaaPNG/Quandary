@@ -1,7 +1,45 @@
+'use client';
+
+import supabase from "./server/supabaseClient";
 import "./style.css"
 import { VscStarFull } from "react-icons/vsc";
+import { useState, useEffect } from 'react';
 
-export default function Home() {
+const Home = () => {
+  const [nama, setNama] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+
+  const advice = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const { data: existing, error: existingError } = await supabase
+      .from('Advice')
+      .select('nama, email, message')
+      .eq('email', email);
+
+    if (existingError) {
+      console.error(existingError);
+      return;
+    }
+
+    if (existing && existing.length > 0) {
+      console.error('Email already exists');
+      return;
+    }
+
+    const { error } = await supabase
+      .from('Advice')
+      .insert([{ nama, email, message }]);
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    console.log('Advice submitted successfully');
+  };
+
   return (
     <>
       <div className="backHitam">
@@ -148,7 +186,7 @@ export default function Home() {
             </div>
             <div className="content6">
               <h1 className="content6Judul">
-                give us advice
+                Give us advice
               </h1>
               <div className="decorLingkaran22">
                 <img src="/assets/Landing/lingkaran1.svg" alt="" className="decorLingkaran1" />
@@ -156,27 +194,38 @@ export default function Home() {
                 <img src="/assets/Landing/lingkaran3.svg" alt="" className="decorLingkaran3" />
               </div>
               <div className="content6Form">
-                <form action="" className="content6Form">
+                <form onSubmit={advice} className="content6Form">
                   <fieldset className="Content6FormField Content6FormFieldName">
-                    <legend className="Content6FormLegendName">
-                      Name
-                    </legend>
-                    <input className="Content6FormLegendNameInput" type="text" />
+                    <legend className="Content6FormLegendName">Name</legend>
+                    <input
+                      className="Content6FormLegendNameInput"
+                      value={nama}
+                      onChange={(e) => setNama(e.target.value)}
+                      type="text"
+                    />
                   </fieldset>
                   <fieldset className="Content6FormField Content6FormFieldEmail">
-                    <legend className="Content6FormLegendEmail">
-                      Email
-                    </legend>
-                    <input className="Content6FormLegendEmailInput" type="email" />
+                    <legend className="Content6FormLegendEmail">Email</legend>
+                    <input
+                      className="Content6FormLegendEmailInput"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      type="email"
+                    />
                   </fieldset>
                   <fieldset className="Content6FormField Content6FormFieldMessage">
-                    <legend className="Content6FormLegendMessage">
-                      Message
-                    </legend>
-                    <textarea name="" id="" cols={0} rows={10} className="Content6FormLegendMessageInput">
-                    </textarea>
+                    <legend className="Content6FormLegendMessage">Message</legend>
+                    <textarea
+                      name=""
+                      id=""
+                      cols={0}
+                      rows={10}
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      className="Content6FormLegendMessageInput"
+                    ></textarea>
                   </fieldset>
-                  <button className="content6FormSubmit">
+                  <button type="submit" className="content6FormSubmit">
                     Submit
                   </button>
                 </form>
@@ -213,3 +262,5 @@ export default function Home() {
     </>
   )
 }
+
+export default Home
