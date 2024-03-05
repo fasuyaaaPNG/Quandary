@@ -67,7 +67,7 @@ const Home = () => {
             </a>
           </div>
         </div>
-        <div className="container1" id="Home">
+        <div className="container1">
           <div className="content1">
             <div className="content1Title">
               <h1>
@@ -92,7 +92,7 @@ const Home = () => {
               </div>
             </div>
           </div>
-          <div className="garis1" id="About">
+          <div className="garis1" >
           </div>
           <div className="whiteBackground">
             <img src="/assets/Landing/kiri.svg" className="garisKiri" alt="" />
