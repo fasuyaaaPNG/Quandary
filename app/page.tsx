@@ -79,8 +79,8 @@ const Home = () => {
                 Your Premier Forum Destination for Thoughtful Discussions and Diverse Perspectives.
               </p>
             </div>
-            <img className="miniIcon1" src="/assets/Landing/Vector.svg" alt="" />
-            <img className="miniIcon2" src="/assets/Landing/Vector2.svg" alt="" />
+            <img className="miniIcon1" loading="lazy" src="/assets/Landing/Vector.svg" alt="" />
+            <img className="miniIcon2" loading="lazy" src="/assets/Landing/Vector2.svg" alt="" />
             <div className="gridBox1">
               <div className="box1">
               </div>
@@ -95,9 +95,9 @@ const Home = () => {
           <div className="garis1" >
           </div>
           <div className="whiteBackground">
-            <img src="/assets/Landing/kiri.svg" className="garisKiri" alt="" />
-            <img src="/assets/Landing/kanan.svg" className="garisKanan" alt="" />
-            <img src="/assets/Landing/IlustContent2.svg" alt="" className="ilustContent2" />
+            <img src="/assets/Landing/kiri.svg" loading="lazy" className="garisKiri" alt="" />
+            <img src="/assets/Landing/kanan.svg" loading="lazy" className="garisKanan" alt="" />
+            <img src="/assets/Landing/IlustContent2.svg" loading="lazy" alt="" className="ilustContent2" />
             <div className="content2">
               <div className="content2Judul">
                 <h1>
@@ -105,9 +105,9 @@ const Home = () => {
                 </h1>
               </div>
               <div className="decorLingkaran">
-                <img src="/assets/Landing/lingkaran1.svg" alt="" className="decorLingkaran1" />
-                <img src="/assets/Landing/lingkaran2.svg" alt="" className="decorLingkaran2" />
-                <img src="/assets/Landing/lingkaran3.svg" alt="" className="decorLingkaran3" />
+                <img src="/assets/Landing/lingkaran1.svg" loading="lazy" alt="" className="decorLingkaran1" />
+                <img src="/assets/Landing/lingkaran2.svg" loading="lazy" alt="" className="decorLingkaran2" />
+                <img src="/assets/Landing/lingkaran3.svg" loading="lazy" alt="" className="decorLingkaran3" />
               </div>
               <div className="content2Desk">
                 <div className="content2DeskJudul">
@@ -129,8 +129,8 @@ const Home = () => {
             </div>
             <div className="content3">
               <div className="createPost">
-                <img src="/assets/Landing/createPost.svg" alt="" className="createPostText" />
-                <img src="/assets/Landing/createPostIcon.svg" alt="" className="createPostIcon" />
+                <img src="/assets/Landing/createPost.svg" loading="lazy" alt="" className="createPostText" />
+                <img src="/assets/Landing/createPostIcon.svg" loading="lazy" alt="" className="createPostIcon" />
                 <p className="createPostTextDesk">
                   Utilize our website's forum feature to create engaging posts and foster discussions within the community
                 </p>
@@ -183,8 +183,8 @@ const Home = () => {
                     Come on, create an account and share the beauty of Indonesian culture
                   </p>
                   <div className="content5Icon">
-                    <img src="/assets/Landing/content5Chat.svg" alt="" className="content5Chat" />
-                    <img src="/assets/Landing/content5Cursor.svg" alt="" className="content5Cursor" />
+                    <img src="/assets/Landing/content5Chat.svg" loading="lazy" alt="" className="content5Chat" />
+                    <img src="/assets/Landing/content5Cursor.svg" loading="lazy" alt="" className="content5Cursor" />
                   </div>
                 </div>
                 <div className="content5BorderSignUp">
@@ -199,9 +199,9 @@ const Home = () => {
                 Give us advice
               </h1>
               <div className="decorLingkaran22">
-                <img src="/assets/Landing/lingkaran1.svg" alt="" className="decorLingkaran1" />
-                <img src="/assets/Landing/lingkaran2.svg" alt="" className="decorLingkaran2" />
-                <img src="/assets/Landing/lingkaran3.svg" alt="" className="decorLingkaran3" />
+                <img src="/assets/Landing/lingkaran1.svg" loading="lazy" alt="" className="decorLingkaran1" />
+                <img src="/assets/Landing/lingkaran2.svg" loading="lazy" alt="" className="decorLingkaran2" />
+                <img src="/assets/Landing/lingkaran3.svg" loading="lazy" alt="" className="decorLingkaran3" />
               </div>
               <div className="content6Form">
                 <form onSubmit={advice} className="content6Form">
@@ -255,8 +255,8 @@ const Home = () => {
           </div>
           <div className="footer">
             <div className="isiFooter">
-              <img src="/assets/Landing/footerLogo.svg" alt="" className="logoFooter" />
-              <img src="/assets/Landing/footerPipe.svg" alt="" className="footerPipe" />
+              <img src="/assets/Landing/footerLogo.svg" loading="lazy" alt="" className="logoFooter" />
+              <img src="/assets/Landing/footerPipe.svg" loading="lazy" alt="" className="footerPipe" />
             </div>
             <div className="isiFooter2">
               <div className="navFooter">
