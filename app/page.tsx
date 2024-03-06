@@ -1,7 +1,7 @@
 'use client';
 
 import supabase from "./server/supabaseClient";
-import "./style.css"
+import "./style.css";
 import { VscStarFull } from "react-icons/vsc";
 import React, { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
