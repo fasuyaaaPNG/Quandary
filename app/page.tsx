@@ -55,7 +55,7 @@ const Home = () => {
     <>
       <div className="backHitam">
         <div className="headerLogoNav">
-          <img src="/assets/Landing/Logo.svg" className="headerLogo" alt="" />
+          <img src="/assets/Landing/Logo.png" className="headerLogo" alt="" />
           <div className="headerNav">
             <a className="navHome" href="/">
               Home
@@ -96,8 +96,8 @@ const Home = () => {
           <div className="garis1" >
           </div>
           <div className="whiteBackground">
-            <img src="/assets/Landing/kiri.svg" loading="lazy" className="garisKiri" alt="" />
-            <img src="/assets/Landing/kanan.svg" loading="lazy" className="garisKanan" alt="" />
+            <img src="/assets/Landing/kiri.png" loading="lazy" className="garisKiri" alt="" />
+            <img src="/assets/Landing/kanan.png" loading="lazy" className="garisKanan" alt="" />
             <motion.img initial={{opacity:0}} whileInView={{opacity:1}} src="/assets/Landing/IlustContent2.png  " loading="lazy" alt="" className="ilustContent2" />
             <div className="content2">
               <div className="content2Judul">
@@ -106,9 +106,9 @@ const Home = () => {
                 </h1>
               </div>
               <div className="decorLingkaran">
-                <img src="/assets/Landing/lingkaran1.svg" loading="lazy" alt="" className="decorLingkaran1" />
-                <img src="/assets/Landing/lingkaran2.svg" loading="lazy" alt="" className="decorLingkaran2" />
-                <img src="/assets/Landing/lingkaran3.svg" loading="lazy" alt="" className="decorLingkaran3" />
+                <img src="/assets/Landing/lingkaran1.png" loading="lazy" alt="" className="decorLingkaran1" />
+                <img src="/assets/Landing/lingkaran2.png" loading="lazy" alt="" className="decorLingkaran2" />
+                <img src="/assets/Landing/lingkaran3.png" loading="lazy" alt="" className="decorLingkaran3" />
               </div>
               <div className="content2Desk">
                 <div className="content2DeskJudul">
@@ -130,8 +130,8 @@ const Home = () => {
             </div>
             <div className="content3">
               <motion.div initial={{opacity:0}} whileInView={{opacity:1}} className="createPost">
-                <img src="/assets/Landing/createPost.svg" loading="lazy" alt="" className="createPostText" />
-                <img src="/assets/Landing/createPostIcon.svg" loading="lazy" alt="" className="createPostIcon" />
+                <img src="/assets/Landing/createPost.png" loading="lazy" alt="" className="createPostText" />
+                <img src="/assets/Landing/createPostIcon.png" loading="lazy" alt="" className="createPostIcon" />
                 <p className="createPostTextDesk">
                   Utilize our website's forum feature to create engaging posts and foster discussions within the community
                 </p>
@@ -256,7 +256,7 @@ const Home = () => {
           </div>
           <div className="footer">
             <div className="isiFooter">
-              <img src="/assets/Landing/footerLogo.svg" loading="lazy" alt="" className="logoFooter" />
+              <img src="/assets/Landing/footerLogo.png" loading="lazy" alt="" className="logoFooter" />
               <img src="/assets/Landing/footerPipe.svg" loading="lazy" alt="" className="footerPipe" />
             </div>
             <div className="isiFooter2">
