@@ -6,6 +6,7 @@ import { VscStarFull } from "react-icons/vsc";
 import React, { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { motion } from "framer-motion";
 
 const Home = () => {
   const [name_sender, setName_sender  ] = useState('');
@@ -97,7 +98,7 @@ const Home = () => {
           <div className="whiteBackground">
             <img src="/assets/Landing/kiri.svg" loading="lazy" className="garisKiri" alt="" />
             <img src="/assets/Landing/kanan.svg" loading="lazy" className="garisKanan" alt="" />
-            <img src="/assets/Landing/IlustContent2.svg" loading="lazy" alt="" className="ilustContent2" />
+            <motion.img initial={{opacity:0}} whileInView={{opacity:1}} src="/assets/Landing/IlustContent2.svg" loading="lazy" alt="" className="ilustContent2" />
             <div className="content2">
               <div className="content2Judul">
                 <h1>
@@ -128,16 +129,16 @@ const Home = () => {
               </div>
             </div>
             <div className="content3">
-              <div className="createPost">
+              <motion.div initial={{opacity:0}} whileInView={{opacity:1}} className="createPost">
                 <img src="/assets/Landing/createPost.svg" loading="lazy" alt="" className="createPostText" />
                 <img src="/assets/Landing/createPostIcon.svg" loading="lazy" alt="" className="createPostIcon" />
                 <p className="createPostTextDesk">
                   Utilize our website's forum feature to create engaging posts and foster discussions within the community
                 </p>
-              </div>
+              </motion.div>
             </div>
             <div className="content4">
-              <div className="content4LingkaranBiru">
+              <motion.div initial={{opacity:0, scale:0}} whileInView={{opacity:1, scale: 1}} className="content4LingkaranBiru" animate={{opacity: 1}} transition={{ delay: 1 }}>
                 <div className="content4LingkaranBiruIsi">
                   <div className="content4LingkaranBiruIsiAtasIcon">
                     <div className="content4LingkaranBiruIsiAtas">
@@ -151,8 +152,8 @@ const Home = () => {
                     rating
                   </div>
                 </div>
-              </div>
-              <div className="content4LingkaranHitam">
+              </motion.div>
+              <motion.div initial={{opacity:0, scale:0}} whileInView={{opacity:1, scale: 1}} className="content4LingkaranHitam" animate={{opacity: 1}} transition={{ delay: 0.5 }}>
                 <div className="content4LingkaranHitamIsi">
                   <div className="content4LingkaranHitamIsiAtas">
                     7 million+
@@ -161,8 +162,8 @@ const Home = () => {
                     post
                   </div>
                 </div>
-              </div>
-              <div className="content4LingkaranBiruMuda">
+              </motion.div>
+              <motion.div initial={{opacity:0, scale:0}} whileInView={{opacity:1, scale: 1}}  className="content4LingkaranBiruMuda" animate={{opacity: 1}} transition={{ delay: 0 }}>
                 <div className="content4LingkaranBiruMudaIsi">
                   <div className="content4LingkaranBiruMudaIsiAtas">
                     200.000+
@@ -171,13 +172,13 @@ const Home = () => {
                     user
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </div>
             <div className="content5">
               <fieldset className="content5Fieldset">
-                <legend className="content5Legend">
+                <motion.legend initial={{opacity:0,scale:0}} whileInView={{opacity:1,scale:1}} className="content5Legend">
                   Lets <span className="content5SpanDark">Join Now!!!</span>
-                </legend>
+                </motion.legend>
                 <div className="content5IsiIcon">
                   <p className="content5Isi">
                     Come on, create an account and share the beauty of Indonesian culture
@@ -188,9 +189,9 @@ const Home = () => {
                   </div>
                 </div>
                 <div className="content5BorderSignUp">
-                  <a href="/auth/regist" className="content5SignUp">
+                  <motion.a initial={{opacity:0,scale:2}} whileInView={{opacity:1,scale:1}} href="/auth/regist" className="content5SignUp">
                     Create Account
-                  </a>
+                  </motion.a>
                 </div>
               </fieldset>
             </div>
@@ -253,7 +254,7 @@ const Home = () => {
               </div>
             </div>
           </div>
-          <div className="footer">
+          <motion.div initial={{translateY:50}} whileInView={{ translateY: 20 }} className="footer">
             <div className="isiFooter">
               <img src="/assets/Landing/footerLogo.svg" loading="lazy" alt="" className="logoFooter" />
               <img src="/assets/Landing/footerPipe.svg" loading="lazy" alt="" className="footerPipe" />
@@ -277,7 +278,7 @@ const Home = () => {
                 ©2024 Quandary All right reserved
               </p>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </>
