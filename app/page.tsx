@@ -98,7 +98,7 @@ const Home = () => {
           <div className="whiteBackground">
             <img src="/assets/Landing/kiri.svg" loading="lazy" className="garisKiri" alt="" />
             <img src="/assets/Landing/kanan.svg" loading="lazy" className="garisKanan" alt="" />
-            <motion.img initial={{opacity:0}} whileInView={{opacity:1}} src="/assets/Landing/IlustContent2.svg" loading="lazy" alt="" className="ilustContent2" />
+            <motion.img initial={{opacity:0}} whileInView={{opacity:1}} src="/assets/Landing/IlustContent2.png  " loading="lazy" alt="" className="ilustContent2" />
             <div className="content2">
               <div className="content2Judul">
                 <h1>
@@ -254,7 +254,7 @@ const Home = () => {
               </div>
             </div>
           </div>
-          <motion.div initial={{translateY:50}} whileInView={{ translateY: 20 }} className="footer">
+          <div className="footer">
             <div className="isiFooter">
               <img src="/assets/Landing/footerLogo.svg" loading="lazy" alt="" className="logoFooter" />
               <img src="/assets/Landing/footerPipe.svg" loading="lazy" alt="" className="footerPipe" />
@@ -278,7 +278,7 @@ const Home = () => {
                 ©2024 Quandary All right reserved
               </p>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </>
