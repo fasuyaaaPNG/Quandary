@@ -13,7 +13,7 @@ const Home = () => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
 
-  const notifySuccsess = () => toast.success('😋 Advice successfully sent!', {
+  const notifySuccsess = () => toast.success('😋 opinion successfully sent!', {
     position: "top-right",
     autoClose: 2000,
     hideProgressBar: false,
@@ -21,7 +21,7 @@ const Home = () => {
     theme: "light",
     });
 
-  const notifyError = () => toast.error('😰 Advice not sent!', {
+  const notifyError = () => toast.error('😰 opinion not sent!', {
     position: "top-right",
     autoClose: 2000,
     hideProgressBar: false,
@@ -138,7 +138,7 @@ const Home = () => {
               </motion.div>
             </div>
             <div className="content4">
-              <motion.div initial={{opacity:0, scale:0}} whileInView={{opacity:1, scale: 1}} className="content4LingkaranBiru" animate={{opacity: 1}} transition={{ delay: 1 }}>
+              <motion.div initial={{opacity:0, scale:0}} whileInView={{opacity:1, scale: 1}} className="content4LingkaranBiru" animate={{opacity: 1}} transition={{ delay: 0.2 }}>
                 <div className="content4LingkaranBiruIsi">
                   <div className="content4LingkaranBiruIsiAtasIcon">
                     <div className="content4LingkaranBiruIsiAtas">
@@ -153,7 +153,7 @@ const Home = () => {
                   </div>
                 </div>
               </motion.div>
-              <motion.div initial={{opacity:0, scale:0}} whileInView={{opacity:1, scale: 1}} className="content4LingkaranHitam" animate={{opacity: 1}} transition={{ delay: 0.5 }}>
+              <motion.div initial={{opacity:0, scale:0}} whileInView={{opacity:1, scale: 1}} className="content4LingkaranHitam" animate={{opacity: 1}} transition={{ delay: 0.1 }}>
                 <div className="content4LingkaranHitamIsi">
                   <div className="content4LingkaranHitamIsiAtas">
                     7 million+
@@ -197,7 +197,7 @@ const Home = () => {
             </div>
             <div className="content6">
               <h1 className="content6Judul">
-                Give us advice
+                Give us opinion
               </h1>
               <div className="decorLingkaran22">
                 <img src="/assets/Landing/lingkaran1.svg" loading="lazy" alt="" className="decorLingkaran1" />
