@@ -95,7 +95,7 @@ const Home = () => {
           </div>
           <div className="garis1" >
           </div>
-          <div className="whiteBackground">
+          <div className="whiteBackground" id="About">
             <img src="/assets/Landing/kiri.png" loading="lazy" className="garisKiri" alt="" />
             <img src="/assets/Landing/kanan.png" loading="lazy" className="garisKanan" alt="" />
             <motion.img initial={{opacity:0}} whileInView={{opacity:1}} src="/assets/Landing/IlustContent2.png  " loading="lazy" alt="" className="ilustContent2" />

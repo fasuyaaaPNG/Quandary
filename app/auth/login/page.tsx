@@ -93,7 +93,7 @@ export default function Login() {
       </div>
       <div className="already">
         <p>
-          Don't have an account yet? <a href="/regist" className="signin">Sign up</a>
+          Don't have an account yet? <a href="/auth/regist" className="signin">Sign up</a>
         </p>
       </div>
     </div>
