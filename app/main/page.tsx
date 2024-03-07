@@ -5,6 +5,7 @@ import './style.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import React, { useRef, useState, ChangeEvent } from 'react';
+import { motion } from "framer-motion";
 
 const Home: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -252,15 +253,15 @@ const Home: React.FC = () => {
       </div>
       {/* navbar */}
       <div className="navbar">
-        <div className="round"></div>
+        <motion.div animate={{translateY: -25, opacity: 1}} className="round"></motion.div>
         <div className="iconDesc">
           {/* <img src="/assets/main/icon/icon_home.png" className='iconImage' id="iconImage1" alt="" /> */}
-          <div className="iconImage" id="iconImage1">
+          <motion.div animate={{translateY: -10}} className="iconImage" id="iconImage1">
             <FaHouse size={20} />
-          </div>
-          <p id='iconText1'>
+          </motion.div>
+          <motion.p animate={{color: "#7FA1F8"}} id='iconText1'>
             Home
-          </p>
+          </motion.p>
         </div>
         <div className="iconDesc">
           {/* <img src="/assets/main/icon/icon_search.png" className='iconImage' id='iconImage2' alt="" /> */}
