@@ -254,43 +254,43 @@ const Home: React.FC = () => {
       {/* navbar */}
       <div className="navbar">
         <motion.div animate={{translateY: -25, opacity: 1}} className="round"></motion.div>
-        <div className="iconDesc">
-          {/* <img src="/assets/main/icon/icon_home.png" className='iconImage' id="iconImage1" alt="" /> */}
-          <motion.div animate={{translateY: -10}} className="iconImage" id="iconImage1">
-            <FaHouse size={20} />
-          </motion.div>
-          <motion.p animate={{color: "#7FA1F8"}} id='iconText1'>
-            Home
-          </motion.p>
-        </div>
-        <div className="iconDesc">
-          {/* <img src="/assets/main/icon/icon_search.png" className='iconImage' id='iconImage2' alt="" /> */}
-          <div className="iconImage" id="iconImage2">
-            <FaMagnifyingGlass size={20} />
+          <div className="iconDesc">
+            {/* <img src="/assets/main/icon/icon_home.png" className='iconImage' id="iconImage1" alt="" /> */}
+            <motion.div animate={{translateY: -10}} className="iconImage" id="iconImage1">
+              <FaHouse size={20} />
+            </motion.div>
+            <motion.p animate={{color: "#7FA1F8"}} id='iconText1'>
+              Home
+            </motion.p>
           </div>
-          <p>
-            Search
-          </p>
-        </div>
-        <div className="iconDesc">
-          {/* <img src="/assets/main/icon/icon_new post.png" className='iconImage' alt="" /> */}
-          <div className="iconImage" id="iconImage3">
-            <FaPlus size={20} />
+          <div className="iconDesc">
+            {/* <img src="/assets/main/icon/icon_search.png" className='iconImage' id='iconImage2' alt="" /> */}
+            <div className="iconImage" id="iconImage2">
+              <FaMagnifyingGlass size={20} />
+            </div>
+            <p>
+              Search
+            </p>
           </div>
-          <p>
-            New Post
-          </p>
-        </div>
-        <div className="iconDesc">
-          {/* <img src="/assets/main/icon/icon_notip.png" className='iconImage' alt="" /> */}
-          <div className="iconImage" id="iconImage4">
-            <FaBell size={20} />
+          <div className="iconDesc">
+            {/* <img src="/assets/main/icon/icon_new post.png" className='iconImage' alt="" /> */}
+            <div className="iconImage" id="iconImage3">
+              <FaPlus size={20} />
+            </div>
+            <p>
+              New Post
+            </p>
           </div>
-          <p>
-            Notify
-          </p>
-        </div>
-        <div className="iconDesc">
+          <div className="iconDesc">
+            {/* <img src="/assets/main/icon/icon_notip.png" className='iconImage' alt="" /> */}
+            <div className="iconImage" id="iconImage4">
+              <FaBell size={20} />
+            </div>
+            <p>
+              Notify
+            </p>
+          </div>
+        <a href="/main/profile" className="iconDesc">
           {/* <img src="/assets/main/icon/icon_profile.png" className='iconImage' alt="" /> */}
           <div className="iconImage" id="iconImage5">
             <FaRegUser size={20} />
@@ -298,7 +298,7 @@ const Home: React.FC = () => {
           <p>
             Account
           </p>
-        </div>
+        </a>
       </div>
     </>
   );
