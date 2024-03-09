@@ -12,6 +12,7 @@
     position: relative;
     z-index: 1;
     font-family: 'Poppins', sans-serif;
+    overflow: hidden;
 }
 
 .searchProfil {
@@ -173,24 +174,24 @@
     padding-right: 1vw;
     width: 82vw;
     top: 28vw;
-    height: 150vw; 
+    height: 170vw; 
     z-index: -1;
     overflow-y: auto; 
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
     scrollbar-width: none;  /* Firefox */
-    border: 1px solid red;
+    /* border: 1px solid red; */
 }
 
 .content::-webkit-scrollbar { 
     display: none;  /* Safari and Chrome */
 }
 
-/* .content::after {
+.content::after {
     content: "";
     display: block;
     height: 25vw; 
     margin-bottom: -4vw; 
-} */
+}
 
 
 .content1 {
