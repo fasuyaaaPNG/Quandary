@@ -1,12 +1,45 @@
 'use client'
 
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaHouse, FaMagnifyingGlass, FaPlus, FaBell, FaRegUser } from "react-icons/fa6";
-import "./style.css"
+import "./style.css";
 
 export default function Profile() {
+    useEffect(() => {
+        const usernameAkun = document.querySelector(".usernameAkun");
+        const bioAkun = document.querySelector(".bioAkun")
+        if (usernameAkun !== null && usernameAkun.innerHTML.trim() === "") {
+            usernameAkun.remove();
+        };
+        if (bioAkun !== null && bioAkun.innerHTML.trim() === "") {
+            bioAkun.remove();
+        };
+    }, []);
+
     return (
         <>
+            <h1 className="profile">
+                Profile
+            </h1>
+            <img src="/assets/main/image1.jpg" alt="" className="fotoProfile" />
+            <div className="deskProfile">
+                <p className="namaAkun">
+                    Dhavin Fasya A
+                </p>
+                <p className="usernameAkun">
+                    @fasuyaaa
+                </p>
+                <p className="bioAkun">
+                    hi! im a weaboo 😈
+                </p>
+            </div>
+            <a href="/main/profile/edit" className="editProfile">
+                <p className="text">
+                    Edit profile
+                </p>
+                <img src="/assets/profile/iconEdit.png" alt="" className="icon" />
+            </a>
             {/* navbar */}
             <div className="navbar">
                 <motion.div animate={{translateY: -25, opacity: 1}} className="round"></motion.div>
