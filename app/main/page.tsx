@@ -50,7 +50,7 @@ const Home: React.FC = () => {
           </a>
         </div>
         {/* tranding */}
-        <div className="tranding">
+        {/* <div className="tranding">
           <div className="tranding1">
             <button>
               Trending
@@ -66,7 +66,7 @@ const Home: React.FC = () => {
               Culture
             </button>
           </div>
-        </div>
+        </div> */}
         {/* content */}
         <div className="content">
           <div className="content1">
