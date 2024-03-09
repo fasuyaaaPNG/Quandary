@@ -45,9 +45,9 @@ const Home: React.FC = () => {
               </button>
             )}
           </div>
-          <div className="profilImage">
+          <a href="/main/profile" className="profilImage">
             <img src="/assets/image1.jpg" className="profil" alt="" />
-          </div>
+          </a>
         </div>
         {/* tranding */}
         <div className="tranding">

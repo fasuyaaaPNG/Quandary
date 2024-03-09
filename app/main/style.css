@@ -82,6 +82,8 @@
     font-size: 3vw;
     top: 25vw;
     left: 9vw;
+    /* border: 1px solid red; */
+    background-color: #ffffff;
 }
 
 .tranding1, .tranding2, .tranding3 {
