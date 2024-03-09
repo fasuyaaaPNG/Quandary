@@ -46,7 +46,7 @@ export default function Profile() {
                         Notify
                     </p>
                 </a>
-                <a className="iconDesc">
+                <a href="/main/profile" className="iconDesc">
                     {/* <img src="/assets/main/icon/icon_profile.png" className='iconImage' alt="" /> */}
                     <motion.div animate={{translateY: -10}} className="iconImage" id="iconImage5">
                         <FaRegUser size={20} />

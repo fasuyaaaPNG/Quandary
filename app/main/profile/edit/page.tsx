@@ -19,7 +19,7 @@ export default function Edit() {
                         Home
                     </motion.p>
                 </a>
-                <div className="iconDesc">
+                <a href="/main/search" className="iconDesc">
                     {/* <img src="/assets/main/icon/icon_search.png" className='iconImage' id='iconImage2' alt="" /> */}
                     <div className="iconImage" id="iconImage2">
                         <FaMagnifyingGlass size={20} />
@@ -27,8 +27,8 @@ export default function Edit() {
                     <p>
                         Search
                     </p>
-                </div>
-                <div className="iconDesc">
+                </a>
+                <a href="/main/create" className="iconDesc">
                     {/* <img src="/assets/main/icon/icon_new post.png" className='iconImage' alt="" /> */}
                     <div className="iconImage" id="iconImage3">
                         <FaPlus size={20} />
@@ -36,8 +36,8 @@ export default function Edit() {
                     <p>
                         New Post
                     </p>
-                </div>
-                <div className="iconDesc">
+                </a>
+                <a href="/main/notify" className="iconDesc">
                     {/* <img src="/assets/main/icon/icon_notip.png" className='iconImage' alt="" /> */}
                     <div className="iconImage" id="iconImage4">
                         <FaBell size={20} />
@@ -45,8 +45,8 @@ export default function Edit() {
                     <p>
                         Notify
                     </p>
-                </div>
-                <a className="iconDesc">
+                </a>
+                <a href="/main/profile" className="iconDesc">
                     {/* <img src="/assets/main/icon/icon_profile.png" className='iconImage' alt="" /> */}
                     <div className="iconImage" id="iconImage5">
                         <FaRegUser size={20} />
