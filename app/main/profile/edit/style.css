@@ -66,6 +66,10 @@
     margin-bottom: 9vw;
 }
 
+input:focus {
+    outline: none;
+}
+
 .inputNameDiv {
     display: flex;
     flex-direction: column;

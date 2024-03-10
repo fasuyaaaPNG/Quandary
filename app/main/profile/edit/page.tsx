@@ -8,19 +8,19 @@ export default function Edit() {
     function countTextBio() {
         const bioInput = document.querySelector<HTMLInputElement>("form[name=form_main] input[name=bio]");
         const text = bioInput!.value; 
-        document.getElementById('bio')!.innerText = text.length.toString();
+        document.getElementById('bioLength')!.innerText = text.length.toString();
     }
-
+    
     function countTextName() {
         const nameInput = document.querySelector<HTMLInputElement>("form[name=form_main] input[name=fullname]");
         const text = nameInput!.value; 
-        document.getElementById('fullname')!.innerText = text.length.toString();
+        document.getElementById('fullnameLength')!.innerText = text.length.toString();
     }
-
+    
     function countTextUsername() {
         const usernameInput = document.querySelector<HTMLInputElement>("form[name=form_main] input[name=username]");
         const text = usernameInput!.value; 
-        document.getElementById('username')!.innerText = text.length.toString();
+        document.getElementById('usernameLength')!.innerText = text.length.toString();
     }
 
     return (
@@ -49,7 +49,7 @@ export default function Edit() {
                                 Profile name
                             </label>
                             <label className="inputchar" htmlFor="fullname">
-                                <span id="fullname"></span>/30
+                                <span id="fullnameLength"></span>/30
                             </label>
                         </div>
                         <input maxLength={30} onInput={countTextName} className="inputName" name="fullname" id="fullname" type="text" />
@@ -57,24 +57,24 @@ export default function Edit() {
                     <div className="inputNameDiv">
                         <div className="labelChar">
                             <label className="inputNameLabel" htmlFor="username">
-                               Username
+                            Username
                             </label>
                             <label className="inputchar" htmlFor="username">
-                                <span id="username"></span>/10
+                                <span id="usernameLength"></span>/10
                             </label>
                         </div>
                         <input onInput={countTextUsername} maxLength={10} className="inputName" name="username" id="username" type="text" />
                     </div>
                     <div className="inputNameDiv">
                         <div className="labelChar">
-                            <label className="inputNameLabel" htmlFor="name">
+                            <label className="inputNameLabel" htmlFor="bio">
                                 Bio
                             </label>
                             <label className="inputchar" htmlFor="bio">
-                                <span id="bio"></span>/30
+                                <span id="bioLength"></span>/30
                             </label>
                         </div>
-                        <input onInput={countTextBio} maxLength={30} className="inputName" name="bio" type="text" />
+                        <input onInput={countTextBio} maxLength={30} className="inputName" name="bio" id="bio" type="text" />
                     </div>
                     <div className="inputNameDiv">
                         <label className="inputNameLabelCreated">
