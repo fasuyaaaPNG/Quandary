@@ -13,7 +13,7 @@ export default function Edit() {
                     <h1 className="profile">
                         Edit profile
                     </h1>
-                    <FaCheck size={30} className="centang"/>
+                    <FaCheck size={25} className="centang"/>
                 </div>
                 <label htmlFor="uploadInput">
                     <img src="/assets/main/image1.jpg" alt="" className="profileImage" />
