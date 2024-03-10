@@ -169,14 +169,14 @@
 }
 
 .content {
-    position: absolute;
+    position: relative;
     padding-left: 1vw;
     padding-right: 1vw;
     width: 82vw;
     top: 28vw;
     height: 170vw; 
-    z-index: -1;
-    overflow-y: auto; 
+    z-index: -2;
+    overflow-y: scroll; 
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
     scrollbar-width: none;  /* Firefox */
     /* border: 1px solid red; */
