@@ -17,8 +17,10 @@
 
 .searchProfil {
     position: fixed;
-    height: 25vw;
-    /* border: 1px solid blue; */
+    height: 27.6vw;
+    width: 83vw;
+    border: 0.5vw solid FDFDFD;
+    background-color: #FDFDFD;
 }
 
 .search {
@@ -62,7 +64,8 @@
     width: 12vw;
     position: relative;
     bottom: 11vw;
-    left: 17vw;
+    left: 0vw;
+    /* border: 1px solid red; */
 }
 
 .wellcomeBanner {
@@ -180,7 +183,8 @@
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
     scrollbar-width: none;  /* Firefox */
     /* border: 1px solid red; */
-    padding-bottom: 30vw;
+    padding-bottom: 45vw;
+    padding-top: 2vw;
 }
 
 .content::-webkit-scrollbar { 
