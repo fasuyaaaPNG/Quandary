@@ -3,24 +3,38 @@
 import { motion } from "framer-motion";
 import {FaArrowLeft, FaCheck, FaHouse, FaMagnifyingGlass, FaPlus, FaBell, FaRegUser } from "react-icons/fa6";
 import "./style.css"
+import React, { useEffect, useState } from "react";
 
 export default function Edit() {
+    const [fullnameLength, setFullnameLength] = useState(0);
+    const [usernameLength, setUsernameLength] = useState(0);
+    const [bioLength, setBioLength] = useState(0);
+
+    useEffect(() => {
+        if (fullnameLength === 0) document.getElementById('fullnameLength')!.innerText = "0/30";
+        if (usernameLength === 0) document.getElementById('usernameLength')!.innerText = "0/10";
+        if (bioLength === 0) document.getElementById('bioLength')!.innerText = "0/30";
+    }, [fullnameLength, usernameLength, bioLength]);
+
     function countTextBio() {
         const bioInput = document.querySelector<HTMLInputElement>("form[name=form_main] input[name=bio]");
-        const text = bioInput!.value; 
-        document.getElementById('bioLength')!.innerText = text.length.toString();
+        const text = bioInput!.value;
+        setBioLength(text.length);
+        document.getElementById('bioLength')!.innerText = text.length.toString() + "/30";
     }
     
     function countTextName() {
         const nameInput = document.querySelector<HTMLInputElement>("form[name=form_main] input[name=fullname]");
-        const text = nameInput!.value; 
-        document.getElementById('fullnameLength')!.innerText = text.length.toString();
+        const text = nameInput!.value;
+        setFullnameLength(text.length);
+        document.getElementById('fullnameLength')!.innerText = text.length.toString() + "/30";
     }
     
     function countTextUsername() {
         const usernameInput = document.querySelector<HTMLInputElement>("form[name=form_main] input[name=username]");
-        const text = usernameInput!.value; 
-        document.getElementById('usernameLength')!.innerText = text.length.toString();
+        const text = usernameInput!.value;
+        setUsernameLength(text.length);
+        document.getElementById('usernameLength')!.innerText = text.length.toString() + "/10";
     }
 
     return (
@@ -49,7 +63,7 @@ export default function Edit() {
                                 Profile name
                             </label>
                             <label className="inputchar" htmlFor="fullname">
-                                <span id="fullnameLength"></span>/30
+                                <span id="fullnameLength"></span>
                             </label>
                         </div>
                         <input maxLength={30} onInput={countTextName} className="inputName" name="fullname" id="fullname" type="text" />
@@ -60,7 +74,7 @@ export default function Edit() {
                             Username
                             </label>
                             <label className="inputchar" htmlFor="username">
-                                <span id="usernameLength"></span>/10
+                                <span id="usernameLength"></span>
                             </label>
                         </div>
                         <input onInput={countTextUsername} maxLength={10} className="inputName" name="username" id="username" type="text" />
@@ -71,7 +85,7 @@ export default function Edit() {
                                 Bio
                             </label>
                             <label className="inputchar" htmlFor="bio">
-                                <span id="bioLength"></span>/30
+                                <span id="bioLength"></span>
                             </label>
                         </div>
                         <input onInput={countTextBio} maxLength={30} className="inputName" name="bio" id="bio" type="text" />
