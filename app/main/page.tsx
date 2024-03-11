@@ -280,12 +280,14 @@ const Home: React.FC = () => {
       </div>
       {/* navbar */}
       <div className="navbar">
-        <motion.div animate={{translateY: -25, opacity: 1}} className="round"></motion.div>
-          <div className="iconDesc">
-            {/* <img src="/assets/main/icon/icon_home.png" className='iconImage' id="iconImage1" alt="" /> */}
-            <motion.div animate={{translateY: -10}} className="iconImage" id="iconImage1">
+          <div className="iconDesc iconDesc1">
+            <motion.div animate={{translateY: -25, opacity: 1}} className="round">
               <FaHouse size={20} />
             </motion.div>
+            {/* <img src="/assets/main/icon/icon_home.png" className='iconImage' id="iconImage1" alt="" />
+            <motion.div animate={{translateY: -10}} className="iconImage" id="iconImage1">
+              
+            </motion.div> */}
             <motion.p animate={{color: "#7FA1F8"}} id='iconText1'>
               Home
             </motion.p>

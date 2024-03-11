@@ -64,17 +64,30 @@
     width: 3vw;
 }
 
+.userIcon {
+    opacity: 1 !important;    
+}
+
 .round {
-position: absolute;
+    position: relative;
     background-color: #7FA1F8;
     border: 1.5vw solid #141421;
     width: 12vw;
     border-radius: 9vw;
     height: 12vw;
-    bottom: 5vw;
-    left: 78vw;
-    z-index: -1;
+    top: 0vw;
+    left: 0vw;
+    z-index: 1;
     opacity: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 0.5vw;
+}
+
+.iconDesc5 {
+    position: relative;
+    bottom: 4vw;
 }
 
 .navbar {

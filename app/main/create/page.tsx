@@ -9,7 +9,6 @@ export default function Create() {
         <>
             {/* navbar */}
             <div className="navbar">
-                <motion.div animate={{translateY: -25, opacity: 1}} className="round"></motion.div>
                 <a href="/main" className="iconDesc">
                     {/* <img src="/assets/main/icon/icon_home.png" className='iconImage' id="iconImage1" alt="" /> */}
                     <motion.div className="iconImage" id="iconImage1">
@@ -28,11 +27,14 @@ export default function Create() {
                         Search
                     </p>
                 </a>
-                <a href="/main/create" className="iconDesc">
+                <a href="/main/create" className="iconDesc iconDesc3">
                     {/* <img src="/assets/main/icon/icon_new post.png" className='iconImage' alt="" /> */}
-                    <motion.div animate={{translateY: -10}} className="iconImage" id="iconImage3">
+                    <motion.div animate={{translateY: -25, opacity: 1}} className="round">
                         <FaPlus size={20} />
                     </motion.div>
+                    {/* <motion.div animate={{translateY: -10}} className="iconImage" id="iconImage3">
+                        
+                    </motion.div> */}
                     <motion.p animate={{color: "#7FA1F8"}} >
                         New Post
                     </motion.p>

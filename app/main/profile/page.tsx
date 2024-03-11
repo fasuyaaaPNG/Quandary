@@ -42,7 +42,6 @@ export default function Profile() {
             </a>
             {/* navbar */}
             <div className="navbar">
-                <motion.div animate={{translateY: -25, opacity: 1}} className="round"></motion.div>
                 <a href="/main" className="iconDesc">
                     {/* <img src="/assets/main/icon/icon_home.png" className='iconImage' id="iconImage1" alt="" /> */}
                     <motion.div className="iconImage" id="iconImage1">
@@ -79,11 +78,14 @@ export default function Profile() {
                         Notify
                     </p>
                 </a>
-                <a href="/main/profile" className="iconDesc">
-                    {/* <img src="/assets/main/icon/icon_profile.png" className='iconImage' alt="" /> */}
-                    <motion.div animate={{translateY: -10}} className="iconImage" id="iconImage5">
-                        <FaRegUser size={20} />
+                <a href="/main/profile" className="iconDesc iconDesc5">
+                    <motion.div animate={{translateY: -10, opacity: 1}} className="round">
+                        <FaRegUser size={20} className="userIcon" />
                     </motion.div>
+                    {/* <img src="/assets/main/icon/icon_profile.png" className='iconImage' alt="" /> */}
+                    {/* <motion.div animate={{translateY: -10}} className="iconImage" id="iconImage5">
+                        
+                    </motion.div> */}
                     <motion.p animate={{color: "#7FA1F8"}} >
                         Account
                     </motion.p>

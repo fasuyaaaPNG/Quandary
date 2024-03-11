@@ -102,7 +102,6 @@ export default function Edit() {
                 </form>
                 {/* navbar */}
                 <div className="navbar">
-                    <motion.div animate={{translateY: 0, opacity: 1}} className="round"></motion.div>
                     <a href="/main" className="iconDesc">
                         {/* <img src="/assets/main/icon/icon_home.png" className='iconImage' id="iconImage1" alt="" /> */}
                         <motion.div animate={{translateY: 0}} className="iconImage" id="iconImage1">
@@ -139,11 +138,14 @@ export default function Edit() {
                             Notify
                         </p>
                     </a>
-                    <a href="/main/profile" className="iconDesc">
-                        {/* <img src="/assets/main/icon/icon_profile.png" className='iconImage' alt="" /> */}
-                        <div className="iconImage" id="iconImage5">
+                    <a href="/main/profile" className="iconDesc iconDesc5">
+                        <motion.div animate={{translateY: 0, opacity: 1}} className="round">
                             <FaRegUser size={20} />
-                        </div>
+                        </motion.div>
+                        {/* <img src="/assets/main/icon/icon_profile.png" className='iconImage' alt="" /> */}
+                        {/* <div className="iconImage" id="iconImage5">
+                            
+                        </div> */}
                         <p className="blue">
                             Account
                         </p>
