@@ -1,3 +1,57 @@
+*{
+    font-family: 'Poppins', sans-serif;
+}
+
+.background {
+    background-color: #F1F1F1;
+    height: 100vh;
+}
+
+.back {
+    /* margin-top: 7vw;
+    margin-left: 7vw; */
+    width: max-content;
+    display: block;
+    padding-top: 7vw;
+    padding-left: 7vw;
+}
+
+form {
+    /* border: 1px solid red; */
+    width: max-content;
+    margin: auto;
+    margin-top: 6vw;
+}
+
+textarea {
+    background-color: #9d9d9d00;
+    resize: none;
+    overflow: hidden;
+    border: 0.5vw solid #A4A4A4;
+    width: 85vw;
+    padding-left: 3vw;
+    color: #4D4D4D;
+    border-radius: 4vw;
+    padding-top: 4vw;
+    padding-right: 3vw;
+    height: 50vw;
+}
+
+textarea::placeholder {
+    color: #4D4D4D;
+}
+
+button {
+    display: flex;
+    align-items: center;
+    background-color: #7FA1F8;
+    border: 0.5vw solid #6F8AD2;
+    color: #F1F1F1;
+    font-size: 4vw;
+    margin-left: 7vw;
+    padding: 1vw 4vw 1vw 4vw;
+    border-radius: 2vw;
+}
 
 .round {
     position: relative;
