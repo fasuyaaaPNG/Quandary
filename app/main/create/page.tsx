@@ -40,7 +40,7 @@ export default function Create() {
                         <motion.div className="iconImage" id="iconImage1">
                             <FaHouse size={15} />
                         </motion.div>
-                        <motion.p className='iconText1'>
+                        <motion.p >
                             Home
                         </motion.p>
                     </a>

@@ -1,3 +1,7 @@
+*{
+    font-family: 'Poppins', sans-serif;
+}
+
 .container {
     /* border: 1px solid red; */
     display: flex;
@@ -68,61 +72,19 @@
     /* border: 1px solid red; */
 }
 
-.wellcomeBanner {
-    position: fixed;
-    top: 41vw;
-    left: 15%;
-    transform: translate(-9%, -50%);
-}
 
-.banner {
-    width: 100vw;
-}
-
-.tranding {
-    position: fixed;
-    display: flex;
-    justify-content: flex-start; 
-    font-size: 3vw;
-    top: 25vw;
-    left: 9vw;
-    /* border: 1px solid red; */
-    background-color: #ffffff;
-}
-
-.tranding1, .tranding2, .tranding3 {
-    margin-right: 2vw;
-}
-
-.tranding1 {
-    background-color: #7FA1F8;
-    height: 7vw;
-    padding-top: 1.5vw;
-    padding-bottom: 5vw;
-    padding-left: 2vw;
-    padding-right: 2vw;
-    color: #FFFFFF;
-    border-radius: 2vw;
-}
-
-.tranding2, .tranding3 {
-    background-color: #BCCFFF;
-    height: 7vw;
-    padding-top: 1.5vw;
-    padding-bottom: 5vw;
-    padding-left: 2vw;
-    padding-right: 2vw;
-    color: #5484FFCC;
-    border-radius: 2vw;
+.iconDesc1 {
+    position: relative;
+    bottom: 5vw;
 }
 
 .round {
     position: relative;
     background-color: #7FA1F8;
     border: 1.5vw solid #141421;
-    width: 12vw;
+    width: 11vw;
     border-radius: 9vw;
-    height: 12vw;
+    height: 11vw;
     top: 4vw;
     left: 0vw;
     z-index: 1;
@@ -134,16 +96,17 @@
 
 .iconDesc1 {
     position: relative;
-    bottom: 5vw;
+    bottom: 4vw;
+    left: 1vw;
 }
+
 .navbar {
     border-top-right-radius: 4vw;
     border-top-left-radius: 4vw;
     display: flex;
-    padding-left: 9vw;
+    padding-left: 7vw;
     padding-right: 9vw;
     justify-content: space-between;
-    border: 1px solid #141421;
     background-color: #141421;
     width: 100vw;
     height: 20vw;
@@ -169,13 +132,17 @@
     font-size: 3vw;
 }
 
-#iconImage1 {
+#iconImage5 {
     position: relative;
     top: 0vw;
 }
 
-#iconText1 {
+.iconText1 {
     color: #ffffff;
+}
+
+.blue {
+    color: #7FA1F8;
 }
 
 .content {

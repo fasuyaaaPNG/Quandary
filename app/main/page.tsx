@@ -280,53 +280,49 @@ const Home: React.FC = () => {
       </div>
       {/* navbar */}
       <div className="navbar">
-          <div className="iconDesc iconDesc1">
-            <motion.div animate={{translateY: -25, opacity: 1}} className="round">
-              <FaHouse size={20} />
-            </motion.div>
-            {/* <img src="/assets/main/icon/icon_home.png" className='iconImage' id="iconImage1" alt="" />
-            <motion.div animate={{translateY: -10}} className="iconImage" id="iconImage1">
-              
-            </motion.div> */}
-            <motion.p animate={{color: "#7FA1F8"}} id='iconText1'>
-              Home
-            </motion.p>
+        <a href="/main" className="iconDesc iconDesc1">
+          <motion.div animate={{translateY: -25, opacity: 1}} className="round">
+            <FaHouse size={20}/>
+          </motion.div>
+          <motion.p >
+            Home
+          </motion.p>
+        </a>
+        <a href="/main/search" className="iconDesc">
+          {/* <img src="/assets/main/icon/icon_search.png" className='iconImage' id='iconImage2' alt="" /> */}
+          <div className="iconImage" id="iconImage2">
+            <FaMagnifyingGlass size={15} />
           </div>
-          <a  href="/main/search" className="iconDesc">
-            {/* <img src="/assets/main/icon/icon_search.png" className='iconImage' id='iconImage2' alt="" /> */}
-            <div className="iconImage" id="iconImage2">
-              <FaMagnifyingGlass size={15} />
-            </div>
-            <p>
-              Search
-            </p>
-          </a>
-          <a href="/main/create" className="iconDesc">
-            {/* <img src="/assets/main/icon/icon_new post.png" className='iconImage' alt="" /> */}
-            <div className="iconImage" id="iconImage3">
-              <FaPlus size={15} />
-            </div>
-            <p>
-              New Post
-            </p>
-          </a>
-          <a href="/main/notify" className="iconDesc">
-            {/* <img src="/assets/main/icon/icon_notip.png" className='iconImage' alt="" /> */}
-            <div className="iconImage" id="iconImage4">
-              <FaBell size={15} />
-            </div>
-            <p>
-              Notify
-            </p>
-          </a>
-        <a href="/main/profile" className="iconDesc">
-          {/* <img src="/assets/main/icon/icon_profile.png" className='iconImage' alt="" /> */}
-          <div className="iconImage" id="iconImage5">
-            <FaRegUser size={15} />
+          <p> 
+            Search
+          </p>
+        </a>
+        <a href="/main/create" className="iconDesc">
+          {/* <img src="/assets/main/icon/icon_new post.png" className='iconImage' alt="" /> */}
+          <div className="iconImage" id="iconImage3">
+            <FaPlus size={15} />
           </div>
           <p>
-            Account
+            New Post
           </p>
+        </a>
+        <a href="/main/notify" className="iconDesc">
+          {/* <img src="/assets/main/icon/icon_notip.png" className='iconImage' alt="" /> */}
+          <div className="iconImage" id="iconImage4">
+            <FaBell size={15} />
+          </div>
+          <p>
+            Notify
+          </p>
+        </a>
+        <a href="/main/profile" className="iconDesc">
+          {/* <img src="/assets/main/icon/icon_profile.png" className='iconImage' alt="" /> */}
+          <motion.div className="iconImage" id="iconImage5">
+            <FaRegUser size={15} />
+          </motion.div>
+          <motion.p className='iconText1'>
+            Account
+          </motion.p>
         </a>
       </div>
     </>

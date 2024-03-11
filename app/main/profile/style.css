@@ -82,7 +82,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-left: 0.5vw;
+    padding-left: 0.3vw;
 }
 
 .iconDesc5 {
@@ -97,7 +97,6 @@
     padding-left: 9vw;
     padding-right: 9vw;
     justify-content: space-between;
-    border: 1px solid #141421;
     background-color: #141421;
     width: 100vw;
     height: 20vw;
