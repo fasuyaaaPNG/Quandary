@@ -189,6 +189,33 @@ const Home: React.FC = () => {
               <div className="kategori1">
                 JMK48_LOCAL
               </div>
+              <div className="kategori1">
+                JMK48_LOCAL
+              </div>
+              <div className="kategori1">
+                JMK48_LOCAL
+              </div>
+              <div className="kategori1">
+                JMK48_LOCAL
+              </div>
+              <div className="kategori1">
+                JMK48_LOCAL
+              </div>
+              <div className="kategori1">
+                JMK48_LOCAL
+              </div>
+              <div className="kategori1">
+                JMK48_LOCAL
+              </div>
+              <div className="kategori1">
+                JMK48_LOCAL
+              </div>
+              <div className="kategori1">
+                JMK48_LOCAL
+              </div>
+              <div className="kategori1">
+                JMK48_LOCAL
+              </div>
             </div>
             <div className="garis">
             </div>

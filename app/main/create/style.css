@@ -1,0 +1,58 @@
+.round {
+    position: absolute;
+    background-color: #7FA1F8;
+    border: 1.5vw solid #141421;
+    width: 12vw;
+    border-radius: 9vw;
+    height: 12vw;
+    bottom: 5vw;
+    left: 42.5vw;
+    z-index: -1;
+    opacity: 0;
+}
+
+.navbar {
+    border-top-right-radius: 4vw;
+    border-top-left-radius: 4vw;
+    display: flex;
+    padding-left: 9vw;
+    padding-right: 9vw;
+    justify-content: space-between;
+    border: 1px solid #141421;
+    background-color: #141421;
+    width: 100vw;
+    height: 20vw;
+    position: fixed;
+    bottom: 15vw;
+    z-index: 2;
+    transform: translate(0%, 75%);
+}
+
+.iconImage {
+    width: 6vw;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 2vw;
+    /* border: 1px solid red; */
+    width: max-content;
+}
+
+.iconDesc {
+    padding-top: 2vw;
+    text-align: center;
+    color: white;
+    font-size: 3vw;
+}
+
+#iconImage5 {
+    position: relative;
+    top: 0vw;
+}
+
+.iconText1 {
+    color: #ffffff;
+}
+
+.blue {
+    color: #7FA1F8;
+}
