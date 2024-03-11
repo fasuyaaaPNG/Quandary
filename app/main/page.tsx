@@ -284,7 +284,7 @@ const Home: React.FC = () => {
           <motion.div animate={{translateY: -25, opacity: 1}} className="round">
             <FaHouse size={20}/>
           </motion.div>
-          <motion.p >
+          <motion.p animate={{color: "#7FA1F8"}} >
             Home
           </motion.p>
         </a>
