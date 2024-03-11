@@ -281,7 +281,7 @@ const Home: React.FC = () => {
       {/* navbar */}
       <div className="navbar">
         <a href="/main" className="iconDesc iconDesc1">
-          <motion.div animate={{translateY: -25, opacity: 1}} className="round">
+          <motion.div animate={{translateY: -28, opacity: 1}} className="round">
             <FaHouse size={20}/>
           </motion.div>
           <motion.p animate={{color: "#7FA1F8"}} >

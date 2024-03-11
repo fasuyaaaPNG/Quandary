@@ -57,9 +57,9 @@ button {
     position: relative;
     background-color: #7FA1F8;
     border: 1.5vw solid #141421;
-    width: 12vw;
+    width: 11vw;
     border-radius: 9vw;
-    height: 12vw;
+    height: 11vw;
     top: 4vw;
     left: 0vw;
     z-index: 1;
@@ -72,7 +72,7 @@ button {
 
 .iconDesc3 {
     position: relative;
-    bottom: 5vw;
+    bottom: 4vw;
 }
 
 .navbar {

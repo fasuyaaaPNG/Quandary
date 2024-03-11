@@ -79,7 +79,7 @@ export default function Profile() {
                     </p>
                 </a>
                 <a href="/main/profile" className="iconDesc iconDesc5">
-                    <motion.div animate={{translateY: -10, opacity: 1}} className="round">
+                    <motion.div animate={{translateY: -13, opacity: 1}} className="round">
                         <FaRegUser size={20} className="userIcon" />
                     </motion.div>
                     {/* <img src="/assets/main/icon/icon_profile.png" className='iconImage' alt="" /> */}
