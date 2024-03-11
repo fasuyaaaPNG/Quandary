@@ -65,14 +65,14 @@
 }
 
 .round {
-    position: absolute;
+position: absolute;
     background-color: #7FA1F8;
     border: 1.5vw solid #141421;
     width: 12vw;
     border-radius: 9vw;
     height: 12vw;
     bottom: 5vw;
-    left: 78.5vw;
+    left: 78vw;
     z-index: -1;
     opacity: 0;
 }
