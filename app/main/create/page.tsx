@@ -3,11 +3,35 @@
 import "./style.css"
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import {FaX, FaHouse, FaMagnifyingGlass, FaPlus, FaBell, FaRegUser } from "react-icons/fa6";
+import {FaMinus, FaX, FaHouse, FaMagnifyingGlass, FaPlus, FaBell, FaRegUser } from "react-icons/fa6";
 
 export default function Create() {
+    
     const [text, setText] = useState("");
     const [inputCount, setInputCount] = useState(1);
+    const [isShareable, setIsShareable] = useState(false);
+
+    function checkShareable() {
+        if (text.trim() !== "" && inputCount >= 1) {
+            const inputs = document.querySelectorAll<HTMLInputElement>('input[type="text"], textarea');
+            let allFilled = true;
+            inputs.forEach(input => {
+                if (!input.value.trim()) {
+                    allFilled = false;
+                }
+            });
+            setIsShareable(allFilled);
+        } else {
+            setIsShareable(false);
+        }
+    }
+
+    function removeInput() {
+        if (inputCount > 1) { // Pastikan tidak ada kurang dari 1 input
+            setInputCount(inputCount - 1);
+            checkShareable(); // Periksa kembali keadaan setelah menghapus input
+        }
+    }
 
     function autoGrow(event:React.ChangeEvent<HTMLTextAreaElement>) {
         const element = event.target;
@@ -23,7 +47,7 @@ export default function Create() {
     const inputElements = [];
     for (let i = 0; i < inputCount; i++) {
         inputElements.push(
-            <input key={i} placeholder="Content tag" type="text" id={`new_${i}`} />
+            <input key={i} onInput={checkShareable} required placeholder="Content tag" type="text" id={`tag${i}`} name={`tag${i}`} />
         );
     }
 
@@ -35,20 +59,33 @@ export default function Create() {
                 </a>
                 <form action="" method="post">
                     <textarea
+                        onInput={checkShareable}
                         placeholder="Ask a question"
                         value={text}
                         onChange={autoGrow}
                         className="textArea"
+                        required
                     />
                     <div id="new_chq">
                         {inputElements}
                     </div>
-                    <input type="hidden" value={inputCount} id="total_chq"/>
+                    {/* <input type="hidden" value={inputCount} id="total_chq"/> */}
+                    <button className={`share ${isShareable ? "share shareOke" : ""}`} disabled={!isShareable}>
+                        Share
+                    </button>
                 </form>
-                <button onClick={addInput}>
-                        <FaPlus/>
-                        Add
-                </button>
+                <div className="button">
+                    <button onClick={addInput}>
+                            <FaPlus className={"buttonIcon"}/>
+                            Add tag 
+                    </button>
+                    {inputCount > 1 && ( 
+                        <button onClick={removeInput}>
+                            <FaMinus className={"buttonIcon"} />
+                            Remove tag
+                        </button>
+                    )}
+                </div>
                 {/* navbar */}
                 <div className="navbar">
                     <a href="/main" className="iconDesc">

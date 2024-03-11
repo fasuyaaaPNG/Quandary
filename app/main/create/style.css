@@ -32,6 +32,34 @@ input[type=text] {
     width: 85vw;
 }
 
+.buttonIcon {
+    margin-right: 1vw;
+}
+
+.share {
+    position: absolute;
+    background-color: transparent;
+    border: none;
+    color: #2121217c;
+    top: 4.8vw;
+    right: 7vw;
+    font-size: 4vw;
+}
+
+.shareOke {
+    color: #212121 !important   ;
+}
+
+.button {
+    display: flex;
+    align-items: center;
+    /* border: 1px solid red; */
+    width: 85vw;
+    margin: auto;
+    justify-content: space-around;
+    margin-top: 4vw;
+}
+
 form {
     /* border: 1px solid red; */
     width: max-content;
@@ -65,9 +93,8 @@ button {
     background-color: #7FA1F8;
     border: 0.5vw solid #6F8AD2;
     color: #F1F1F1;
-    font-size: 4vw;
-    margin-left: 7vw;
-    padding: 1vw 4vw 1vw 4vw;
+    font-size: 3vw;
+    padding: 1.5vw 4vw 1.5vw 4vw;
     border-radius: 2vw;
 }
 
