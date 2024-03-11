@@ -295,7 +295,7 @@ const Home: React.FC = () => {
           <a  href="/main/search" className="iconDesc">
             {/* <img src="/assets/main/icon/icon_search.png" className='iconImage' id='iconImage2' alt="" /> */}
             <div className="iconImage" id="iconImage2">
-              <FaMagnifyingGlass size={20} />
+              <FaMagnifyingGlass size={15} />
             </div>
             <p>
               Search
@@ -304,7 +304,7 @@ const Home: React.FC = () => {
           <a href="/main/create" className="iconDesc">
             {/* <img src="/assets/main/icon/icon_new post.png" className='iconImage' alt="" /> */}
             <div className="iconImage" id="iconImage3">
-              <FaPlus size={20} />
+              <FaPlus size={15} />
             </div>
             <p>
               New Post
@@ -313,7 +313,7 @@ const Home: React.FC = () => {
           <a href="/main/notify" className="iconDesc">
             {/* <img src="/assets/main/icon/icon_notip.png" className='iconImage' alt="" /> */}
             <div className="iconImage" id="iconImage4">
-              <FaBell size={20} />
+              <FaBell size={15} />
             </div>
             <p>
               Notify
@@ -322,7 +322,7 @@ const Home: React.FC = () => {
         <a href="/main/profile" className="iconDesc">
           {/* <img src="/assets/main/icon/icon_profile.png" className='iconImage' alt="" /> */}
           <div className="iconImage" id="iconImage5">
-            <FaRegUser size={20} />
+            <FaRegUser size={15} />
           </div>
           <p>
             Account

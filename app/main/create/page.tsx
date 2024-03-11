@@ -12,7 +12,7 @@ export default function Create() {
                 <a href="/main" className="iconDesc">
                     {/* <img src="/assets/main/icon/icon_home.png" className='iconImage' id="iconImage1" alt="" /> */}
                     <motion.div className="iconImage" id="iconImage1">
-                        <FaHouse size={20} />
+                        <FaHouse size={15} />
                     </motion.div>
                     <motion.p className='iconText1'>
                         Home
@@ -21,7 +21,7 @@ export default function Create() {
                 <a href="/main/search" className="iconDesc">
                     {/* <img src="/assets/main/icon/icon_search.png" className='iconImage' id='iconImage2' alt="" /> */}
                     <div className="iconImage" id="iconImage2">
-                        <FaMagnifyingGlass size={20} />
+                        <FaMagnifyingGlass size={15} />
                     </div>
                     <p>
                         Search
@@ -42,7 +42,7 @@ export default function Create() {
                 <a href="/main/notify" className="iconDesc">
                     {/* <img src="/assets/main/icon/icon_notip.png" className='iconImage' alt="" /> */}
                     <div className="iconImage" id="iconImage4">
-                        <FaBell size={20} />
+                        <FaBell size={15} />
                     </div>
                     <p>
                         Notify
@@ -51,7 +51,7 @@ export default function Create() {
                 <a href="/main/profile" className="iconDesc">
                     {/* <img src="/assets/main/icon/icon_profile.png" className='iconImage' alt="" /> */}
                     <motion.div className="iconImage" id="iconImage5">
-                        <FaRegUser size={20} />
+                        <FaRegUser size={15} />
                     </motion.div>
                     <motion.p className='iconText1'>
                         Account

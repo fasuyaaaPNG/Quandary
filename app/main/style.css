@@ -135,7 +135,7 @@
 
 .iconDesc1 {
     position: relative;
-    bottom: 4vw;
+    bottom: 5vw;
 }
 .navbar {
     border-top-right-radius: 4vw;
@@ -158,13 +158,13 @@
     width: 6vw;
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 2vw;
+    margin-bottom: 3vw;
     /* border: 1px solid red; */
     width: max-content;
 }
 
 .iconDesc {
-    padding-top: 2vw;
+    padding-top: 4vw;
     text-align: center;
     color: white;
     font-size: 3vw;
