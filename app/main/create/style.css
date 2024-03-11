@@ -13,7 +13,23 @@
     width: max-content;
     display: block;
     padding-top: 7vw;
-    padding-left: 7vw;
+    padding-left: 8vw;
+}
+
+input[type=text] {
+    background-color: transparent;
+    border: 0.5vw solid #A4A4A4;
+    border-radius: 3vw;
+    width: 85vw;
+    margin-bottom: 3vw;
+    height: 10vw;
+    padding-left: 3vw;
+    font-size: 3.5vw;
+    color: #4D4D4D;
+}
+
+#new_chq {
+    width: 85vw;
 }
 
 form {
@@ -35,6 +51,8 @@ textarea {
     padding-top: 4vw;
     padding-right: 3vw;
     height: 50vw;
+    margin-bottom: 3vw;
+    font-size: 3.5vw;
 }
 
 textarea::placeholder {

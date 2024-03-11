@@ -7,12 +7,24 @@ import {FaX, FaHouse, FaMagnifyingGlass, FaPlus, FaBell, FaRegUser } from "react
 
 export default function Create() {
     const [text, setText] = useState("");
+    const [inputCount, setInputCount] = useState(1);
 
     function autoGrow(event:React.ChangeEvent<HTMLTextAreaElement>) {
         const element = event.target;
         element.style.height = "50vw";
         element.style.height = (element.scrollHeight) + "px";
         setText(event.target.value);
+    }
+
+    function addInput() {
+        setInputCount(inputCount + 1);
+    }
+
+    const inputElements = [];
+    for (let i = 0; i < inputCount; i++) {
+        inputElements.push(
+            <input key={i} placeholder="Content tag" type="text" id={`new_${i}`} />
+        );
     }
 
     return (
@@ -28,8 +40,12 @@ export default function Create() {
                         onChange={autoGrow}
                         className="textArea"
                     />
+                    <div id="new_chq">
+                        {inputElements}
+                    </div>
+                    <input type="hidden" value={inputCount} id="total_chq"/>
                 </form>
-                <button>
+                <button onClick={addInput}>
                         <FaPlus/>
                         Add
                 </button>
