@@ -75,10 +75,12 @@ export default function Create() {
                     </button>
                 </form>
                 <div className="button">
-                    <button onClick={addInput}>
-                            <FaPlus className={"buttonIcon"}/>
-                            Add tag 
-                    </button>
+                    {inputCount < 5 && ( 
+                        <button onClick={addInput}>
+                            <FaPlus className={"buttonIcon"} />
+                            Add tag
+                        </button>
+                    )}
                     {inputCount > 1 && ( 
                         <button onClick={removeInput}>
                             <FaMinus className={"buttonIcon"} />
