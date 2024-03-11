@@ -1,6 +1,5 @@
 'use client';
 
-import "./backend/advice"
 import supabase from "./server/supabaseClient";
 import "./style.css";
 import { VscStarFull } from "react-icons/vsc";
