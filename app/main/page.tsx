@@ -4,7 +4,7 @@ import { FaHouse, FaMagnifyingGlass, FaPlus, FaBell, FaRegUser } from "react-ico
 import './style.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import React, { useRef, useState, ChangeEvent } from 'react';
+import React, { useRef, useState, ChangeEvent, useEffect } from 'react';
 import { motion } from "framer-motion";
 
 const Home: React.FC = () => {
@@ -25,6 +25,22 @@ const Home: React.FC = () => {
     const value = event.target.value;
     setInputValue(value);
   };
+
+  useEffect(() => {
+    const cookies = document.cookie;
+    const cookieArray = cookies.split(';');
+    const cookieObject: Record<string, string> = {};
+
+    cookieArray.forEach(cookie => {
+      const [name, value] = cookie.trim().split('=');
+      cookieObject[name] = decodeURIComponent(value);
+    });
+    
+    const isLogin = cookieObject['is_login'];
+
+    console.log('Is login:', isLogin);
+  }, []);
+  
 
   return (
     <>

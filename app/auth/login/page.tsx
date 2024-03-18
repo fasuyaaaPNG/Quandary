@@ -3,7 +3,8 @@
 import supabase from "@/app/server/supabaseClient";
 import "./style.css";
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation';
+import { setCookie, parseCookies } from 'nookies';
 
 export default function Login() {
 
@@ -11,24 +12,43 @@ export default function Login() {
   const [google, setgoogle] = useState('/assets/LoginRegister/google.png');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const router = useRouter()
+  const router = useRouter();
 
-  async function handleSignIn() {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+  async function handleSignIn(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
 
-    if (error) {
-      console.error('Error signing in:', error.message);
-      // Handle error, show message to the user, etc.
-    } else {
-      // Redirect to /redirect after successful login
-      router.push('/redirect');
+    const { data: usersData, error: usersError } = await supabase
+      .from('Users')
+      .select('*')
+      .eq('email', email);
+  
+    if (usersError) {
+      console.error('Error retrieving user data:', usersError.message);
+      return;
     }
+  
+    if (!usersData || usersData.length === 0 || usersData[0].password !== password) {
+      console.error('Invalid email or password');
+      return;
+    }
+
+    const userData = usersData[0];
+    console.log('User data:', userData);
+
+    setCookie(null, 'is_login', email, {
+      maxAge: 30 * 24 * 60 * 60,
+      path: '/',
+    });
+    console.log('Sesi aktif:', parseCookies().is_login);
+    router.push('/main');
   }
 
   useEffect(() => {
+    console.log('Sesi saat ini:', parseCookies().is_login);
+    const isLoggedIn = parseCookies().is_login;
+    if (isLoggedIn) {
+      router.push('/main');
+    }
     const handleResize = () => {
       const screenWidth = window.innerWidth;
 
@@ -69,17 +89,17 @@ export default function Login() {
           New user? <a href="/auth/regist" className="signin">Sign up</a>
         </p>
       </div>
-        <form onSubmit={handleSignIn}>
-          <div className="input">
-            <input type="email" placeholder="Email" className="email" onChange={(e) => setEmail(e.target.value)} value={email} />
-            <input type="password" placeholder="Password" className="password" onChange={(e) => setPassword(e.target.value)} value={password}/>
-          </div>
-          <div className="submit">
-            <button className="enter">
-              Login
-            </button>
-          </div>
-        </form>
+      <form onSubmit={handleSignIn}>
+        <div className="input">
+          <input type="email" placeholder="Email" className="email" onChange={(e) => setEmail(e.target.value)} value={email} />
+          <input type="password" placeholder="Password" className="password" onChange={(e) => setPassword(e.target.value)} value={password}/>
+        </div>
+        <div className="submit">
+          <button className="enter">
+            Login
+          </button>
+        </div>
+      </form>
         <div className="google">
           <a href="" className="withgoogle">
             <div className="iconback">

@@ -1,16 +1,57 @@
 'use client'
 
+import { useEffect, useState } from "react";
+import { FaArrowLeft, FaCheck, FaHouse, FaMagnifyingGlass, FaPlus, FaBell, FaRegUser } from "react-icons/fa6";
 import { motion } from "framer-motion";
-import {FaArrowLeft, FaCheck, FaHouse, FaMagnifyingGlass, FaPlus, FaBell, FaRegUser } from "react-icons/fa6";
-import "./style.css"
-import React, { useEffect, useState } from "react";
+import supabase from '@/app/server/supabaseClient';
+import { useRouter } from 'next/navigation';
+import "./style.css";
 
 export default function Edit() {
+    const [fullname, setFullname] = useState('');
+    const [username, setUsername] = useState('');
+    const [bio, setBio] = useState('');
+    const [createat, setCreate] = useState('');
     const [fullnameLength, setFullnameLength] = useState(0);
     const [usernameLength, setUsernameLength] = useState(0);
     const [bioLength, setBioLength] = useState(0);
+    const router = useRouter();
 
     useEffect(() => {
+        const fetchUserProfile = async () => {
+            const cookies = document.cookie;
+            const cookieArray = cookies.split(';');
+            const cookieObject: Record<string, string> = {};
+
+            cookieArray.forEach(cookie => {
+            const [name, value] = cookie.trim().split('=');
+            cookieObject[name] = decodeURIComponent(value);
+            });
+            
+            const isLogin = cookieObject['is_login'];
+            const { data, error } = await supabase
+                .from('Users')
+                .select('username, name_profile, bio, created_at')
+                .eq('email', isLogin);
+          
+            if (error) {
+                console.error('Error fetching user profile:', error.message);
+                return;
+            }
+      
+            if (data.length === 0) {
+                console.error('User not found');
+                return;
+            }
+      
+            const userProfile = data[0];
+            setFullname(userProfile.name_profile || userProfile.name_profile);
+            setUsername(userProfile.username || userProfile.username);
+            setBio(userProfile.bio || userProfile.bio);
+            setCreate(userProfile.created_at || userProfile.created_at);
+        };
+        fetchUserProfile();
+
         if (fullnameLength === 0) document.getElementById('fullnameLength')!.innerText = "0/30";
         if (usernameLength === 0) document.getElementById('usernameLength')!.innerText = "0/10";
         if (bioLength === 0) document.getElementById('bioLength')!.innerText = "0/30";
@@ -37,6 +78,55 @@ export default function Edit() {
         document.getElementById('usernameLength')!.innerText = text.length.toString() + "/10";
     }
 
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const cookies = document.cookie;
+        const cookieArray = cookies.split(';');
+        const cookieObject: Record<string, string> = {};
+    
+        cookieArray.forEach(cookie => {
+        const [name, value] = cookie.trim().split('=');
+        cookieObject[name] = decodeURIComponent(value);
+        });            
+        const isLogin = cookieObject['is_login'];
+        
+        // Memeriksa apakah pengguna sudah ada di tabel Users
+        const { data: existingUserData, error: existingUserError } = await supabase
+            .from('Users')
+            .select('id')
+            .eq('email', isLogin);
+    
+        if (existingUserError) {
+            console.error('Error checking existing user:', existingUserError.message);
+            return;
+        }
+    
+        if (existingUserData.length === 0) {
+            // Jika pengguna belum ada, lakukan operasi insert
+            const { error: insertError } = await supabase
+                .from('Users')
+                .insert([{ email: isLogin, name_profile: fullname, username, bio }]);
+    
+            if (insertError) {
+                console.error('Error inserting new user profile:', insertError.message);
+                return;
+            }
+        } else {
+            // Jika pengguna sudah ada, lakukan operasi update
+            const { error: updateError } = await supabase
+                .from('Users')
+                .update({ name_profile: fullname, username, bio })
+                .eq('email', isLogin);
+    
+            if (updateError) {
+                console.error('Error updating user profile:', updateError.message);
+                return;
+            }
+        }
+    
+        router.push('/main/profile');
+    };
+
     return (
         <> 
             <div className="background">
@@ -56,7 +146,7 @@ export default function Edit() {
                 <p className="profileDesk">
                     Change profile picture
                 </p>
-                <form name="form_main" action="/main" method="POST">
+                <form name="form_main" onSubmit={handleSubmit}>
                     <div className="inputNameDiv">
                         <div className="labelChar">
                             <label className="inputNameLabel" htmlFor="fullname">
@@ -66,7 +156,7 @@ export default function Edit() {
                                 <span id="fullnameLength"></span>
                             </label>
                         </div>
-                        <input maxLength={30} onInput={countTextName} className="inputName" name="fullname" id="fullname" type="text" />
+                        <input maxLength={30} onInput={countTextName} value={fullname} className="inputName" name="fullname" id="fullname" type="text" />
                     </div>
                     <div className="inputNameDiv">
                         <div className="labelChar">
@@ -77,7 +167,7 @@ export default function Edit() {
                                 <span id="usernameLength"></span>
                             </label>
                         </div>
-                        <input onInput={countTextUsername} maxLength={10} className="inputName" name="username" id="username" type="text" />
+                        <input onInput={countTextUsername} value={username} maxLength={10} className="inputName" name="username" id="username" type="text" />
                     </div>
                     <div className="inputNameDiv">
                         <div className="labelChar">
@@ -88,13 +178,13 @@ export default function Edit() {
                                 <span id="bioLength"></span>
                             </label>
                         </div>
-                        <input onInput={countTextBio} maxLength={30} className="inputName" name="bio" id="bio" type="text" />
+                        <input onInput={countTextBio} value={bio} maxLength={30} className="inputName" name="bio" id="bio" type="text" />
                     </div>
                     <div className="inputNameDiv">
                         <label className="inputNameLabelCreated">
                             Created Account at
                         </label>
-                        <input className="inputName" type="text" />
+                        <input className="inputName" value={createat} readOnly type="text" />
                     </div>
                     <button type="submit" className="submit">
                         <FaCheck size={25} className="centang"/>

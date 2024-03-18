@@ -1,12 +1,62 @@
 'use client'
 
-import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import {FaHouse, FaMagnifyingGlass, FaPlus, FaBell, FaRegUser } from "react-icons/fa6";
-import "./style.css";
+import { useState, useEffect } from 'react';
+import { FaHouse, FaMagnifyingGlass, FaPlus, FaBell, FaRegUser } from 'react-icons/fa6';
+import { motion } from 'framer-motion';
+import supabase from '@/app/server/supabaseClient';
+import './style.css';
 
 export default function Profile() {
+    const [username, setUsername] = useState('');
+    const [userProfileName, setUserProfileName] = useState('');
+    const [bio, setBio] = useState('');
+
     useEffect(() => {
+        const fetchUserProfile = async () => {
+            const cookies = document.cookie;
+            const cookieArray = cookies.split(';');
+            const cookieObject: Record<string, string> = {};
+
+            cookieArray.forEach(cookie => {
+            const [name, value] = cookie.trim().split('=');
+            cookieObject[name] = decodeURIComponent(value);
+            });
+            
+            const isLogin = cookieObject['is_login'];
+            const { data, error } = await supabase
+              .from('Users')
+              .select('username, name_profile, bio')
+              .eq('email', isLogin);
+            
+            if (error) {
+              console.error('Error fetching user profile:', error.message);
+              return;
+            }
+      
+            if (data.length === 0) {
+              console.error('User not found');
+              return;
+            }
+      
+            const userProfile = data[0];
+            setUsername(userProfile.username);
+            setUserProfileName(userProfile.name_profile);
+            setBio(userProfile.bio);
+        };
+        fetchUserProfile();
+
+        const cookies = document.cookie;
+        const cookieArray = cookies.split(';');
+        const cookieObject: Record<string, string> = {};
+
+        cookieArray.forEach(cookie => {
+            const [name, value] = cookie.trim().split('=');
+            cookieObject[name] = decodeURIComponent(value);
+        });
+        
+        const isLogin = cookieObject['is_login'];
+        console.log('Is login:', isLogin);
+
         const usernameAkun = document.querySelector(".usernameAkun");
         const bioAkun = document.querySelector(".bioAkun")
         if (usernameAkun !== null && usernameAkun.innerHTML.trim() === "") {
@@ -25,13 +75,13 @@ export default function Profile() {
             <img src="/assets/main/image1.jpg" alt="" className="fotoProfile" />
             <div className="deskProfile">
                 <p className="namaAkun">
-                    Dhavin Fasya A
+                    {userProfileName}
                 </p>
                 <p className="usernameAkun">
-                    @fasuyaaa
+                    @{username}
                 </p>
                 <p className="bioAkun">
-                    hi! im a weaboo 😈
+                    {bio}
                 </p>
             </div>
             <a href="/main/profile/edit" className="editProfile">
