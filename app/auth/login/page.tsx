@@ -33,7 +33,7 @@ export default function Login() {
     }
 
     const userData = usersData[0];
-    console.log('User data:', userData);
+    // console.log('User data:', userData);
 
     setCookie(null, 'is_login', email, {
       maxAge: 30 * 24 * 60 * 60,

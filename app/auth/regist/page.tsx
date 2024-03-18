@@ -3,12 +3,14 @@
 import "./style.css";
 import { useState, useEffect } from 'react';
 import supabase from "../../server/supabaseClient";
+import { setCookie, parseCookies } from 'nookies';
 
 const Regist = () => {
-  const [username, setUsername] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [formError, setFormError] = useState<string | null>(null);
+  const [emailExistsError, setEmailExistsError] = useState<boolean>(false); // State untuk menampilkan pesan error jika email sudah ada
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,11 +36,7 @@ const Regist = () => {
     }
   
     if (existingUser && existingUser.length > 0) {
-      setFormError('Email already exists');
-      const errorContainer = document.getElementById('error');
-      if (errorContainer) {
-        errorContainer.classList.add('error-show');
-      }
+      setEmailExistsError(true);
       return;
     }
 
@@ -53,13 +51,16 @@ const Regist = () => {
       if (errorContainer) {
         errorContainer.classList.add('error-show');
       }
-    }
-  
-    else {
-      window.open('https://quandary-net.vercel.app/auth/login', '_self');
+    } else {
+      setCookie(null, 'is_login', email, {
+        maxAge: 30 * 24 * 60 * 60,
+        path: '/',
+      });
+      console.log('Sesi aktif:', parseCookies().is_login);
+      window.location.href = '/redirect';
       console.log(data)
+    }
   };
-}
   
   const [logo, setlogo] = useState('/assets/LoginRegister/QUANDARY.png');
   const [google, setgoogle] = useState('/assets/LoginRegister/google.png');
