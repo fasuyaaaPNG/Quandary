@@ -55,17 +55,25 @@ export default function Profile() {
         });
         
         const isLogin = cookieObject['is_login'];
-        console.log('Is login:', isLogin);
+        // console.log('Is login:', isLogin);
+        if (!isLogin) {
+           window.location.href = '/auth/login';
+        }
 
         const usernameAkun = document.querySelector(".usernameAkun");
         const bioAkun = document.querySelector(".bioAkun")
         if (usernameAkun !== null && usernameAkun.innerHTML.trim() === "") {
             usernameAkun.remove();
         };
-        if (bioAkun !== null && bioAkun.innerHTML.trim() === "") {
-            bioAkun.remove();
-        };
+        // if (bioAkun !== null && bioAkun.innerHTML.trim() === "") {
+        //     bioAkun.remove();
+        // };
     }, []);
+
+    const handleLogout = () => {
+        document.cookie = 'is_login=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        window.location.href = '/auth/login';
+    };
 
     return (
         <>
@@ -90,6 +98,7 @@ export default function Profile() {
                 </p>
                 <img src="/assets/profile/iconEdit.png" alt="" className="icon" />
             </a>
+            <img onClick={handleLogout} src="/assets/profile/logout.png" alt="" className="logoutButton" />
             {/* navbar */}
             <div className="navbar">
                 <a href="/main" className="iconDesc">

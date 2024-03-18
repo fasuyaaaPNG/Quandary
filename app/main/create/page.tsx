@@ -51,6 +51,23 @@ export default function Create() {
         );
     }
 
+    React.useEffect(() => {
+        const cookies = document.cookie;
+        const cookieArray = cookies.split(';');
+        const cookieObject: Record<string, string> = {};
+
+        cookieArray.forEach(cookie => {
+            const [name, value] = cookie.trim().split('=');
+            cookieObject[name] = decodeURIComponent(value);
+        });
+
+        const isLogin = cookieObject['is_login'];
+
+        if (!isLogin) {
+            window.location.href = '/auth/login';
+        }
+    }, []);
+
     return (
         <>
             <div className="background">

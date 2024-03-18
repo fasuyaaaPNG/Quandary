@@ -8,6 +8,8 @@
     text-align: center;
     padding-top: 5vw;
     margin-bottom: 4vw;
+    width: 15vw;
+    margin: auto;
 }
 
 .fotoProfile {
@@ -15,6 +17,14 @@
     margin: auto;
     border-radius: 100%;
     margin-bottom: 4vw;
+    margin-top: 4vw;
+}
+
+.logoutButton {
+    position: absolute;
+    width: 8vw;
+    top: 5vw;
+    left: 87vw;
 }
 
 .namaAkun {

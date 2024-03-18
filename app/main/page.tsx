@@ -38,7 +38,11 @@ const Home: React.FC = () => {
     
     const isLogin = cookieObject['is_login'];
 
-    console.log('Is login:', isLogin);
+    // console.log('Is login:', isLogin);
+    if (!isLogin) {
+      // Redirect to login page
+      window.location.href = '/auth/login';
+    }
   }, []);
   
 

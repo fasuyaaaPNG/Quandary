@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { FaArrowLeft, FaCheck, FaHouse, FaMagnifyingGlass, FaPlus, FaBell, FaRegUser } from "react-icons/fa6";
 import { motion } from "framer-motion";
 import supabase from '@/app/server/supabaseClient';
-import { useRouter } from 'next/navigation';
 import "./style.css";
 
 export default function Edit() {
@@ -15,7 +14,6 @@ export default function Edit() {
     const [fullnameLength, setFullnameLength] = useState(0);
     const [usernameLength, setUsernameLength] = useState(0);
     const [bioLength, setBioLength] = useState(0);
-    const router = useRouter();
 
     useEffect(() => {
         const fetchUserProfile = async () => {
@@ -24,11 +22,16 @@ export default function Edit() {
             const cookieObject: Record<string, string> = {};
 
             cookieArray.forEach(cookie => {
-            const [name, value] = cookie.trim().split('=');
-            cookieObject[name] = decodeURIComponent(value);
+                const [name, value] = cookie.trim().split('=');
+                cookieObject[name] = decodeURIComponent(value);
             });
             
             const isLogin = cookieObject['is_login'];
+            
+            if (!isLogin) {
+                window.location.href = '/auth/login';
+             }
+
             const { data, error } = await supabase
                 .from('Users')
                 .select('username, name_profile, bio, created_at')
@@ -45,37 +48,30 @@ export default function Edit() {
             }
       
             const userProfile = data[0];
-            setFullname(userProfile.name_profile || userProfile.name_profile);
-            setUsername(userProfile.username || userProfile.username);
-            setBio(userProfile.bio || userProfile.bio);
-            setCreate(userProfile.created_at || userProfile.created_at);
+            setFullname(userProfile.name_profile);
+            setUsername(userProfile.username);
+            setBio(userProfile.bio);
+            setCreate(userProfile.created_at);
         };
         fetchUserProfile();
+    }, []);
 
-        if (fullnameLength === 0) document.getElementById('fullnameLength')!.innerText = "0/30";
-        if (usernameLength === 0) document.getElementById('usernameLength')!.innerText = "0/10";
-        if (bioLength === 0) document.getElementById('bioLength')!.innerText = "0/30";
-    }, [fullnameLength, usernameLength, bioLength]);
-
-    function countTextBio() {
-        const bioInput = document.querySelector<HTMLInputElement>("form[name=form_main] input[name=bio]");
-        const text = bioInput!.value;
+    function countTextBio(event: React.ChangeEvent<HTMLInputElement>) {
+        const text = event.target.value;
+        setBio(text);
         setBioLength(text.length);
-        document.getElementById('bioLength')!.innerText = text.length.toString() + "/30";
     }
     
-    function countTextName() {
-        const nameInput = document.querySelector<HTMLInputElement>("form[name=form_main] input[name=fullname]");
-        const text = nameInput!.value;
+    function countTextName(event: React.ChangeEvent<HTMLInputElement>) {
+        const text = event.target.value;
+        setFullname(text);
         setFullnameLength(text.length);
-        document.getElementById('fullnameLength')!.innerText = text.length.toString() + "/30";
     }
     
-    function countTextUsername() {
-        const usernameInput = document.querySelector<HTMLInputElement>("form[name=form_main] input[name=username]");
-        const text = usernameInput!.value;
+    function countTextUsername(event: React.ChangeEvent<HTMLInputElement>) {
+        const text = event.target.value;
+        setUsername(text);
         setUsernameLength(text.length);
-        document.getElementById('usernameLength')!.innerText = text.length.toString() + "/10";
     }
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -83,14 +79,13 @@ export default function Edit() {
         const cookies = document.cookie;
         const cookieArray = cookies.split(';');
         const cookieObject: Record<string, string> = {};
-    
+        
         cookieArray.forEach(cookie => {
-        const [name, value] = cookie.trim().split('=');
-        cookieObject[name] = decodeURIComponent(value);
+            const [name, value] = cookie.trim().split('=');
+            cookieObject[name] = decodeURIComponent(value);
         });            
         const isLogin = cookieObject['is_login'];
-        
-        // Memeriksa apakah pengguna sudah ada di tabel Users
+
         const { data: existingUserData, error: existingUserError } = await supabase
             .from('Users')
             .select('id')
@@ -102,7 +97,6 @@ export default function Edit() {
         }
     
         if (existingUserData.length === 0) {
-            // Jika pengguna belum ada, lakukan operasi insert
             const { error: insertError } = await supabase
                 .from('Users')
                 .insert([{ email: isLogin, name_profile: fullname, username, bio }]);
@@ -112,20 +106,19 @@ export default function Edit() {
                 return;
             }
         } else {
-            // Jika pengguna sudah ada, lakukan operasi update
             const { error: updateError } = await supabase
                 .from('Users')
                 .update({ name_profile: fullname, username, bio })
                 .eq('email', isLogin);
-    
+
             if (updateError) {
                 console.error('Error updating user profile:', updateError.message);
                 return;
             }
         }
-    
-        router.push('/main/profile');
+        window.location.href = '/main/profile';
     };
+
 
     return (
         <> 
@@ -153,10 +146,10 @@ export default function Edit() {
                                 Profile name
                             </label>
                             <label className="inputchar" htmlFor="fullname">
-                                <span id="fullnameLength"></span>
+                                <span id="fullnameLength">{fullnameLength}/30</span>
                             </label>
                         </div>
-                        <input maxLength={30} onInput={countTextName} value={fullname} className="inputName" name="fullname" id="fullname" type="text" />
+                        <input maxLength={30} onChange={countTextName} value={fullname} className="inputName" name="fullname" id="fullname" type="text" />
                     </div>
                     <div className="inputNameDiv">
                         <div className="labelChar">
@@ -164,10 +157,10 @@ export default function Edit() {
                             Username
                             </label>
                             <label className="inputchar" htmlFor="username">
-                                <span id="usernameLength"></span>
+                                <span id="usernameLength">{usernameLength}/10</span>
                             </label>
                         </div>
-                        <input onInput={countTextUsername} value={username} maxLength={10} className="inputName" name="username" id="username" type="text" />
+                        <input onChange={countTextUsername} value={username} maxLength={10} className="inputName" name="username" id="username" type="text" />
                     </div>
                     <div className="inputNameDiv">
                         <div className="labelChar">
@@ -175,10 +168,10 @@ export default function Edit() {
                                 Bio
                             </label>
                             <label className="inputchar" htmlFor="bio">
-                                <span id="bioLength"></span>
+                                <span id="bioLength">{bioLength}/30</span>
                             </label>
                         </div>
-                        <input onInput={countTextBio} value={bio} maxLength={30} className="inputName" name="bio" id="bio" type="text" />
+                        <input onChange={countTextBio} value={bio} maxLength={30} className="inputName" name="bio" id="bio" type="text" />
                     </div>
                     <div className="inputNameDiv">
                         <label className="inputNameLabelCreated">
@@ -193,7 +186,6 @@ export default function Edit() {
                 {/* navbar */}
                 <div className="navbar">
                     <a href="/main" className="iconDesc">
-                        {/* <img src="/assets/main/icon/icon_home.png" className='iconImage' id="iconImage1" alt="" /> */}
                         <motion.div animate={{translateY: 0}} className="iconImage" id="iconImage1">
                             <FaHouse size={15} />
                         </motion.div>
@@ -202,7 +194,6 @@ export default function Edit() {
                         </motion.p>
                     </a>
                     <a href="/main/search" className="iconDesc">
-                        {/* <img src="/assets/main/icon/icon_search.png" className='iconImage' id='iconImage2' alt="" /> */}
                         <div className="iconImage" id="iconImage2">
                             <FaMagnifyingGlass size={15} />
                         </div>
@@ -211,7 +202,6 @@ export default function Edit() {
                         </p>
                     </a>
                     <a href="/main/create" className="iconDesc">
-                        {/* <img src="/assets/main/icon/icon_new post.png" className='iconImage' alt="" /> */}
                         <div className="iconImage" id="iconImage3">
                             <FaPlus size={15} />
                         </div>
@@ -220,7 +210,6 @@ export default function Edit() {
                         </p>
                     </a>
                     <a href="/main/notify" className="iconDesc">
-                        {/* <img src="/assets/main/icon/icon_notip.png" className='iconImage' alt="" /> */}
                         <div className="iconImage" id="iconImage4">
                             <FaBell size={15} />
                         </div>
@@ -232,10 +221,6 @@ export default function Edit() {
                         <motion.div animate={{translateY: 0, opacity: 1}} className="round">
                             <FaRegUser size={20} />
                         </motion.div>
-                        {/* <img src="/assets/main/icon/icon_profile.png" className='iconImage' alt="" /> */}
-                        {/* <div className="iconImage" id="iconImage5">
-                            
-                        </div> */}
                         <p className="blue">
                             Account
                         </p>

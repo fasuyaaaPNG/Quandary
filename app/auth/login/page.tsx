@@ -40,14 +40,14 @@ export default function Login() {
       path: '/',
     });
     console.log('Sesi aktif:', parseCookies().is_login);
-    router.push('/main');
+    window.location.href = '/main/profile';
   }
 
   useEffect(() => {
     console.log('Sesi saat ini:', parseCookies().is_login);
     const isLoggedIn = parseCookies().is_login;
     if (isLoggedIn) {
-      router.push('/main');
+      window.location.href = '/main/profile';
     }
     const handleResize = () => {
       const screenWidth = window.innerWidth;
