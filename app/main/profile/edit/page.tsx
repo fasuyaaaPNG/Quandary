@@ -176,7 +176,7 @@ export default function Edit() {
                     )}
                     <img src="/assets/editProfile/iconImage.png" className="iconProfile" alt="" />
                 </label>
-                <input type="file" id="uploadInput" className="image" style={{ display: "none" }} onChange={handleImageChange} />
+                <input type="file" id="uploadInput" accept="image/*" className="image" style={{ display: "none" }} onChange={handleImageChange} />
                 <p className="profileDesk">
                     Change profile picture
                 </p>
