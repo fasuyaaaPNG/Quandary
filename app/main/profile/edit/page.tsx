@@ -211,10 +211,10 @@ export default function Edit() {
                                 Bio
                             </label>
                             <label className="inputchar" htmlFor="bio">
-                                <span id="bioLength">{bioLength}/30</span>
+                                <span id="bioLength">{bioLength}/50</span>
                             </label>
                         </div>
-                        <input onChange={countTextBio} value={bio} maxLength={30} className="inputName" name="bio" id="bio" type="text" />
+                        <input onChange={countTextBio} value={bio} maxLength={50} className="inputName" name="bio" id="bio" type="text" />
                     </div>
                     <div className="inputNameDiv">
                         <label className="inputNameLabelCreated">
