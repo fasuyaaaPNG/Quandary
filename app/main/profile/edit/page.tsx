@@ -123,7 +123,6 @@ export default function Edit() {
                 }
             }
         }
-        
 
         const { data: existingUserData, error: existingUserError } = await supabase
             .from('Users')
