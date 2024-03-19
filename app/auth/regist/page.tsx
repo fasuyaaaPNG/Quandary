@@ -11,6 +11,11 @@ const Regist = () => {
   const [password, setPassword] = useState('');
   const [formError, setFormError] = useState<string | null>(null);
   const [emailExistsError, setEmailExistsError] = useState<boolean>(false);
+
+  function encryptEmail(email: string): string {
+    const encryptedEmail = Buffer.from(email).toString('base64');
+    return encryptedEmail.split('').reverse().join('');
+  }
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,6 +28,8 @@ const Regist = () => {
       }
       return;
     }
+
+    const encryptedEmail = encryptEmail(email);
 
     const { data: existingUser, error: existingUserError } = await supabase
       .from('Users')
@@ -52,11 +59,10 @@ const Regist = () => {
         errorContainer.classList.add('error-show');
       }
     } else {
-      setCookie(null, 'is_login', email, {
+      setCookie(null, 'is_login', encryptedEmail, {
         maxAge: 30 * 24 * 60 * 60,
         path: '/',
       });
-      console.log('Sesi aktif:', parseCookies().is_login);
       window.location.href = '/redirect';
       console.log(data)
     }

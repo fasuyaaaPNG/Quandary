@@ -14,6 +14,11 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const router = useRouter();
 
+  function encryptEmail(email: string): string {
+    const encryptedEmail = Buffer.from(email).toString('base64');
+    return encryptedEmail.split('').reverse().join('');
+  }
+
   async function handleSignIn(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
@@ -33,18 +38,15 @@ export default function Login() {
     }
 
     const userData = usersData[0];
-    // console.log('User data:', userData);
-
-    setCookie(null, 'is_login', email, {
+    const encryptedEmail = encryptEmail(email);
+    setCookie(null, 'is_login', encryptedEmail, {
       maxAge: 30 * 24 * 60 * 60,
       path: '/',
     });
-    console.log('Sesi aktif:', parseCookies().is_login);
     window.location.href = '/main/profile';
   }
 
   useEffect(() => {
-    console.log('Sesi saat ini:', parseCookies().is_login);
     const isLoggedIn = parseCookies().is_login;
     if (isLoggedIn) {
       window.location.href = '/main/profile';

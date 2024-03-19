@@ -6,6 +6,15 @@ import { motion } from "framer-motion";
 import supabase from '@/app/server/supabaseClient';
 import "./style.css";
 
+function decryptEmail(encryptedEmail: string): string {
+    if (!encryptedEmail) {
+        return '';
+    }
+    const reversedEncryptedEmail = encryptedEmail.split('').reverse().join('');
+    const originalEmail = Buffer.from(reversedEncryptedEmail, 'base64').toString();
+    return originalEmail;
+}
+
 export default function Edit() {
     const [fullname, setFullname] = useState('');
     const [username, setUsername] = useState('');
@@ -14,28 +23,31 @@ export default function Edit() {
     const [fullnameLength, setFullnameLength] = useState(0);
     const [usernameLength, setUsernameLength] = useState(0);
     const [bioLength, setBioLength] = useState(0);
+    const [isLogin, setIsLogin] = useState('');
 
     useEffect(() => {
+        const cookies = document.cookie;
+        const cookieArray = cookies.split(';');
+        const cookieObject: Record<string, string> = {};
+
+        cookieArray.forEach(cookie => {
+            const [name, value] = cookie.trim().split('=');
+            cookieObject[name] = decodeURIComponent(value);
+        });
+        
+        const encryptedSession = cookieObject['is_login'];
+        const decryptedSession = decryptEmail(encryptedSession);
+        setIsLogin(decryptedSession);
+
+        if (!decryptedSession) { 
+            window.location.href = '/auth/login';
+        }
+
         const fetchUserProfile = async () => {
-            const cookies = document.cookie;
-            const cookieArray = cookies.split(';');
-            const cookieObject: Record<string, string> = {};
-
-            cookieArray.forEach(cookie => {
-                const [name, value] = cookie.trim().split('=');
-                cookieObject[name] = decodeURIComponent(value);
-            });
-            
-            const isLogin = cookieObject['is_login'];
-            
-            if (!isLogin) {
-                window.location.href = '/auth/login';
-             }
-
             const { data, error } = await supabase
                 .from('Users')
                 .select('username, name_profile, bio, created_at')
-                .eq('email', isLogin);
+                .eq('email', decryptedSession);
           
             if (error) {
                 console.error('Error fetching user profile:', error.message);
@@ -76,15 +88,6 @@ export default function Edit() {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const cookies = document.cookie;
-        const cookieArray = cookies.split(';');
-        const cookieObject: Record<string, string> = {};
-        
-        cookieArray.forEach(cookie => {
-            const [name, value] = cookie.trim().split('=');
-            cookieObject[name] = decodeURIComponent(value);
-        });            
-        const isLogin = cookieObject['is_login'];
 
         const { data: existingUserData, error: existingUserError } = await supabase
             .from('Users')

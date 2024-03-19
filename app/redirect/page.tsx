@@ -25,38 +25,50 @@ const Redirect = () => {
         };
     }, []);
 
+    function decryptEmail(encryptedEmail: string): string {
+      const reversedEncryptedEmail = encryptedEmail.split('').reverse().join('');
+      const originalEmail = Buffer.from(reversedEncryptedEmail, 'base64').toString();
+      return originalEmail;
+    }
+
     useEffect(() => {
         const cookies = document.cookie;
         const cookieArray = cookies.split(';');
         const cookieObject: Record<string, string> = {};
 
         cookieArray.forEach(cookie => {
-          const [name, value] = cookie.trim().split('=');
-          cookieObject[name] = decodeURIComponent(value);
+            const [name, value] = cookie.trim().split('=');
+            cookieObject[name] = decodeURIComponent(value);
         });
-            
-        const is_login = cookieObject['is_login'];
-        if (!is_login) {
-          window.location.href = '/auth/login';
+
+        const isLogin = cookieObject['is_login'];
+        const decryptedEmail = isLogin ? decryptEmail(isLogin) : '';
+
+        if (!isLogin || !decryptedEmail) {
+            window.location.href = '/auth/login';
+            return;
         }
+
 
         const redirectTimer = setTimeout(() => {
           const cookies = document.cookie;
           const cookieArray = cookies.split(';');
           const cookieObject: Record<string, string> = {};
-
+  
           cookieArray.forEach(cookie => {
-            const [name, value] = cookie.trim().split('=');
-            cookieObject[name] = decodeURIComponent(value);
+              const [name, value] = cookie.trim().split('=');
+              cookieObject[name] = decodeURIComponent(value);
           });
             
-          const is_login = cookieObject['is_login'];
-          if (is_login) {
+          const isLogin = cookieObject['is_login'];
+          const decryptedEmail = isLogin ? decryptEmail(isLogin) : '';
+
+          if (isLogin || decryptedEmail) {
             window.location.href = '/main'; 
           } else {
             window.location.href = '/auth/login';
           }
-        }, 3500);
+        }, 3000);
 
         return () => clearTimeout(redirectTimer);
     }, []);

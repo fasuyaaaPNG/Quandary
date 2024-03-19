@@ -27,9 +27,9 @@ export default function Create() {
     }
 
     function removeInput() {
-        if (inputCount > 1) { // Pastikan tidak ada kurang dari 1 input
+        if (inputCount > 1) {
             setInputCount(inputCount - 1);
-            checkShareable(); // Periksa kembali keadaan setelah menghapus input
+            checkShareable();
         }
     }
 
@@ -51,6 +51,12 @@ export default function Create() {
         );
     }
 
+    function decryptEmail(encryptedEmail: string): string {
+        const reversedEncryptedEmail = encryptedEmail.split('').reverse().join('');
+        const originalEmail = Buffer.from(reversedEncryptedEmail, 'base64').toString();
+        return originalEmail;
+    }
+
     React.useEffect(() => {
         const cookies = document.cookie;
         const cookieArray = cookies.split(';');
@@ -62,8 +68,9 @@ export default function Create() {
         });
 
         const isLogin = cookieObject['is_login'];
+        const decryptedEmail = isLogin ? decryptEmail(isLogin) : '';
 
-        if (!isLogin) {
+        if (!isLogin || !decryptedEmail) {
             window.location.href = '/auth/login';
         }
     }, []);

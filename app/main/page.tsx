@@ -26,20 +26,26 @@ const Home: React.FC = () => {
     setInputValue(value);
   };
 
+  function decryptEmail(encryptedEmail: string): string {
+    const reversedEncryptedEmail = encryptedEmail.split('').reverse().join('');
+    const originalEmail = Buffer.from(reversedEncryptedEmail, 'base64').toString();
+    return originalEmail;
+  }
+
   useEffect(() => {
     const cookies = document.cookie;
     const cookieArray = cookies.split(';');
     const cookieObject: Record<string, string> = {};
-
+  
     cookieArray.forEach(cookie => {
       const [name, value] = cookie.trim().split('=');
       cookieObject[name] = decodeURIComponent(value);
     });
     
     const isLogin = cookieObject['is_login'];
-
-    // console.log('Is login:', isLogin);
-    if (!isLogin) {
+    const decryptedEmail = isLogin ? decryptEmail(isLogin) : '';
+  
+    if (!isLogin || !decryptedEmail) {
       window.location.href = '/auth/login';
     }
   }, []);

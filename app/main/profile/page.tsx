@@ -11,6 +11,12 @@ export default function Profile() {
     const [userProfileName, setUserProfileName] = useState('');
     const [bio, setBio] = useState('');
 
+    function decryptEmail(encryptedEmail: string): string {
+        const reversedEncryptedEmail = encryptedEmail.split('').reverse().join('');
+        const originalEmail = Buffer.from(reversedEncryptedEmail, 'base64').toString();
+        return originalEmail;
+    }
+
     useEffect(() => {
         const fetchUserProfile = async () => {
             const cookies = document.cookie;
@@ -18,56 +24,40 @@ export default function Profile() {
             const cookieObject: Record<string, string> = {};
 
             cookieArray.forEach(cookie => {
-            const [name, value] = cookie.trim().split('=');
-            cookieObject[name] = decodeURIComponent(value);
+                const [name, value] = cookie.trim().split('=');
+                cookieObject[name] = decodeURIComponent(value);
             });
-            
+
             const isLogin = cookieObject['is_login'];
+            const decryptedEmail = isLogin ? decryptEmail(isLogin) : '';
+
+            if (!isLogin || !decryptedEmail) {
+                window.location.href = '/auth/login';
+                return;
+            }
+
             const { data, error } = await supabase
-              .from('Users')
-              .select('username, name_profile, bio')
-              .eq('email', isLogin);
-            
+                .from('Users')
+                .select('username, name_profile, bio')
+                .eq('email', decryptedEmail);
+
             if (error) {
-              console.error('Error fetching user profile:', error.message);
-              return;
+                console.error('Error fetching user profile:', error.message);
+                return;
             }
-      
+
             if (data.length === 0) {
-              console.error('User not found');
-              return;
+                console.error('User not found');
+                return;
             }
-      
+
             const userProfile = data[0];
             setUsername(userProfile.username);
             setUserProfileName(userProfile.name_profile);
             setBio(userProfile.bio);
         };
+
         fetchUserProfile();
-
-        const cookies = document.cookie;
-        const cookieArray = cookies.split(';');
-        const cookieObject: Record<string, string> = {};
-
-        cookieArray.forEach(cookie => {
-            const [name, value] = cookie.trim().split('=');
-            cookieObject[name] = decodeURIComponent(value);
-        });
-        
-        const isLogin = cookieObject['is_login'];
-        // console.log('Is login:', isLogin);
-        if (!isLogin) {
-           window.location.href = '/auth/login';
-        }
-
-        const usernameAkun = document.querySelector(".usernameAkun");
-        const bioAkun = document.querySelector(".bioAkun")
-        if (usernameAkun !== null && usernameAkun.innerHTML.trim() === "") {
-            usernameAkun.remove();
-        };
-        // if (bioAkun !== null && bioAkun.innerHTML.trim() === "") {
-        //     bioAkun.remove();
-        // };
     }, []);
 
     const handleLogout = () => {
