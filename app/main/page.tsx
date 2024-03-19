@@ -1,13 +1,16 @@
 'use client'
 
-import { FaHouse, FaMagnifyingGlass, FaPlus, FaBell, FaRegUser } from "react-icons/fa6";
-import './style.css';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FaHouse, FaMagnifyingGlass, FaPlus, FaBell, FaRegUser } from "react-icons/fa6";
 import React, { useRef, useState, ChangeEvent, useEffect } from 'react';
+import supabase from '@/app/server/supabaseClient';
 import { motion } from "framer-motion";
+import './style.css';
 
 const Home: React.FC = () => {
+  const [photoURL, setPhotoURL] = useState('');
+
   const inputRef = useRef<HTMLInputElement>(null);
   const [inputValue, setInputValue] = useState<string>('');
 
@@ -26,7 +29,7 @@ const Home: React.FC = () => {
     setInputValue(value);
   };
 
-  function decryptEmail(encryptedEmail: string): string {
+  const decryptEmail = (encryptedEmail: string): string => {
     const reversedEncryptedEmail = encryptedEmail.split('').reverse().join('');
     const originalEmail = Buffer.from(reversedEncryptedEmail, 'base64').toString();
     return originalEmail;
@@ -44,17 +47,41 @@ const Home: React.FC = () => {
     
     const isLogin = cookieObject['is_login'];
     const decryptedEmail = isLogin ? decryptEmail(isLogin) : '';
+
+    const fetchUserProfile = async () => {
+      const { data, error } = await supabase
+          .from('Users')
+          .select('username, name_profile, bio, foto_profile')
+          .eq('email', decryptedEmail);
+
+      if (error) {
+          console.error('Error fetching user profile:', error.message);
+          return;
+      }
+
+      if (!data || data.length === 0) {
+          console.error('User not found');
+          return;
+      }
+
+      const userProfile = data[0];
+      if (!userProfile.foto_profile) {
+          setPhotoURL('https://tyldtyivzeqiedyvaulp.supabase.co/storage/v1/object/public/foto_profile/profile.png');
+      } else {
+          setPhotoURL(`https://tyldtyivzeqiedyvaulp.supabase.co/storage/v1/object/public/foto_profile/${userProfile.foto_profile}`);
+      }
+    };
   
     if (!isLogin || !decryptedEmail) {
       window.location.href = '/auth/login';
+    } else {
+      fetchUserProfile();
     }
   }, []);
-  
 
   return (
     <>
       <div className="container">
-        {/* search + profil */}
         <div className="searchProfil">
           <div className="search">
             <div className="searchIcon" onClick={handleSearchIconClick}>
@@ -71,7 +98,7 @@ const Home: React.FC = () => {
             )}
           </div>
           <a href="/main/profile" className="profilImage">
-            <img src="/assets/image1.jpg" className="profil" alt="" />
+            <img loading="lazy" src={photoURL} className="profil" alt="" />
           </a>
         </div>
         {/* tranding */}

@@ -24,6 +24,9 @@ export default function Edit() {
     const [usernameLength, setUsernameLength] = useState(0);
     const [bioLength, setBioLength] = useState(0);
     const [isLogin, setIsLogin] = useState('');
+    const [selectedImage, setSelectedImage] = useState<File | null>(null);
+    const [previewImage, setPreviewImage] = useState<string | null>(null);
+    const [photoURL, setPhotoURL] = useState('');
 
     useEffect(() => {
         const cookies = document.cookie;
@@ -46,7 +49,7 @@ export default function Edit() {
         const fetchUserProfile = async () => {
             const { data, error } = await supabase
                 .from('Users')
-                .select('username, name_profile, bio, created_at')
+                .select('username, name_profile, bio, created_at, foto_profile')
                 .eq('email', decryptedSession);
           
             if (error) {
@@ -64,6 +67,12 @@ export default function Edit() {
             setUsername(userProfile.username);
             setBio(userProfile.bio);
             setCreate(userProfile.created_at);
+
+            if (!userProfile.foto_profile) {
+                setPhotoURL('https://tyldtyivzeqiedyvaulp.supabase.co/storage/v1/object/public/foto_profile/profile.png');
+            } else {
+                setPhotoURL("https://tyldtyivzeqiedyvaulp.supabase.co/storage/v1/object/public/foto_profile/"+userProfile.foto_profile);
+            }
         };
         fetchUserProfile();
     }, []);
@@ -86,8 +95,35 @@ export default function Edit() {
         setUsernameLength(text.length);
     }
 
+    const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            setSelectedImage(file);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreviewImage(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+
+        let photoURL: string | null = null;
+
+        if (selectedImage) {
+            const { data, error } = await supabase.storage.from('foto_profile').upload(selectedImage.name, selectedImage);
+            if (error) {
+                console.error('Error uploading image:', error.message);
+                alert(error.message)
+            } else {
+                if (data) {
+                    photoURL = data.path;
+                }
+            }
+        }
+        
 
         const { data: existingUserData, error: existingUserError } = await supabase
             .from('Users')
@@ -102,7 +138,7 @@ export default function Edit() {
         if (existingUserData.length === 0) {
             const { error: insertError } = await supabase
                 .from('Users')
-                .insert([{ email: isLogin, name_profile: fullname, username, bio }]);
+                .insert([{ email: isLogin, name_profile: fullname, username, bio, foto_profile: photoURL }]);
     
             if (insertError) {
                 console.error('Error inserting new user profile:', insertError.message);
@@ -111,7 +147,7 @@ export default function Edit() {
         } else {
             const { error: updateError } = await supabase
                 .from('Users')
-                .update({ name_profile: fullname, username, bio })
+                .update({ name_profile: fullname, username, bio, foto_profile: photoURL })
                 .eq('email', isLogin);
 
             if (updateError) {
@@ -121,7 +157,6 @@ export default function Edit() {
         }
         window.location.href = '/main/profile';
     };
-
 
     return (
         <> 
@@ -135,10 +170,14 @@ export default function Edit() {
                     </h1>
                 </div>
                 <label className="inputImage" htmlFor="uploadInput">
-                    <img src="/assets/main/image1.jpg" alt="" className="profileImage" />
+                    {previewImage ? (
+                        <img loading="lazy" src={previewImage} alt="Profile" className="profileImage" />
+                    ) : (
+                        <img loading="lazy" src={photoURL} alt="" className="profileImage" />
+                    )}
                     <img src="/assets/editProfile/iconImage.png" className="iconProfile" alt="" />
                 </label>
-                <input type="file" id="uploadInput" className="image" style={{ display: "none" }} />
+                <input type="file" id="uploadInput" className="image" style={{ display: "none" }} onChange={handleImageChange} />
                 <p className="profileDesk">
                     Change profile picture
                 </p>

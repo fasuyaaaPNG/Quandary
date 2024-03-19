@@ -10,6 +10,7 @@ export default function Profile() {
     const [username, setUsername] = useState('');
     const [userProfileName, setUserProfileName] = useState('');
     const [bio, setBio] = useState('');
+    const [photoURL, setPhotoURL] = useState('');
 
     function decryptEmail(encryptedEmail: string): string {
         const reversedEncryptedEmail = encryptedEmail.split('').reverse().join('');
@@ -38,7 +39,7 @@ export default function Profile() {
 
             const { data, error } = await supabase
                 .from('Users')
-                .select('username, name_profile, bio')
+                .select('username, name_profile, bio, foto_profile')
                 .eq('email', decryptedEmail);
 
             if (error) {
@@ -55,6 +56,12 @@ export default function Profile() {
             setUsername(userProfile.username);
             setUserProfileName(userProfile.name_profile);
             setBio(userProfile.bio);
+
+            if (!userProfile.foto_profile) {
+                setPhotoURL('https://tyldtyivzeqiedyvaulp.supabase.co/storage/v1/object/public/foto_profile/profile.png');
+            } else {
+                setPhotoURL("https://tyldtyivzeqiedyvaulp.supabase.co/storage/v1/object/public/foto_profile/"+userProfile.foto_profile);
+            }
         };
 
         fetchUserProfile();
@@ -70,7 +77,7 @@ export default function Profile() {
             <h1 className="profile">
                 Profile
             </h1>
-            <img src="/assets/main/image1.jpg" alt="" className="fotoProfile" />
+            <img loading='lazy' src={photoURL} alt="" className="fotoProfile" />
             <div className="deskProfile">
                 <p className="namaAkun">
                     {userProfileName}

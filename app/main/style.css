@@ -61,6 +61,8 @@
 
 .profil {
     border-radius: 13vw;
+    aspect-ratio: 1;
+    object-fit: cover;
 }
 
 .profilImage {
