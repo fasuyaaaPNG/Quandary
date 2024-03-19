@@ -10,7 +10,7 @@ const Regist = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [formError, setFormError] = useState<string | null>(null);
-  const [emailExistsError, setEmailExistsError] = useState<boolean>(false); // State untuk menampilkan pesan error jika email sudah ada
+  const [emailExistsError, setEmailExistsError] = useState<boolean>(false);
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

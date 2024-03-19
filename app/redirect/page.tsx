@@ -39,7 +39,7 @@ const Redirect = () => {
         if (!is_login) {
           window.location.href = '/auth/login';
         }
-        
+
         const redirectTimer = setTimeout(() => {
           const cookies = document.cookie;
           const cookieArray = cookies.split(';');
@@ -52,14 +52,14 @@ const Redirect = () => {
             
           const is_login = cookieObject['is_login'];
           if (is_login) {
-            window.location.href = '/main'; // Jika ada is_login, redirect ke /main
+            window.location.href = '/main'; 
           } else {
-            window.location.href = '/auth/login'; // Jika tidak ada is_login, redirect ke /auth/login
+            window.location.href = '/auth/login';
           }
-        }, 3500); // Delay 4 detik sebelum redirect
+        }, 3500);
 
-        return () => clearTimeout(redirectTimer); // Membersihkan timer saat komponen unmount
-    }, []); // useEffect ini akan dipanggil hanya saat komponen pertama kali dirender
+        return () => clearTimeout(redirectTimer);
+    }, []);
 
     const backgroundImageStyle = {
         backgroundImage: `url(${background})`,

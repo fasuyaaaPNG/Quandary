@@ -40,7 +40,6 @@ const Home: React.FC = () => {
 
     // console.log('Is login:', isLogin);
     if (!isLogin) {
-      // Redirect to login page
       window.location.href = '/auth/login';
     }
   }, []);
