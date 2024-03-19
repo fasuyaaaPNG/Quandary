@@ -65,6 +65,14 @@
     object-fit: cover;
 }
 
+.tumbnail {
+    width: 70vw;
+    margin: auto;
+    margin-top: 4vw;
+    margin-bottom: 4vw;
+    object-fit: cover;
+}
+
 .profilImage {
     float: right;
     width: 12vw;

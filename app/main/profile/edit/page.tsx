@@ -109,23 +109,46 @@ export default function Edit() {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-
+    
         let photoURL: string | null = null;
-
+    
         if (selectedImage) {
+            const { data: existingFiles, error: existingFilesError } = await supabase.storage
+                .from('foto_profile')
+                .list();
+    
+            if (existingFilesError) {
+                console.error('Error listing existing files:', existingFilesError.message);
+                return;
+            }
+
+            const existingFile = existingFiles?.find(file => file.name === selectedImage.name);
+
+            if (existingFile) {
+                const { error: deleteError } = await supabase.storage
+                    .from('foto_profile')
+                    .remove([selectedImage.name]);
+    
+                if (deleteError) {
+                    console.error('Error deleting existing file:', deleteError.message);
+                    return;
+                }
+            }
+
             const { data, error } = await supabase.storage
                 .from('foto_profile')
                 .upload(selectedImage.name, selectedImage);
+    
             if (error) {
                 console.error('Error uploading image:', error.message);
-                alert(error.message)
+                alert(error.message);
             } else {
                 if (data) {
                     photoURL = data.path;
                 }
             }
         }
-
+    
         const { data: existingUserData, error: existingUserError } = await supabase
             .from('Users')
             .select('id')

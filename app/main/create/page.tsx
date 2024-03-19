@@ -4,12 +4,15 @@ import "./style.css"
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import {FaMinus, FaX, FaHouse, FaMagnifyingGlass, FaPlus, FaBell, FaRegUser } from "react-icons/fa6";
+import supabase from '@/app/server/supabaseClient';
 
 export default function Create() {
     
     const [text, setText] = useState("");
     const [inputCount, setInputCount] = useState(1);
     const [isShareable, setIsShareable] = useState(false);
+    const [selectedImage, setSelectedImage] = useState<File | null>(null);
+    const [previewImage, setPreviewImage] = useState<string | null>(null);
 
     function checkShareable() {
         if (text.trim() !== "" && inputCount >= 1) {
@@ -57,6 +60,60 @@ export default function Create() {
         return originalEmail;
     }
 
+    const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            setSelectedImage(file);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreviewImage(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+    
+        // Menghapus file dari bucket jika sudah ada dengan nama yang sama
+        if (selectedImage) {
+            const fileName = selectedImage.name;
+            const { data: existingFiles, error: existingFilesError } = await supabase.storage
+                .from('foto_post')
+                .list();
+    
+            if (existingFilesError) {
+                console.error('Error listing existing files:', existingFilesError.message);
+                return;
+            }
+    
+            const existingFile = existingFiles?.find(file => file.name === fileName);
+    
+            if (existingFile) {
+                const { error: deleteError } = await supabase.storage
+                    .from('foto_post')
+                    .remove([existingFile.id]);
+    
+                if (deleteError) {
+                    console.error('Error deleting existing file:', deleteError.message);
+                    return;
+                }
+            }
+    
+            // Mengunggah file baru ke bucket penyimpanan
+            const { data, error } = await supabase.storage
+                .from('foto_post')
+                .upload(fileName, selectedImage);
+    
+            if (error) {
+                console.error('Error uploading image:', error.message);
+                return;
+            }
+    
+            window.location.href = '/main'; // Redirect ke halaman utama setelah berhasil submit
+        }
+    };
+
     React.useEffect(() => {
         const cookies = document.cookie;
         const cookieArray = cookies.split(';');
@@ -81,7 +138,15 @@ export default function Create() {
                 <a className="back" href="/main">
                     <FaX size={20}/>
                 </a>
-                <form action="" method="post">
+                <form action="" method="post" onSubmit={handleSubmit}>
+                    <div className="imgUpload">
+                        <label className="thumbnailClass" htmlFor="thumbnail">
+                            <FaPlus className={"buttonIcon"} />
+                            Add thumbnail
+                        </label>
+                        <input id="thumbnail" type="file" accept="image/*" style={{display: "none"}} onChange={handleImageChange} />
+                    </div>
+                    <img src={previewImage ? previewImage : ""} alt="" className="Thumbnail" />
                     <textarea
                         onInput={checkShareable}
                         placeholder="Ask a question"

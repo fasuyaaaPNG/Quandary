@@ -133,6 +133,7 @@ const Home: React.FC = () => {
                 </p>
               </div>
             </div>
+            <img src="/assets/main/post.jpg" alt="" className="tumbnail" />
             <div className="deskripsi">
               <p>
                 I'm planning a cultural journey through Indonesia and would love to hear about your most memorable cultural experiences. Any hidden gems or unique festivals I should check out?

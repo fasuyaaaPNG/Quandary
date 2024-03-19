@@ -14,6 +14,7 @@
     display: block;
     padding-top: 7vw;
     padding-left: 8vw;
+    margin-bottom: 4vw;
 }
 
 input[type=text] {
@@ -163,4 +164,18 @@ button {
 
 .blue {
     color: #7FA1F8;
+}
+
+.thumbnailClass {
+    display: flex;
+    margin-bottom: 3vw;
+    padding-top: 4vw;
+    align-items: center;
+}
+
+.Thumbnail {
+    width: 70vw;
+    margin: auto;
+    margin-bottom: 7vw;
+    display:flex;
 }
