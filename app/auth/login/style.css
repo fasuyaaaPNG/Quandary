@@ -8,6 +8,38 @@
     }
 }
 
+.error-show {
+    position: absolute;
+    bottom: -15vw;
+    left: 26vw;
+    font-size: 4vw;
+    text-align: center;
+    margin-left: 0;
+    right: 6vw;
+    animation: fadeIn 1s;
+    .alert {
+        display: block;
+        animation: fadeIn 1s;
+        position: absolute;
+        width: 5vw;
+        right: 59vw;
+        align-content: center;
+    }
+}
+
+.errorText {
+    position: relative;
+    right: 5vw;
+}
+
+.alert {
+    display: none;
+}
+
+.error {
+    display: none;
+}
+
 .container {
     display: flex;
     flex-direction: column;

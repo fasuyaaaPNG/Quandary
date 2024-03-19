@@ -7,11 +7,11 @@ import { useRouter } from 'next/navigation';
 import { setCookie, parseCookies } from 'nookies';
 
 export default function Login() {
-
   const [logo, setlogo] = useState('/assets/LoginRegister/QUANDARY.png');
   const [google, setgoogle] = useState('/assets/LoginRegister/google.png');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [formError, setFormError] = useState<string | null>(null); // State untuk menampilkan pesan error
   const router = useRouter();
 
   function encryptEmail(email: string): string {
@@ -34,6 +34,11 @@ export default function Login() {
   
     if (!usersData || usersData.length === 0 || usersData[0].password !== password) {
       console.error('Invalid email or password');
+      setFormError('Invalid email or password');
+      const errorContainer = document.getElementById('error');
+      if (errorContainer) {
+        errorContainer.classList.add('error-show');
+      }
       return;
     }
 
@@ -100,6 +105,10 @@ export default function Login() {
           <button className="enter">
             Login
           </button>
+        </div>
+        <div id="error">
+          <img className="alert" src="/assets/LoginRegister/alert.png" alt="" />
+          {formError && <p className="errorText">{formError}</p>}
         </div>
       </form>
         <div className="google">
