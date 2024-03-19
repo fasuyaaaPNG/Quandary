@@ -113,7 +113,9 @@ export default function Edit() {
         let photoURL: string | null = null;
 
         if (selectedImage) {
-            const { data, error } = await supabase.storage.from('foto_profile').upload(selectedImage.name, selectedImage);
+            const { data, error } = await supabase.storage
+                .from('foto_profile')
+                .upload(selectedImage.name, selectedImage);
             if (error) {
                 console.error('Error uploading image:', error.message);
                 alert(error.message)
