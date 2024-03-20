@@ -107,78 +107,79 @@ export default function Edit() {
         }
     };
 
-    const uploadImage = async (image: File, retryCount: number = 0): Promise<string | null> => {
-        try {
-            const { data, error } = await supabase.storage
-                .from('foto_profile')
-                .upload(image.name, image);
-    
-            if (error) {
-                throw new Error(error.message);
-            }
-    
-            if (data) {
-                return data.path;
-            }
-        } catch (error) {
-            // cons('Error uploading image:', sage);
-            // Mengulangi proses jika masih ada percobaan yang tersisa
-            if (retryCount > 0) {
-                return uploadImage(image, retryCount - 1);
-            }
-        }
-    
-        return null;
-    };
-    
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
     
         let photoURL: string | null = null;
     
         if (selectedImage) {
-            // Mencoba mengunggah gambar dengan maksimal 3 percobaan
-            photoURL = await uploadImage(selectedImage, 3);
+            const { data: existingFiles, error: existingFilesError } = await supabase.storage
+                .from('foto_profile')
+                .list();
+    
+            if (existingFilesError) {
+                console.error('Error listing existing files:', existingFilesError.message);
+                return;
+            }
+
+            const existingFile = existingFiles?.find(file => file.name === selectedImage.name);
+
+            if (existingFile) {
+                const { error: deleteError } = await supabase.storage
+                    .from('foto_profile')
+                    .remove([selectedImage.name]);
+    
+                if (deleteError) {
+                    console.error('Error deleting existing file:', deleteError.message);
+                    return;
+                }
+            }
+
+            const { data, error } = await supabase.storage
+                .from('foto_profile')
+                .upload(selectedImage.name, selectedImage);
+    
+            if (error) {
+                console.error('Error uploading image:', error.message);
+                // alert(error.message);
+            } else {
+                if (data) {
+                    photoURL = data.path;
+                }
+            }
         }
     
-        if (!photoURL) {
-            console.error('Failed to upload image after multiple attempts');
+        const { data: existingUserData, error: existingUserError } = await supabase
+            .from('Users')
+            .select('id')
+            .eq('email', isLogin);
+    
+        if (existingUserError) {
+            console.error('Error checking existing user:', existingUserError.message);
             return;
         }
     
-        try {
-            const { data: existingUserData, error: existingUserError } = await supabase
+        if (existingUserData.length === 0) {
+            const { error: insertError } = await supabase
                 .from('Users')
-                .select('id')
+                .insert([{ email: isLogin, name_profile: fullname, username, bio, foto_profile: photoURL }]);
+    
+            if (insertError) {
+                console.error('Error inserting new user profile:', insertError.message);
+                return;
+            }
+        } else {
+            const { error: updateError } = await supabase
+                .from('Users')
+                .update({ name_profile: fullname, username, bio, foto_profile: photoURL })
                 .eq('email', isLogin);
-    
-            if (existingUserError) {
-                throw new Error(existingUserError.message);
+
+            if (updateError) {
+                console.error('Error updating user profile:', updateError.message);
+                return;
             }
-    
-            if (existingUserData.length === 0) {
-                const { error: insertError } = await supabase
-                    .from('Users')
-                    .insert([{ email: isLogin, name_profile: fullname, username, bio, foto_profile: photoURL }]);
-    
-                if (insertError) {
-                    throw new Error(insertError.message);
-                }
-            } else {
-                const { error: updateError } = await supabase
-                    .from('Users')
-                    .update({ name_profile: fullname, username, bio, foto_profile: photoURL })
-                    .eq('email', isLogin);
-    
-                if (updateError) {
-                    throw new Error(updateError.message);
-                }
-            }
-    
-            window.location.href = '/main/profile';
-        } catch (error) {
-            console.error('Error ');
         }
+        window.location.href = '/main/profile';
     };
 
     return (
