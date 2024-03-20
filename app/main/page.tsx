@@ -10,7 +10,7 @@ import './style.css';
 
 const Home: React.FC = () => {
   const [photoURL, setPhotoURL] = useState('');
-
+  const [posts, setPosts] = useState<any[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const [inputValue, setInputValue] = useState<string>('');
 
@@ -49,26 +49,26 @@ const Home: React.FC = () => {
     const decryptedEmail = isLogin ? decryptEmail(isLogin) : '';
 
     const fetchUserProfile = async () => {
-      const { data, error } = await supabase
-          .from('Users')
-          .select('username, name_profile, bio, foto_profile')
-          .eq('email', decryptedEmail);
+      const { data: userDataa, error: userError } = await supabase
+        .from('Users')
+        .select('username, name_profile, bio, foto_profile')
+        .eq('email', decryptedEmail);
 
-      if (error) {
-          console.error('Error fetching user profile:', error.message);
-          return;
+      if (userError) {
+        console.error('Error fetching user:', userError.message);
+        return;
       }
 
-      if (!data || data.length === 0) {
-          console.error('User not found');
-          return;
+      if (!userDataa || userDataa.length === 0) {
+        console.error('User data not found');
+        return;
       }
 
-      const userProfile = data[0];
+      const userProfile = userDataa[0];
       if (!userProfile.foto_profile) {
-          setPhotoURL('https://tyldtyivzeqiedyvaulp.supabase.co/storage/v1/object/public/foto_profile/profile.png');
+        setPhotoURL('https://tyldtyivzeqiedyvaulp.supabase.co/storage/v1/object/public/foto_profile/profile.png');
       } else {
-          setPhotoURL(`https://tyldtyivzeqiedyvaulp.supabase.co/storage/v1/object/public/foto_profile/${userProfile.foto_profile}`);
+        setPhotoURL(`https://tyldtyivzeqiedyvaulp.supabase.co/storage/v1/object/public/foto_profile/${userProfile.foto_profile}`);
       }
     };
   
@@ -77,7 +77,72 @@ const Home: React.FC = () => {
     } else {
       fetchUserProfile();
     }
-  }, []);
+    const fetchData = async () => {
+      const { data: tagPostingData, error: tagPostingError } = await supabase
+        .from('tag_posting')
+        .select('id_posting, id_tag');
+    
+      if (tagPostingError) {
+        console.error('Error fetching tag_posting:', tagPostingError.message);
+        return;
+      }
+      
+      const groupedPosts: Record<string, boolean> = {};
+      const postData = [];
+    
+      for (const tagPosting of tagPostingData) {
+        const idPosting = tagPosting.id_posting;
+    
+        // Jika id_posting belum ditampilkan sebelumnya, maka tampilkan postingnya
+        if (!groupedPosts[idPosting]) {
+          const { data: postDataResult, error: postError } = await supabase
+            .from('posting')
+            .select('pesan, thumbnail, created_at, id_user')
+            .eq('id', idPosting);
+    
+          if (postError) {
+            console.error('Error fetching posting:', postError.message);
+            continue;
+          }
+    
+          const { data: userData, error: userError } = await supabase
+            .from('Users')
+            .select('username, name_profile, bio, foto_profile')
+            .eq('id', postDataResult[0].id_user);
+    
+          if (userError) {
+            console.error('Error fetching user:', userError.message);
+            continue;
+          }
+    
+          const { data: tagData, error: tagError } = await supabase
+            .from('tag')
+            .select('tag')
+            .eq('id', tagPosting.id_tag);
+    
+          if (tagError) {
+            console.error('Error fetching tag:', tagError.message);
+            continue;
+          }
+    
+          const post = {
+            pesan: postDataResult[0].pesan,
+            thumbnail: postDataResult[0].thumbnail,
+            created_at: postDataResult[0].created_at,
+            username: userData[0].username,
+            tag: tagData.map((tag: any) => tag.tag).join(', '),
+            foto_profile: `https://tyldtyivzeqiedyvaulp.supabase.co/storage/v1/object/public/foto_profile/${userData[0].foto_profile}`
+          };
+    
+          postData.push(post);
+          groupedPosts[idPosting] = true; // tandai id_posting sudah ditampilkan
+        }
+      }
+    
+      setPosts(postData);
+    };
+  fetchData();
+}, []);
 
   return (
     <>
@@ -101,234 +166,49 @@ const Home: React.FC = () => {
             <img loading="lazy" src={photoURL} className="profil" alt="" />
           </a>
         </div>
-        {/* tranding */}
-        {/* <div className="tranding">
-          <div className="tranding1">
-            <button>
-              Trending
-            </button>
-          </div>
-          <div className="tranding2">
-            <button>
-              New
-            </button>
-          </div>
-          <div className="tranding3">
-            <button>
-              Culture
-            </button>
-          </div>
-        </div> */}
         {/* content */}
         <div className="content">
-          <div className="content1">
-            <div className="profilUser">
-              <img src="/assets/image2.jpeg" alt="" className="profilUserImage" />
-              <div className="userTime">
-                <p className="username">
-                  Raiueueueueu
-                </p>
-                <p className="time">
-                  17 hours ago
-                </p>
+          {posts.map((post, index) => (
+            <div key={index} className="content1">
+              <div className="profilUser">
+                <img src={post.foto_profile} alt="" className="profilUserImage" />
+                <div className="userTime">
+                  <p className="username">
+                    {post.username}
+                  </p>
+                  <p className="time">
+                    {post.created_at}
+                  </p>
+                </div>
               </div>
-            </div>
-            <img src="/assets/main/post.jpg" alt="" className="tumbnail" />
-            <div className="deskripsi">
-              <p>
-                I'm planning a cultural journey through Indonesia and would love to hear about your most memorable cultural experiences. Any hidden gems or unique festivals I should check out?
-              </p>
-            </div>
-            <div className="kategori">
-              <div className="kategori1">
-                jakarta
-              </div>
-              <div className="kategori1">
-                Indonesia
-              </div>
-              <div className="kategori1">
-                Travel
-              </div>
-            </div>
-            <div className="garis">
-            </div>
-            <div className="likeComment">
-              <div className="like">
-                <img src="/assets/main/icon/like.svg" alt="" className="iconLikeComment" />
-                <p className="countLike">
-                  13.895 likes
+              <img src={post.thumbnail} alt="" className="thumbnail" />
+              <div className="deskripsi">
+                <p>
+                  {post.pesan}
                 </p>
               </div>
-              <div className="comment">
-                <img src="/assets/main/icon/comment.svg" alt="" className="iconLikeComment" />
-                <p className="countComment">
-                  378 replies
-                </p>
+              <div className="kategori">
+                  <div className="kategori1">
+                    {post.tag}
+                  </div>
+              </div>
+              <div className="garis"></div>
+              <div className="likeComment">
+                <div className="like">
+                  <img src="/assets/main/icon/like.svg" alt="" className="iconLikeComment" />
+                  <p className="countLike">
+                    13.895 likes
+                  </p>
+                </div>
+                <div className="comment">
+                  <img src="/assets/main/icon/comment.svg" alt="" className="iconLikeComment" />
+                  <p className="countComment">
+                    378 replies
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="content1">
-            <div className="profilUser">
-              <img src="/assets/image3.jpeg" alt="" className="profilUserImage" />
-              <div className="userTime">
-                <p className="username">
-                  Shikimorii:3
-                </p>
-                <p className="time">
-                  23 hours ago
-                </p>
-              </div>
-            </div>
-            <div className="deskripsi">
-              <p>
-                Traditional Indonesian attire like the kebaya and sarong are not just clothing; they're expressions of cultural identity. Have you experienced or adopted any local fashion styles during your travels?
-              </p>
-            </div>
-            <div className="kategori">
-              <div className="kategori1">
-                Semarang
-              </div>
-              <div className="kategori1">
-                Jawa
-              </div>
-            </div>
-            <div className="garis">
-            </div>
-            <div className="likeComment">
-              <div className="like">
-                <img src="/assets/main/icon/like.svg" alt="" className="iconLikeComment" />
-                <p className="countLike">
-                  69 likes
-                </p>
-              </div>
-              <div className="comment">
-                <img src="/assets/main/icon/comment.svg" alt="" className="iconLikeComment" />
-                <p className="countComment">
-                  7 replies
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="content1">
-            <div className="profilUser">
-              <img src="/assets/image4.jpeg" alt="" className="profilUserImage" />
-              <div className="userTime">
-                <p className="username">
-                  Rusdi JMK48
-                </p>
-                <p className="time">
-                  1 days ago
-                </p>
-              </div>
-            </div>
-            <div className="deskripsi">
-              <p>
-                In your opinion, how does wearing traditional clothing contribute to a deeper understanding and appreciation of the local culture? Have you found it to be a meaningful way to connect with the communities you visit?
-              </p>
-            </div>
-            <div className="kategori">
-              <div className="kategori1">
-                Ngawi
-              </div>
-              <div className="kategori1">
-                Travel
-              </div>
-              <div className="kategori1">
-                Indonesia
-              </div>
-              <div className="kategori1">
-                Question
-              </div>
-              <div className="kategori1">
-                JMK48_LOCAL
-              </div>
-              <div className="kategori1">
-                JMK48_LOCAL
-              </div>
-              <div className="kategori1">
-                JMK48_LOCAL
-              </div>
-              <div className="kategori1">
-                JMK48_LOCAL
-              </div>
-              <div className="kategori1">
-                JMK48_LOCAL
-              </div>
-              <div className="kategori1">
-                JMK48_LOCAL
-              </div>
-              <div className="kategori1">
-                JMK48_LOCAL
-              </div>
-              <div className="kategori1">
-                JMK48_LOCAL
-              </div>
-              <div className="kategori1">
-                JMK48_LOCAL
-              </div>
-              <div className="kategori1">
-                JMK48_LOCAL
-              </div>
-            </div>
-            <div className="garis">
-            </div>
-            <div className="likeComment">
-              <div className="like">
-                <img src="/assets/main/icon/like.svg" alt="" className="iconLikeComment" />
-                <p className="countLike">
-                  134 likes
-                </p>
-              </div>
-              <div className="comment">
-                <img src="/assets/main/icon/comment.svg" alt="" className="iconLikeComment" />
-                <p className="countComment">
-                  14 replies
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="content1">
-            <div className="profilUser">
-              <img src="/assets/image5.jpeg" alt="" className="profilUserImage" />
-              <div className="userTime">
-                <p className="username">
-                  HengkerSMG64
-                </p>
-                <p className="time">
-                  1 days ago
-                </p>
-              </div>
-            </div>
-            <div className="deskripsi">
-              <p>
-                During your travels, have you ever embraced or adopted local fashion styles, particularly traditional Indonesian attire like the kebaya and sarong? If so, what was your experience like?
-              </p>
-            </div>
-            <div className="kategori">
-              <div className="kategori1">
-                Semarang
-              </div>
-              <div className="kategori1">
-                Indonesia
-              </div>
-            </div>
-            <div className="garis">
-            </div>
-            <div className="likeComment">
-              <div className="like">
-                <img src="/assets/main/icon/like.svg" alt="" className="iconLikeComment" />
-                <p className="countLike">
-                  1.391 likes
-                </p>
-              </div>
-              <div className="comment">
-                <img src="/assets/main/icon/comment.svg" alt="" className="iconLikeComment" />
-                <p className="countComment">
-                  140 replies
-                </p>
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
       {/* navbar */}

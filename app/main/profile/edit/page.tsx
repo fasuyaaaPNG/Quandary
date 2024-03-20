@@ -141,7 +141,6 @@ export default function Edit() {
     
             if (error) {
                 console.error('Error uploading image:', error.message);
-                // alert(error.message);
             } else {
                 if (data) {
                     photoURL = data.path;
