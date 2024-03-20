@@ -177,7 +177,7 @@ export default function Edit() {
     
             window.location.href = '/main/profile';
         } catch (error) {
-            console.error('Error');
+            console.error('Error ');
         }
     };
 
