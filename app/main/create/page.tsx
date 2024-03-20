@@ -138,44 +138,46 @@ export default function Create() {
                 <a className="back" href="/main">
                     <FaX size={20}/>
                 </a>
-                <form action="" method="post" onSubmit={handleSubmit}>
-                    <div className="imgUpload">
-                        <label className="thumbnailClass" htmlFor="thumbnail">
-                            <FaPlus className={"buttonIcon"} />
-                            Add thumbnail
-                        </label>
-                        <input id="thumbnail" type="file" accept="image/*" style={{display: "none"}} onChange={handleImageChange} />
-                    </div>
-                    <img src={previewImage ? previewImage : ""} alt="" className="Thumbnail" />
-                    <textarea
-                        onInput={checkShareable}
-                        placeholder="Ask a question"
-                        value={text}
-                        onChange={autoGrow}
-                        className="textArea"
-                        required
-                    />
-                    <div id="new_chq">
-                        {inputElements}
-                    </div>
-                    {/* <input type="hidden" value={inputCount} id="total_chq"/> */}
-                    <button className={`share ${isShareable ? "share shareOke" : ""}`} disabled={!isShareable}>
-                        Share
-                    </button>
-                </form>
-                <div className="button">
-                    {inputCount < 5 && ( 
-                        <button onClick={addInput}>
-                            <FaPlus className={"buttonIcon"} />
-                            Add tag
+                <div className="over">
+                    <form action="" method="post" onSubmit={handleSubmit}>
+                        <div className="imgUpload">
+                            <label className="thumbnailClass" htmlFor="thumbnail">
+                                <FaPlus className={"buttonIcon"} />
+                                Add thumbnail
+                            </label>
+                            <input id="thumbnail" type="file" accept="image/*" style={{display: "none"}} onChange={handleImageChange} />
+                        </div>
+                        <img src={previewImage ? previewImage : ""} alt="" className="Thumbnail" />
+                        <textarea
+                            onInput={checkShareable}
+                            placeholder="Ask a question"
+                            value={text}
+                            onChange={autoGrow}
+                            className="textArea"
+                            required
+                        />
+                        <div id="new_chq">
+                            {inputElements}
+                        </div>
+                        {/* <input type="hidden" value={inputCount} id="total_chq"/> */}
+                        <button className={`share ${isShareable ? "share shareOke" : ""}`} disabled={!isShareable}>
+                            Share
                         </button>
-                    )}
-                    {inputCount > 1 && ( 
-                        <button onClick={removeInput}>
-                            <FaMinus className={"buttonIcon"} />
-                            Remove tag
-                        </button>
-                    )}
+                    </form>
+                    <div className="button">
+                        {inputCount < 5 && ( 
+                            <button onClick={addInput}>
+                                <FaPlus className={"buttonIcon"} />
+                                Add tag
+                            </button>
+                        )}
+                        {inputCount > 1 && ( 
+                            <button onClick={removeInput}>
+                                <FaMinus className={"buttonIcon"} />
+                                Remove tag
+                            </button>
+                        )}
+                    </div>
                 </div>
                 {/* navbar */}
                 <div className="navbar">
