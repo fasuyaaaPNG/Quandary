@@ -67,7 +67,7 @@ const Home: React.FC = () => {
     return data[0].id;
 };
 
-const getUserId = async () => {
+      const getUserId = async () => {
         const cookies = document.cookie;
         const cookieArray = cookies.split(';');
         const cookieObject: Record<string, string> = {};
@@ -302,7 +302,7 @@ const getUserId = async () => {
         const { data: userData, error: userError } = await supabase
           .from('Users')
           .select('username, name_profile, bio, foto_profile')
-          .eq('id', postDataResult[0].id_user);
+          .eq('id', postDataResult[0]?.id_user);
     
         if (userError) {
           console.error('Error fetching user:', userError.message);

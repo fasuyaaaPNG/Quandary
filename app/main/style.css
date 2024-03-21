@@ -160,6 +160,7 @@
 }
 
 .content {
+    word-break: keep-all;
     position: relative;
     padding-left: 6vw;
     padding-right: 6vw;

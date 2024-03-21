@@ -133,6 +133,14 @@
     font-size: 3vw;
 }
 
+.show {
+    display: flex !important;
+}
+
+.hide {
+    display: none;
+}
+
 #iconImage5 {
     position: relative;
     top: 0vw;
@@ -144,4 +152,150 @@
 
 .blue {
     color: #7FA1F8;
+}
+
+.optionMore {
+    background-color: #F6F6F6;
+    width: max-content;
+    align-items: end;
+    position: relative;
+    padding: 1vw 3vw 1vw 3vw;
+    border-radius: 4vw;
+    color: #141421;
+    font-size: 3vw;
+    left: 60vw;
+    bottom: 11vw;
+    display: flex;
+}
+
+.edit {
+    margin-right: 5vw;
+}
+
+.iconMore {
+    font-size: 6vw;
+    position: relative;
+    bottom: 10vw;
+    left: 70vw;
+    z-index: 9;
+}
+
+.content {
+    position: relative;
+    padding-left: 6vw;
+    padding-right: 6vw;
+    right: 0vw;
+    width: 100vw;
+    top: 10vw;
+    height: 175vw; 
+    z-index: 1;
+    overflow-y: auto; 
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+    /* border: 1px solid red; */
+    padding-bottom: 45vw;
+    padding-top: 2vw;
+}
+
+.content1 {
+    background-color: #F6F6F6;
+    border-radius: 6vw;
+    box-shadow: 0vw 0.1vw 1vw 0vw rgba(0, 0, 0, 0.25);
+    padding-left: 4.5vw;
+    padding-right: 4.5vw;
+    margin-bottom: 7vw;
+}
+
+.profilUser {
+    position: relative;
+    padding-top: 4vw;
+    width: 9vw;
+    display: flexbox;
+    margin-bottom: 3vw;
+}
+
+.profilUserImage {
+    border-radius: 100%;
+    width: 9vw;
+    aspect-ratio: 1;
+    object-fit: cover;
+}
+
+.userTime {
+    width: 63vw;
+    position: absolute;
+    left: 12vw;
+    bottom: 0.5vw;
+}
+
+.username {
+    font-weight: 500;
+    font-size: 3vw;
+}
+
+.time {
+    font-size: 2vw;
+    opacity: 50%;
+}
+
+.deskripsi {
+    font-size: 3.5vw;
+    margin-bottom: 8vw;
+}
+
+.kategori {
+    display: flex;
+    justify-content: start;
+    color: white;
+    margin-bottom: 4vw;
+    flex-wrap: wrap;
+}
+
+.thumbnail {
+    margin-bottom: 6vw;
+    margin-top: -5vw;
+}
+
+.kategori1{
+    margin-right: 2vw;
+    font-size: 3vw;
+    border: 1px solid #141421;
+    background-color: #141421;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    padding-top: 1vw;
+    padding-bottom: 1vw;
+    border-radius: 2vw;
+    margin-bottom: 2vw;
+}
+
+.garis {
+    width: 72vw;
+    border: 0.1vw solid #D5D5D566;
+    margin-bottom: 2vw;
+    margin-top: -2vw;
+    height: 0.1vw;
+}
+
+.iconLikeComment {
+    width: 4vw;
+    margin-right: 1vw;
+}
+
+.likeComment {
+    display: flex;
+    justify-content: flex-start;
+    font-size: 2.5vw;
+    align-items: center;
+}
+
+.like, .comment {
+    display: flex;
+    margin-right: 4vw;
+    margin-bottom: 4vw;
+}
+
+.countLike, .countComment {
+    display: flex;  
+    font-size: 3vw;
 }
