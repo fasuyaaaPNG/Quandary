@@ -1,5 +1,7 @@
 *{
     font-family: 'Poppins', sans-serif;
+    padding: 0;
+    margin: 0;
 }
 
 .container {
@@ -9,7 +11,7 @@
     margin-top: 2vw;
     margin-left: auto; 
     margin-right: auto; 
-    width: 90vw; 
+    width: 100vw; 
     height: 98vh;
     padding-left: 3vw;
     padding-right: 3vw;
@@ -157,11 +159,12 @@
 
 .content {
     position: relative;
-    padding-left: 1vw;
-    padding-right: 1vw;
-    width: 82vw;
+    padding-left: 6vw;
+    padding-right: 6vw;
+    right: 3.12vw;
+    width: 100vw;
     top: 28vw;
-    height: 170vw; 
+    height: 175vw; 
     z-index: -2;
     overflow-y: scroll; 
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
@@ -169,6 +172,7 @@
     /* border: 1px solid red; */
     padding-bottom: 45vw;
     padding-top: 2vw;
+    /* border: 1px solid red; */
 }
 
 .content::-webkit-scrollbar { 
@@ -257,9 +261,10 @@
 
 .garis {
     width: 72vw;
-    border: 0.5vw solid #D5D5D566;
+    border: 0.1vw solid #D5D5D566;
     margin-bottom: 2vw;
     margin-top: -2vw;
+    height: 0.1vw;
 }
 
 .iconLikeComment {
