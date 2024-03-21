@@ -27,6 +27,8 @@
     width: 83vw;
     border: 0.5vw solid FDFDFD;
     background-color: #FDFDFD;
+    margin: auto;
+    left: 8vw;
 }
 
 .search {
