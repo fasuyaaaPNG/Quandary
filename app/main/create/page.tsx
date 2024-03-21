@@ -40,6 +40,7 @@ export default function Create() {
         const element = event.target;
         element.style.height = "50vw";
         element.style.height = (element.scrollHeight) + "px";
+        element.style.paddingBottom = "3vw"
         setText(event.target.value);
     }
 
@@ -58,8 +59,8 @@ export default function Create() {
                 type="text" 
                 id={`tag${i}`} 
                 name={`tag${i}`}
-                value={tags[i] || ''} // Menampilkan nilai tag
-                onChange={(event) => handleTagChange(i, event)} // Menangani perubahan nilai tag
+                value={tags[i] || ''} 
+                onChange={(event) => handleTagChange(i, event)}
             />
         );
     }
@@ -133,10 +134,8 @@ export default function Create() {
         if (error) {
             console.error('Error fetching posting data:', error.message);
         } else {
-            // Jika data ditemukan
             if (data && data.length > 0) {
                 const modifiedData = data.map(post => {
-                    // Tambahkan 1 ke nilai id
                     post.id = post.id + 1;
                     return post;
                 });

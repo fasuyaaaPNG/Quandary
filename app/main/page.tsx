@@ -35,6 +35,24 @@ const Home: React.FC = () => {
     return originalEmail;
   }
 
+  const getTimeAgoString = (createdAt: string): string => {
+    const createdDate = new Date(createdAt);
+    const currentDate = new Date();
+    const timeDifference = currentDate.getTime() - createdDate.getTime();
+    const seconds = Math.floor(timeDifference / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+  
+    if (days > 0) {
+      return `${days} day${days > 1 ? 's' : ''} ago`;
+    } else if (hours > 0) {
+      return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+    } else {
+      return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+    }
+  };
+
   useEffect(() => {
     const cookies = document.cookie;
     const cookieArray = cookies.split(';');
@@ -87,23 +105,19 @@ const Home: React.FC = () => {
       return;
     }
     
-      const groupedTags: Record<string, string[]> = {}; // Objek untuk menyimpan id_tag yang memiliki kesamaan pada id_posting
-    
-      // Iterasi melalui tagPostingData menggunakan forEach
+      const groupedTags: Record<string, string[]> = {};
+
       tagPostingData.forEach(tagPosting => {
         const idPosting = tagPosting.id_posting;
         const idTag = tagPosting.id_tag;
-    
-        // Jika id_posting belum ada dalam groupedTags, buat array baru untuk id_posting tersebut
+
         if (!groupedTags[idPosting]) {
           groupedTags[idPosting] = [idTag];
         } else {
-          // Jika id_posting sudah ada, tambahkan id_tag ke dalam array yang sudah ada
           groupedTags[idPosting].push(idTag);
         }
       });
-    
-      // Fetch posting data
+
       const postData = [];
       for (const idPosting in groupedTags) {
         const { data: postDataResult, error: postError } = await supabase
@@ -126,7 +140,7 @@ const Home: React.FC = () => {
           continue;
         }
     
-        const tagIds = groupedTags[idPosting]; // Ambil array id_tag untuk posting ini
+        const tagIds = groupedTags[idPosting];
         const tagData = await Promise.all(tagIds.map(async (tagId: string) => {
         const { data: tagDataResult, error: tagError } = await supabase
           .from('tag')
@@ -138,7 +152,7 @@ const Home: React.FC = () => {
           return '';
         }
 
-        return tagDataResult[0]?.tag || ''; // Jika tag ditemukan, kembalikan nama tag, jika tidak, kembalikan string kosong
+        return tagDataResult[0]?.tag || ''; 
       }));
 
       const post = {
@@ -146,7 +160,7 @@ const Home: React.FC = () => {
         thumbnail: postDataResult[0].thumbnail,
         created_at: postDataResult[0].created_at,
         username: userData[0].username,
-        tag: tagData.join(', '), // Gabungkan nama tag menjadi satu string, dipisahkan oleh koma
+        tag: tagData.join(', '),
         foto_profile: `https://tyldtyivzeqiedyvaulp.supabase.co/storage/v1/object/public/foto_profile/${userData[0].foto_profile}`
       };
 
@@ -191,7 +205,7 @@ const Home: React.FC = () => {
                     {post.username} 
                   </p>
                   <p className="time">
-                    {post.created_at}
+                    {getTimeAgoString(post.created_at)}
                   </p>
                 </div>
               </div>
