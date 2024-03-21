@@ -83,64 +83,78 @@ const Home: React.FC = () => {
         .select('id_posting, id_tag');
     
       if (tagPostingError) {
-        console.error('Error fetching tag_posting:', tagPostingError.message);
-        return;
-      }
-      
-      const groupedPosts: Record<string, boolean> = {};
-      const postData = [];
+      console.error('Error fetching tag_posting:', tagPostingError.message);
+      return;
+    }
     
-      for (const tagPosting of tagPostingData) {
+      const groupedTags: Record<string, string[]> = {}; // Objek untuk menyimpan id_tag yang memiliki kesamaan pada id_posting
+    
+      // Iterasi melalui tagPostingData menggunakan forEach
+      tagPostingData.forEach(tagPosting => {
         const idPosting = tagPosting.id_posting;
+        const idTag = tagPosting.id_tag;
     
-        // Jika id_posting belum ditampilkan sebelumnya, maka tampilkan postingnya
-        if (!groupedPosts[idPosting]) {
-          const { data: postDataResult, error: postError } = await supabase
-            .from('posting')
-            .select('pesan, thumbnail, created_at, id_user')
-            .eq('id', idPosting);
-    
-          if (postError) {
-            console.error('Error fetching posting:', postError.message);
-            continue;
-          }
-    
-          const { data: userData, error: userError } = await supabase
-            .from('Users')
-            .select('username, name_profile, bio, foto_profile')
-            .eq('id', postDataResult[0].id_user);
-    
-          if (userError) {
-            console.error('Error fetching user:', userError.message);
-            continue;
-          }
-    
-          const { data: tagData, error: tagError } = await supabase
-            .from('tag')
-            .select('tag')
-            .eq('id', tagPosting.id_tag);
-    
-          if (tagError) {
-            console.error('Error fetching tag:', tagError.message);
-            continue;
-          }
-    
-          const post = {
-            pesan: postDataResult[0].pesan,
-            thumbnail: postDataResult[0].thumbnail,
-            created_at: postDataResult[0].created_at,
-            username: userData[0].username,
-            tag: tagData.map((tag: any) => tag.tag).join(', '),
-            foto_profile: `https://tyldtyivzeqiedyvaulp.supabase.co/storage/v1/object/public/foto_profile/${userData[0].foto_profile}`
-          };
-    
-          postData.push(post);
-          groupedPosts[idPosting] = true; // tandai id_posting sudah ditampilkan
+        // Jika id_posting belum ada dalam groupedTags, buat array baru untuk id_posting tersebut
+        if (!groupedTags[idPosting]) {
+          groupedTags[idPosting] = [idTag];
+        } else {
+          // Jika id_posting sudah ada, tambahkan id_tag ke dalam array yang sudah ada
+          groupedTags[idPosting].push(idTag);
         }
-      }
+      });
     
-      setPosts(postData);
-    };
+      // Fetch posting data
+      const postData = [];
+      for (const idPosting in groupedTags) {
+        const { data: postDataResult, error: postError } = await supabase
+          .from('posting')
+          .select('pesan, thumbnail, created_at, id_user')
+          .eq('id', idPosting);
+    
+        if (postError) {
+          console.error('Error fetching posting:', postError.message);
+          continue;
+        }
+    
+        const { data: userData, error: userError } = await supabase
+          .from('Users')
+          .select('username, name_profile, bio, foto_profile')
+          .eq('id', postDataResult[0].id_user);
+    
+        if (userError) {
+          console.error('Error fetching user:', userError.message);
+          continue;
+        }
+    
+        const tagIds = groupedTags[idPosting]; // Ambil array id_tag untuk posting ini
+        const tagData = await Promise.all(tagIds.map(async (tagId: string) => {
+        const { data: tagDataResult, error: tagError } = await supabase
+          .from('tag')
+          .select('tag')
+          .eq('id', tagId);
+
+        if (tagError) {
+          console.error('Error fetching tag:', tagError.message);
+          return '';
+        }
+
+        return tagDataResult[0]?.tag || ''; // Jika tag ditemukan, kembalikan nama tag, jika tidak, kembalikan string kosong
+      }));
+
+      const post = {
+        pesan: postDataResult[0].pesan,
+        thumbnail: postDataResult[0].thumbnail,
+        created_at: postDataResult[0].created_at,
+        username: userData[0].username,
+        tag: tagData.join(', '), // Gabungkan nama tag menjadi satu string, dipisahkan oleh koma
+        foto_profile: `https://tyldtyivzeqiedyvaulp.supabase.co/storage/v1/object/public/foto_profile/${userData[0].foto_profile}`
+      };
+
+      postData.push(post);
+    }
+
+    setPosts(postData);
+  };
   fetchData();
 }, []);
 
@@ -168,29 +182,31 @@ const Home: React.FC = () => {
         </div>
         {/* content */}
         <div className="content">
-          {posts.map((post, index) => (
+          {posts.slice().reverse().map((post, index) => (
             <div key={index} className="content1">
               <div className="profilUser">
-                <img src={post.foto_profile} alt="" className="profilUserImage" />
+                <img loading="lazy" src={post.foto_profile} alt="" className="profilUserImage" />
                 <div className="userTime">
                   <p className="username">
-                    {post.username}
+                    {post.username} 
                   </p>
                   <p className="time">
                     {post.created_at}
                   </p>
                 </div>
               </div>
-              <img src={post.thumbnail} alt="" className="thumbnail" />
+              <img loading="lazy" src={post.thumbnail} alt="" className="thumbnail" />
               <div className="deskripsi">
                 <p>
                   {post.pesan}
                 </p>
-              </div>
+              </div>  
               <div className="kategori">
-                  <div className="kategori1">
-                    {post.tag}
+                {post.tag.split(',').map((tag: any, tagIndex: any) => (
+                  <div key={tagIndex} className="kategori1">
+                    {tag}
                   </div>
+                ))}
               </div>
               <div className="garis"></div>
               <div className="likeComment">
