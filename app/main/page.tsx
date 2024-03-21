@@ -13,6 +13,170 @@ const Home: React.FC = () => {
   const [posts, setPosts] = useState<any[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const [inputValue, setInputValue] = useState<string>('');
+  const [likeCounts, setLikeCounts] = useState<Record<string, number>>({});
+  const [likedPosts, setLikedPosts] = useState<Record<string, boolean>>({});
+
+  const getPostingId = async () => {
+    const cookies = document.cookie;
+    const cookieArray = cookies.split(';');
+    const cookieObject: Record<string, string> = {};
+
+    cookieArray.forEach(cookie => {
+        const [name, value] = cookie.trim().split('=');
+        cookieObject[name] = decodeURIComponent(value);
+    });
+
+    const isLogin = cookieObject['is_login'];
+    const decryptedEmail = isLogin ? decryptEmail(isLogin) : '';
+
+    if (!isLogin || !decryptedEmail) {
+        window.location.href = '/auth/login';
+        return null;
+    }
+
+    const { data, error } = await supabase
+        .from('posting')
+        .select('*')
+        .order('id', { ascending: false })
+        .limit(1);
+
+    if (error) {
+        console.error('Error fetching posting data:', error.message);
+    } else {
+        if (data && data.length > 0) {
+            const modifiedData = data.map(post => {
+                post.id = post.id + 1;
+                return post;
+            });
+            console.log('Modified Data:', modifiedData);
+        } else {
+            console.error('No posting data found.');
+        }
+    }
+
+    if (error) {
+        console.error('Error fetching posting id:', error.message);
+        return null;
+    }
+
+    if (data.length === 0) {
+        console.error('Posting not found');
+        return null;
+    }
+
+    return data[0].id;
+};
+
+const getUserId = async () => {
+        const cookies = document.cookie;
+        const cookieArray = cookies.split(';');
+        const cookieObject: Record<string, string> = {};
+
+        cookieArray.forEach(cookie => {
+            const [name, value] = cookie.trim().split('=');
+            cookieObject[name] = decodeURIComponent(value);
+        });
+
+        const isLogin = cookieObject['is_login'];
+        const decryptedEmail = isLogin ? decryptEmail(isLogin) : '';
+
+        if (!isLogin || !decryptedEmail) {
+            window.location.href = '/auth/login';
+            return null;
+        }
+
+        const { data, error } = await supabase
+            .from('Users')
+            .select('id')
+            .eq('email', decryptedEmail);
+
+        if (error) {
+            console.error('Error fetching user id:', error.message);
+            return null;
+        }
+
+        if (data.length === 0) {
+            console.error(error);
+            return null;
+        }
+
+        return data[0].id;
+    };
+
+    // Function to handle like button click
+    const handleLikeClick = async (postId: string) => {
+    // Get user ID
+    const userId = await getUserId();
+    
+    if (!userId) {
+      console.error('Failed to get user id');
+      return;
+    }
+
+    // Check if the user has already liked the post
+    const { data: existingLikes, error: likeError } = await supabase
+      .from('like')
+      .select()
+      .eq('id_user', userId)
+      .eq('id_posting', postId);
+
+    if (likeError) {
+      console.error('Error fetching likes:', likeError.message);
+      return;
+    }
+
+    if (existingLikes.length > 0) {
+      // If the user has already liked the post, unlike it
+      const { error } = await supabase
+        .from('like')
+        .delete()
+        .eq('id_user', userId)
+        .eq('id_posting', postId);
+
+      if (error) {
+        console.error('Error unliking post:', error.message);
+        return;
+      }
+
+      // Update like count in state by decrementing
+      setLikeCounts((prevCounts) => ({
+        ...prevCounts,
+        [postId]: (prevCounts[postId] || 0) - 1,
+      }));
+
+      // Update likedPosts state
+      setLikedPosts((prevState) => {
+        const updatedLikedPosts = { ...prevState, [postId]: false };
+        localStorage.setItem('likedPosts', JSON.stringify(updatedLikedPosts));
+        return updatedLikedPosts;
+      });
+    } else {
+      // If the user has not liked the post, like it
+      const { error } = await supabase
+        .from('like')
+        .insert({ id_user: userId, id_posting: postId });
+
+      if (error) {
+        console.error('Error liking post:', error.message);
+        return;
+      }
+
+      // Update like count in state by incrementing
+      setLikeCounts((prevCounts) => ({
+        ...prevCounts,
+        [postId]: (prevCounts[postId] || 0) + 1,
+      }));
+
+      // Update likedPosts state and localStorage
+      setLikedPosts((prevState) => {
+        const updatedLikedPosts = { ...prevState, [postId]: true };
+        localStorage.setItem('likedPosts', JSON.stringify(updatedLikedPosts));
+        return updatedLikedPosts;
+      });
+
+      localStorage.setItem('likedPosts', JSON.stringify(likedPosts));
+    }
+  };
 
   const handleSearchIconClick = () => {
     if (inputRef.current) {
@@ -57,6 +221,11 @@ const Home: React.FC = () => {
     const cookies = document.cookie;
     const cookieArray = cookies.split(';');
     const cookieObject: Record<string, string> = {};
+
+    const likedStatus = localStorage.getItem('likedPosts');
+    if (likedStatus) {
+      setLikedPosts(JSON.parse(likedStatus));
+    }
   
     cookieArray.forEach(cookie => {
       const [name, value] = cookie.trim().split('=');
@@ -122,7 +291,7 @@ const Home: React.FC = () => {
       for (const idPosting in groupedTags) {
         const { data: postDataResult, error: postError } = await supabase
           .from('posting')
-          .select('pesan, thumbnail, created_at, id_user')
+          .select('id, pesan, thumbnail, created_at, id_user')
           .eq('id', idPosting);
     
         if (postError) {
@@ -156,13 +325,34 @@ const Home: React.FC = () => {
       }));
 
       const post = {
+        id: postDataResult[0].id,
         pesan: postDataResult[0].pesan,
         thumbnail: postDataResult[0].thumbnail,
         created_at: postDataResult[0].created_at,
         username: userData[0].username,
         tag: tagData.join(', '),
         foto_profile: `https://tyldtyivzeqiedyvaulp.supabase.co/storage/v1/object/public/foto_profile/${userData[0].foto_profile}`
-      };
+      }
+
+      // Ambil jumlah "likes" dari tabel "like" untuk posting saat ini
+      const { data: likeData, error: likeError } = await supabase
+        .from('like')
+        .select('id_posting')
+        .eq('id_posting', idPosting);
+
+      if (likeError) {
+        console.error('Error fetching likes:', likeError.message);
+        continue;
+      }
+
+      const likeCount = likeData ? likeData.length : 0;
+
+      // Simpan jumlah "likes" ke dalam state
+      setLikeCounts((prevCounts) => ({
+        ...prevCounts,
+        [idPosting]: likeCount,
+      }));
+
 
       postData.push(post);
     }
@@ -224,10 +414,14 @@ const Home: React.FC = () => {
               </div>
               <div className="garis"></div>
               <div className="likeComment">
-                <div className="like">
-                  <img src="/assets/main/icon/like.svg" alt="" className="iconLikeComment" />
+                <div className="like" onClick={() => handleLikeClick(post.id)} >
+                  <img
+                    src={`${likedPosts[post.id] ? "/assets/main/icon/liked.png" : "/assets/main/icon/like.svg"}`}
+                    alt=""
+                    className="iconLikeComment"
+                  />
                   <p className="countLike">
-                    13.895 likes
+                    {likeCounts[post.id] !== undefined ? `${likeCounts[post.id]} likes` : '0 likes'}
                   </p>
                 </div>
                 <div className="comment">

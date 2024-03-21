@@ -278,11 +278,11 @@
     display: flex;
     justify-content: flex-start;
     font-size: 2.5vw;
+    align-items: center;
 }
 
 .like, .comment {
     display: flex;
-    align-items: center;
     margin-right: 4vw;
     margin-bottom: 4vw;
 }
