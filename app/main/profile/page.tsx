@@ -12,11 +12,84 @@ export default function Profile() {
     const [bio, setBio] = useState('');
     const [photoURL, setPhotoURL] = useState('');
     const [posts, setPosts] = useState<any[]>([]);
+    const [postLike, setPost] = useState<any[]>([]);
     const [optionVisible, setOptionVisible] = useState(true);
+    const [likeCounts, setLikeCounts] = useState<Record<string, number>>({});
+    const [likedPosts, setLikedPosts] = useState<Record<string, boolean>>({});
 
-    const handleIconClick = () => {
-        setOptionVisible(!optionVisible);
-    };
+    // Function to handle like button click
+    const handleLikeClick = async (postId: string) => {
+        // Get user ID
+        const userId = await getUserId();
+        
+        if (!userId) {
+          console.error('Failed to get user id');
+          return;
+        }
+    
+        // Check if the user has already liked the post
+        const { data: existingLikes, error: likeError } = await supabase
+          .from('like')
+          .select()
+          .eq('id_user', userId)
+          .eq('id_posting', postId);
+    
+        if (likeError) {
+          console.error('Error fetching likes:', likeError.message);
+          return;
+        }
+    
+        if (existingLikes.length > 0) {
+          // If the user has already liked the post, unlike it
+          const { error } = await supabase
+            .from('like')
+            .delete()
+            .eq('id_user', userId)
+            .eq('id_posting', postId);
+    
+          if (error) {
+            console.error('Error unliking post:', error.message);
+            return;
+          }
+    
+          // Update like count in state by decrementing
+          setLikeCounts((prevCounts) => ({
+            ...prevCounts,
+            [postId]: (prevCounts[postId] || 0) - 1,
+          }));
+    
+          // Update likedPosts state
+          setLikedPosts((prevState) => {
+            const updatedLikedPosts = { ...prevState, [postId]: false };
+            localStorage.setItem('likedPosts', JSON.stringify(updatedLikedPosts));
+            return updatedLikedPosts;
+          });
+        } else {
+          // If the user has not liked the post, like it
+          const { error } = await supabase
+            .from('like')
+            .insert({ id_user: userId, id_posting: postId });
+    
+          if (error) {
+            console.error('Error liking post:', error.message);
+            return;
+          }
+    
+          // Update like count in state by incrementing
+          setLikeCounts((prevCounts) => ({
+            ...prevCounts,
+            [postId]: (prevCounts[postId] || 0) + 1,
+          }));
+    
+          // Update likedPosts state and localStorage
+          setLikedPosts((prevState) => {
+            const updatedLikedPosts = { ...prevState, [postId]: true };
+            localStorage.setItem('likedPosts', JSON.stringify(updatedLikedPosts)); // Simpan updatedLikedPosts ke localStorage
+            return updatedLikedPosts;
+          });
+    
+        }
+      };
 
     function decryptEmail(encryptedEmail: string): string {
         const reversedEncryptedEmail = encryptedEmail.split('').reverse().join('');
@@ -48,7 +121,7 @@ export default function Profile() {
             .eq('email', decryptedEmail);
 
         if (error) {
-            console.error('Error fetching user id:', error.message);
+            // console.error('Error fetching user id:', error.message);
             return null;
         }
 
@@ -83,6 +156,13 @@ export default function Profile() {
             await deletePost(postId);
         }
     };
+
+    const getLikedPostsFromLocalStorage = () => {
+        const likedPostsFromStorage = localStorage.getItem('likedPosts');
+            if (likedPostsFromStorage) {
+                setLikedPosts(JSON.parse(likedPostsFromStorage));
+            }
+        };
 
     const getTimeAgoString = (createdAt: string): string => {
         const createdDate = new Date(createdAt);
@@ -127,7 +207,7 @@ export default function Profile() {
                 .eq('email', decryptedEmail);
 
             if (error) {
-                console.error('Error fetching user profile:', error.message);
+                // console.error('Error fetching user profile:', error.message);
                 return;
             }
 
@@ -148,10 +228,111 @@ export default function Profile() {
             }
         };
 
+        const fetchData = async () => {
+            const { data: tagPostingData, error: tagPostingError } = await supabase
+              .from('tag_posting')
+              .select('id_posting, id_tag');
+          
+            if (tagPostingError) {
+            console.error('Error fetching tag_posting:', tagPostingError.message);
+            return;
+          }
+          
+            const groupedTags: Record<string, string[]> = {};
+      
+            tagPostingData.forEach(tagPosting => {
+              const idPosting = tagPosting.id_posting;
+              const idTag = tagPosting.id_tag;
+      
+              if (!groupedTags[idPosting]) {
+                groupedTags[idPosting] = [idTag];
+              } else {
+                groupedTags[idPosting].push(idTag);
+              }
+            });
+      
+            const postData = [];
+            for (const idPosting in groupedTags) {
+              const { data: postDataResult, error: postError } = await supabase
+                .from('posting')
+                .select('id, pesan, thumbnail, created_at, id_user')
+                .eq('id', idPosting);
+          
+              if (postError) {
+                console.error('Error fetching posting:', postError.message);
+                continue;
+              }
+          
+              const { data: userData, error: userError } = await supabase
+                .from('Users')
+                .select('username, name_profile, bio, foto_profile')
+                .eq('id', postDataResult[0]?.id_user);
+          
+              if (userError) {
+                // console.error('Error fetching user:', userError.message);
+                continue;
+              }
+          
+              const tagIds = groupedTags[idPosting];
+              const tagData = await Promise.all(tagIds.map(async (tagId: string) => {
+              const { data: tagDataResult, error: tagError } = await supabase
+                .from('tag')
+                .select('tag')
+                .eq('id', tagId);
+      
+              if (tagError) {
+                console.error('Error fetching tag:', tagError.message);
+                return '';
+              }
+      
+              return tagDataResult[0]?.tag || ''; 
+            }));
+      
+            const postL = {
+                id: postDataResult[0].id,
+                pesan: postDataResult[0].pesan,
+                thumbnail: postDataResult[0].thumbnail,
+                created_at: postDataResult[0].created_at,
+                username: userData[0].username,
+                tag: tagData.join(', '),
+                foto_profile: `https://tyldtyivzeqiedyvaulp.supabase.co/storage/v1/object/public/foto_profile/${userData[0].foto_profile}`
+            };
+      
+            // Ambil jumlah "likes" dari tabel "like" untuk posting saat ini
+            const { data: likeData, error: likeError } = await supabase
+              .from('like')
+              .select('id_posting')
+              .eq('id_posting', idPosting);
+      
+            if (likeError) {
+              console.error('Error fetching likes:', likeError.message);
+              continue;
+            }
+      
+            const likeCount = likeData ? likeData.length : 0;
+      
+            // Simpan jumlah "likes" ke dalam state
+            setLikeCounts((prevCounts) => ({
+              ...prevCounts,
+              [idPosting]: likeCount,
+            }));
+      
+      
+            postData.push(postL);
+          }
+      
+          setPost(postData);
+        };
+
+        fetchData();
+        getLikedPostsFromLocalStorage();
         fetchUserProfile();
     }, []);
 
     useEffect(() => {
+        const handleStorageChange = () => {
+            getLikedPostsFromLocalStorage();
+        };
         const fetchUserPosts = async () => {
             const userId = await getUserId();
     
@@ -161,9 +342,12 @@ export default function Profile() {
                 .eq('id_user', userId);
     
             if (postError) {
-                console.error('Error fetching user posts:', postError.message);
+                // console.error('Error fetching user posts:', postError.message);
                 return;
             }
+
+            // Listen for changes in localStorage
+            window.addEventListener('storage', handleStorageChange);
     
             // Iterate through userPosts to fetch and append tags for each post
             const postsWithData = await Promise.all(userPosts.map(async (post) => {
@@ -236,7 +420,7 @@ export default function Profile() {
             </a>
             <img onClick={handleLogout} src="/assets/profile/logout.png" alt="" className="logoutButton" />
             <div className="content">
-                {posts.slice().reverse().map(post => (
+                {posts.slice().reverse().map((post, postIndex) => (
                     <div key={post.id} className="content1">
                         <div className="profilUser">
                             <img loading="lazy" src={photoURL} alt="" className="profilUserImage" />
@@ -269,14 +453,10 @@ export default function Profile() {
                         </div>
                         <div className="garis"></div>
                         <div className="likeComment">
-                            <div className="like">
-                                <img
-                                    src="/assets/main/icon/like.svg"
-                                    alt=""
-                                    className="iconLikeComment"
-                                />
+                            <div className="like" onClick={() => handleLikeClick(post.id)}>
+                                <img src={`${likedPosts[post.id] ? "/assets/main/icon/liked.png" : "/assets/main/icon/like.svg"}`} alt="" className="iconLikeComment"/>
                                 <p className="countLike">
-                                    0 likes
+                                    {likeCounts[post.id] !== undefined ? `${likeCounts[post.id]} likes` : '0 likes'}
                                 </p>
                             </div>
                             <div className="comment">
