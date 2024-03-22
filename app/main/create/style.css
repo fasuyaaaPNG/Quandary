@@ -38,7 +38,7 @@ input[type=text] {
 }
 
 .share {
-    position: absolute;
+    position: fixed;
     background-color: transparent;
     border: none;
     color: #2121217c;
@@ -169,8 +169,9 @@ button {
 .thumbnailClass {
     display: flex;
     margin-bottom: 3vw;
-    padding-top: 4vw;
+    width: max-content;
     align-items: center;
+    /* border: 1px solid red; */
 }
 
 .Thumbnail {
@@ -184,4 +185,16 @@ button {
     height: 187vw;
     overflow: scroll;
     padding-bottom: 80vw;
+}
+
+.backFixed {
+    background-color: #F1F1F1;
+    padding-bottom: 3vw;
+    position: fixed;
+    width: 100%;
+}
+
+.backTop {
+    height: 20vw;
+    width: 100%;
 }

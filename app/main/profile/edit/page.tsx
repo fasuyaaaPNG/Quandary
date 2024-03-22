@@ -150,7 +150,7 @@ export default function Edit() {
     
         const { data: existingUserData, error: existingUserError } = await supabase
             .from('Users')
-            .select('id')
+            .select('id, foto_profile')
             .eq('email', isLogin);
     
         if (existingUserError) {
@@ -168,6 +168,12 @@ export default function Edit() {
                 return;
             }
         } else {
+            const existingUserProfile = existingUserData[0];
+            const existingPhotoURL = existingUserProfile.foto_profile;
+
+            // Jika tidak ada gambar yang dipilih untuk diunggah, gunakan foto profil yang sudah ada
+            photoURL = selectedImage ? photoURL : existingPhotoURL;
+
             const { error: updateError } = await supabase
                 .from('Users')
                 .update({ name_profile: fullname, username, bio, foto_profile: photoURL })

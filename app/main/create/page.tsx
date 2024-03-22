@@ -400,9 +400,12 @@ export default function Create() {
     return (
         <>
             <div className="background">
-                <a className="back" href="/main">
-                    <FaX size={20}/>
-                </a>
+                <div className="backFixed">
+                    <a className="back" href="/main">
+                        <FaX size={20}/>
+                    </a>
+                </div>
+                <div className="backTop"></div>
                 <div className="over">
                     <form action="" method="post" onSubmit={handleSubmit}>
                         <div className="imgUpload">
@@ -425,7 +428,7 @@ export default function Create() {
                             {inputElements}
                         </div>
                         {/* <input type="hidden" value={inputCount} id="total_chq"/> */}
-                        <button className={`share ${isShareable ? "share shareOke" : ""}`} disabled={!isShareable}>
+                        <button className="share shareOke">
                             Share
                         </button>
                     </form>
