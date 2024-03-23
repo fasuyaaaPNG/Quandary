@@ -32,6 +32,7 @@ export default function Create() {
     function removeInput() {
         if (inputCount > 1) {
             setInputCount(inputCount - 1);
+            setTags(tags.slice(0, -1));
             checkShareable();
         }
     }
