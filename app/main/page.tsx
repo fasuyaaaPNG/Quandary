@@ -298,10 +298,11 @@ const Home: React.FC = () => {
 
   function autoGrow(event: React.ChangeEvent<HTMLTextAreaElement>) {
     const element = event.target;
-    element.style.height = "1.5vw";
+    element.style.height = "2vw";
     element.style.height = (element.scrollHeight) + "px";
     element.style.paddingBottom = "2vw"
     element.style.paddingTop = "2vw"
+    element.style.paddingRight = "4vw"
     setText(event.target.value);
   }
 

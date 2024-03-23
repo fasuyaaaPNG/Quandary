@@ -311,6 +311,7 @@
 
 .pesanComment {
     font-size: 3vw;
+    word-break: keep-all;
 }
 
 .isiComment {
@@ -320,6 +321,7 @@
     border-radius: 4vw;
     padding: 2.5vw;
     margin-bottom: 3vw;
+    overflow-wrap: break-word;
 }
 
 .user{
