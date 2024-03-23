@@ -21,11 +21,6 @@ const Home: React.FC = () => {
   const [commentsCount, setCommentsCount] = useState<Record<string, number>>({});
   const [comments, setComments] = useState<Record<string, Comment[]>>({});
   const [userId, setUserId] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    setTimeout(() => setIsLoading(false), 1000);
-  }, []);
 
   interface Comment {
     id: string;
@@ -329,7 +324,7 @@ const Home: React.FC = () => {
     setCommentClickedId(postId === commentClickedId ? null : postId);
   };
   
-  const sendComment = async () => {
+  const sendComment = async (postId: string) => {
     // Mendapatkan ID pengguna
     const userId = await getUserId();
     
@@ -338,21 +333,10 @@ const Home: React.FC = () => {
       return;
     }
   
-    // Mendapatkan ID posting yang sedang dikomentari
-    let postingId = await getPostingId(); // Await the result
-    
-    if (!postingId) {
-      // console.error('Failed to get posting id');
-      return;
-    }
-  
-    // Kurangi 1 dari postingId
-    postingId -= 1;
-  
     // Mengirim komentar ke database
     const { error } = await supabase
       .from('comment')
-      .insert({ id_user: userId, id_posting: postingId, message: text });
+      .insert({ id_user: userId, id_posting: postId, message: text });
   
     if (error) {
       // console.error('Error sending comment:', error.message);
@@ -366,9 +350,9 @@ const Home: React.FC = () => {
     fetchComments();
   };
   
-  const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = (postId: string) => (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    sendComment();
+    sendComment(postId);
   };
 
   const fetchUserData = async () => {
@@ -621,7 +605,7 @@ const Home: React.FC = () => {
                     </div>
                 ))
               }
-              <form className={`formSend ${commentClickedId === post.id ? 'unhide2' : ''}`} onSubmit={handleFormSubmit} action="">
+              <form className={`formSend ${commentClickedId === post.id ? 'unhide2' : ''}`} onSubmit={handleFormSubmit(post.id)} action="">
                 <textarea
                   placeholder="Ask a question"
                   value={text}

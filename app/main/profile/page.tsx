@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react';
-import { FaEllipsis, FaHouse, FaMagnifyingGlass, FaPlus, FaBell, FaRegUser } from "react-icons/fa6";
+import { FaPaperPlane, FaHouse, FaMagnifyingGlass, FaPlus, FaBell, FaRegUser } from "react-icons/fa6";
 import { motion } from 'framer-motion';
 import supabase from '@/app/server/supabaseClient';
 import './style.css';
@@ -13,9 +13,252 @@ export default function Profile() {
     const [photoURL, setPhotoURL] = useState('');
     const [posts, setPosts] = useState<any[]>([]);
     const [postLike, setPost] = useState<any[]>([]);
+    const [text, setText] = useState("");
     const [optionVisible, setOptionVisible] = useState(true);
     const [likeCounts, setLikeCounts] = useState<Record<string, number>>({});
     const [likedPosts, setLikedPosts] = useState<Record<string, boolean>>({});
+    const [commentClickedId, setCommentClickedId] = useState<string | null>(null);
+    const [commentsCount, setCommentsCount] = useState<Record<string, number>>({});
+    const [comments, setComments] = useState<Record<string, Comment[]>>({});
+    const [userId, setUserId] = useState<string | null>(null);
+
+    function autoGrow(event: React.ChangeEvent<HTMLTextAreaElement>) {
+        const element = event.target;
+        element.style.height = "2vw";
+        element.style.height = (element.scrollHeight) + "px";
+        element.style.paddingBottom = "2vw"
+        element.style.paddingTop = "2vw"
+        element.style.paddingRight = "4vw"
+        setText(event.target.value);
+    }
+
+    interface Comment {
+        id: string;
+        id_posting: string;
+        message: string;
+        created_at: string;
+        id_user: string;
+        username: string;
+        foto_profile: string;
+      }
+      
+      const handleDeleteComment = async (commentId: string) => {
+        if (!commentId) {
+          // console.error('Comment ID is undefined');
+          return;
+        }
+        
+        // Kirim permintaan untuk menghapus komentar dari database
+        const { error } = await supabase
+          .from('comment')
+          .delete()
+          .eq('id', commentId);
+      
+        if (error) {
+          console.error('Error deleting comment:', error.message);
+          return;
+        }
+      
+        // Perbarui tampilan komentar setelah menghapus
+        fetchComments();
+      };
+
+      const getUserId = async () => {
+        const cookies = document.cookie;
+        const cookieArray = cookies.split(';');
+        const cookieObject: Record<string, string> = {};
+
+        cookieArray.forEach(cookie => {
+            const [name, value] = cookie.trim().split('=');
+            cookieObject[name] = decodeURIComponent(value);
+        });
+
+        const isLogin = cookieObject['is_login'];
+        const decryptedEmail = isLogin ? decryptEmail(isLogin) : '';
+
+        if (!isLogin || !decryptedEmail) {
+            window.location.href = '/auth/login';
+            return null;
+        }
+
+        const { data, error } = await supabase
+            .from('Users')
+            .select('id')
+            .eq('email', decryptedEmail);
+
+        if (error) {
+            // console.error('Error fetching user id:', error.message);
+            return null;
+        }
+
+        if (data.length === 0) {
+            console.error(error);
+            return null;
+        }
+
+        return data[0].id;
+    };
+
+      const getPostingId = async () => {
+        const cookies = document.cookie;
+        const cookieArray = cookies.split(';');
+        const cookieObject: Record<string, string> = {};
+  
+        cookieArray.forEach(cookie => {
+            const [name, value] = cookie.trim().split('=');
+            cookieObject[name] = decodeURIComponent(value);
+        });
+  
+        const isLogin = cookieObject['is_login'];
+        const decryptedEmail = isLogin ? decryptEmail(isLogin) : '';
+  
+        if (!isLogin || !decryptedEmail) {
+            window.location.href = '/auth/login';
+            return null;
+        }
+  
+        const { data, error } = await supabase
+            .from('posting')
+            .select('*')
+            .order('id', { ascending: false })
+            .limit(1);
+  
+        if (error) {
+            console.error('Error fetching posting data:', error.message);
+        } else {
+            if (data && data.length > 0) {
+                const modifiedData = data.map(post => {
+                    post.id = post.id + 1;
+                    return post;
+                });
+                // console.log('Modified Data:', modifiedData);
+            } else {
+                // console.error('No posting data found.');
+            }
+        }
+  
+        if (error) {
+            // console.error('Error fetching posting id:', error.message);
+            return null;
+        }
+  
+        if (data.length === 0) {
+            // console.error('Posting not found');
+            return null;
+        }
+  
+        return data[0].id;
+    };
+    
+      const fetchComments = async () => {
+        const { data: commentsData, error: commentsError } = await supabase
+          .from('comment')
+          .select('id, id_posting, message, created_at, id_user')
+          .order('created_at', { ascending: true });
+      
+        if (commentsError) {
+          console.error('Error fetching comments:', commentsError.message);
+          return;
+        }
+      
+        commentsData.forEach(comment => {
+          // console.log("Message dari comment:", comment.message);
+        });
+      
+        // Kelompokkan komentar berdasarkan id postingan
+        const groupedComments: Record<string, any[]> = {};
+        const commentsCount: Record<string, number> = {};
+      
+        await Promise.all(commentsData.map(async (comment) => {
+          const postId = comment.id_posting;
+          if (!groupedComments[postId]) {
+            groupedComments[postId] = [];
+            commentsCount[postId] = 0;
+          }
+      
+          // Fetch user profile based on id_user
+          const userId = comment.id_user;
+          const { data: userDataComment, error: userError } = await supabase
+            .from('Users')
+            .select('username, foto_profile')
+            .eq('id', userId)
+            .single();
+      
+          if (userError) {
+            console.error('Error fetching user profile:', userError.message);
+            return;
+          }
+      
+          // Menambahkan informasi pengguna ke objek komentar
+          const userComment = {
+            ...comment,
+            username: userDataComment?.username || 'Unknown User',
+            foto_profile: "https://tyldtyivzeqiedyvaulp.supabase.co/storage/v1/object/public/foto_profile/"+userDataComment?.foto_profile || 'default_profile.jpg',
+          };
+      
+          groupedComments[postId].push(userComment);
+          commentsCount[postId]++;
+        }));
+      
+        // Simpan data komentar ke dalam state
+        setComments(groupedComments);
+        setCommentsCount(commentsCount);
+      };
+
+      const handleCommentClick = (postId: string) => {
+        // Set the comment clicked ID
+        setCommentClickedId(postId === commentClickedId ? null : postId);
+      };
+
+      const sendComment = async () => {
+        // Mendapatkan ID pengguna
+        const userId = await getUserId();
+        
+        if (!userId) {
+          // console.error('Failed to get user id');
+          return;
+        }
+      
+        // Mendapatkan ID posting yang sedang dikomentari
+        let postingId = await getPostingId(); // Await the result
+        
+        if (!postingId) {
+          // console.error('Failed to get posting id');
+          return;
+        }
+      
+        // Kurangi 1 dari postingId
+        postingId -= 1;
+      
+        // Mengirim komentar ke database
+        const { error } = await supabase
+          .from('comment')
+          .insert({ id_user: userId, id_posting: postingId, message: text });
+      
+        if (error) {
+          // console.error('Error sending comment:', error.message);
+          return;
+        }
+      
+        // Reset nilai text
+        setText('');
+      
+        // Reload komentar setelah berhasil mengirim
+        fetchComments();
+      };
+
+      const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        sendComment();
+      };
+    
+      const fetchUserData = async () => {
+        const id = await getUserId();
+        if (id) {
+          setUserId(id);
+        }
+      };
+      fetchUserData();
 
     // Function to handle like button click
     const handleLikeClick = async (postId: string) => {
@@ -96,42 +339,6 @@ export default function Profile() {
         const originalEmail = Buffer.from(reversedEncryptedEmail, 'base64').toString();
         return originalEmail;
     }
-
-    const getUserId = async () => {
-        const cookies = document.cookie;
-        const cookieArray = cookies.split(';');
-        const cookieObject: Record<string, string> = {};
-
-        cookieArray.forEach(cookie => {
-            const [name, value] = cookie.trim().split('=');
-            cookieObject[name] = decodeURIComponent(value);
-        });
-
-        const isLogin = cookieObject['is_login'];
-        const decryptedEmail = isLogin ? decryptEmail(isLogin) : '';
-
-        if (!isLogin || !decryptedEmail) {
-            window.location.href = '/auth/login';
-            return null;
-        }
-
-        const { data, error } = await supabase
-            .from('Users')
-            .select('id')
-            .eq('email', decryptedEmail);
-
-        if (error) {
-            // console.error('Error fetching user id:', error.message);
-            return null;
-        }
-
-        if (data.length === 0) {
-            console.error(error);
-            return null;
-        }
-
-        return data[0].id;
-    };
 
     const deletePost = async (postId: string) => {
         const { error } = await supabase
@@ -327,6 +534,7 @@ export default function Profile() {
         fetchData();
         getLikedPostsFromLocalStorage();
         fetchUserProfile();
+        fetchComments();
     }, []);
 
     useEffect(() => {
@@ -459,13 +667,54 @@ export default function Profile() {
                                     {likeCounts[post.id] !== undefined ? `${likeCounts[post.id]} likes` : '0 likes'}
                                 </p>
                             </div>
-                            <div className="comment">
+                            <div className="comment" onClick={() => handleCommentClick(post.id)}>
                                 <img src="/assets/main/icon/comment.svg" alt="" className="iconLikeComment" />
                                 <p className="countComment">
-                                    378 replies
+                                    {commentsCount[post.id] || 0} replies
                                 </p>
                             </div>
                         </div>
+                        {comments[post.id] &&
+                            comments[post.id]
+                            .slice()
+                            .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
+                            .map((comment, commentIndex) => (
+                                <div key={commentIndex} className={`isiComment ${commentClickedId === post.id ? 'unhide' : ''}`}>
+                                    {userId === comment.id_user && ( // Tampilkan tombol hapus hanya jika pengguna adalah pemilik komentar
+                                        <button className="deleteComment" onClick={() => handleDeleteComment(comment.id)}>
+                                            Delete
+                                        </button>
+                                    )}
+                                    <div className="commentProfileUser">
+                                        <img src={comment.foto_profile} alt="" className="fotoComment" />
+                                        <div className="UserHour">
+                                        <p className="username">
+                                            {comment.username}
+                                        </p>
+                                        <p className="time">
+                                            {getTimeAgoString(comment.created_at)}
+                                        </p>
+                                        </div>
+                                    </div>
+                                    <p className="pesanComment">
+                                        {comment.message}
+                                    </p>
+                                </div>
+                            ))
+                        }
+                        <form className={`formSend ${commentClickedId === post.id ? 'unhide2' : ''}`} onSubmit={handleFormSubmit} action="">
+                            <textarea
+                                placeholder="Ask a question"
+                                value={text}
+                                onChange={autoGrow}
+                                className="inputComment"
+                                required
+                                onBeforeInput={autoGrow}
+                            />
+                            <button type="submit" className="sendIcon">
+                                <FaPaperPlane size={15} />
+                            </button>
+                        </form>
                     </div>
                 ))}
             </div>

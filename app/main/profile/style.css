@@ -299,3 +299,76 @@
     display: flex;  
     font-size: 3vw;
 }
+
+.commentProfileUser {
+    display: flex;
+    align-items: center;
+    /* border: 1px solid red; */
+    margin-bottom: 3vw;
+}
+
+.fotoComment {
+    border-radius: 100%;
+    object-fit: cover;
+    aspect-ratio: 1;
+    width: 7vw;
+    margin-right: 2.5vw;
+}
+
+.pesanComment {
+    font-size: 3vw;
+    word-break: keep-all;
+}
+
+.isiComment {
+    display: none;
+    box-shadow: 0vw 0.1vw 1vw 0vw rgba(0, 0, 0, 0.25);
+    background-color: #ffffff;
+    border-radius: 4vw;
+    padding: 2.5vw;
+    margin-bottom: 3vw;
+    overflow-wrap: break-word;
+}
+
+.user{
+    justify-content: flex-end;
+    margin-right: 2vw;
+}
+
+.inputComment {
+    font-size: 3vw;
+    height: 8vw;
+    outline: none;
+    box-shadow: 0vw 0.1vw 1vw 0vw rgba(0, 0, 0, 0.25);
+    width: 70vw;
+    margin-top: 2vw;
+    padding-left: 2vw;
+    border-radius: 2vw;
+    padding-top: 2vw;
+    margin-right: 4vw;
+}
+
+.formSend {
+    display: none;
+    align-items: end;
+    padding-bottom: 4vw;
+}
+
+.sendIcon {
+    font-size: 5vw;
+    color: #141421;
+}
+
+.unhide {
+    display: block;
+}
+
+.unhide2 {
+    display: flex;
+}
+
+.deleteComment {
+    font-size: 2.5vw;
+    position: absolute;
+    left: 75vw;
+}
