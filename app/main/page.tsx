@@ -2,8 +2,8 @@
 
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FaHouse, FaMagnifyingGlass, FaPlus, FaBell, FaRegUser } from "react-icons/fa6";
-import React, { useRef, useState, ChangeEvent, useEffect } from 'react';
+import { FaPaperPlane, FaHouse, FaMagnifyingGlass, FaPlus, FaBell, FaRegUser } from "react-icons/fa6";
+import React, {useRef, useState, ChangeEvent, useEffect } from 'react';
 import supabase from '@/app/server/supabaseClient';
 import { motion } from "framer-motion";
 import './style.css';
@@ -12,9 +12,77 @@ const Home: React.FC = () => {
   const [photoURL, setPhotoURL] = useState('');
   const [posts, setPosts] = useState<any[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [text, setText] = useState("");
   const [inputValue, setInputValue] = useState<string>('');
   const [likeCounts, setLikeCounts] = useState<Record<string, number>>({});
   const [likedPosts, setLikedPosts] = useState<Record<string, boolean>>({});
+  const [commentClickedId, setCommentClickedId] = useState<string | null>(null);
+  const [commentsCount, setCommentsCount] = useState<Record<string, number>>({});
+  const [comments, setComments] = useState<Record<string, Comment[]>>({});
+
+  interface Comment {
+    id_posting: string;
+    message: string;
+    created_at: string;
+    id_user: string;
+    username: string;
+    foto_profile: string;
+  }
+
+  const fetchComments = async () => {
+    const { data: commentsData, error: commentsError } = await supabase
+      .from('comment')
+      .select('id_posting, message, created_at, id_user')
+      .order('created_at', { ascending: true });
+  
+    if (commentsError) {
+      console.error('Error fetching comments:', commentsError.message);
+      return;
+    }
+  
+    commentsData.forEach(comment => {
+      console.log("Message dari comment:", comment.message);
+    });
+  
+    // Kelompokkan komentar berdasarkan id postingan
+    const groupedComments: Record<string, any[]> = {};
+    const commentsCount: Record<string, number> = {};
+  
+    await Promise.all(commentsData.map(async (comment) => {
+      const postId = comment.id_posting;
+      if (!groupedComments[postId]) {
+        groupedComments[postId] = [];
+        commentsCount[postId] = 0;
+      }
+  
+      // Fetch user profile based on id_user
+      const userId = comment.id_user;
+      const { data: userDataComment, error: userError } = await supabase
+        .from('Users')
+        .select('username, foto_profile')
+        .eq('id', userId)
+        .single();
+  
+      if (userError) {
+        console.error('Error fetching user profile:', userError.message);
+        return;
+      }
+  
+      // Menambahkan informasi pengguna ke objek komentar
+      const userComment = {
+        ...comment,
+        username: userDataComment?.username || 'Unknown User',
+        foto_profile: "https://tyldtyivzeqiedyvaulp.supabase.co/storage/v1/object/public/foto_profile/"+userDataComment?.foto_profile || 'default_profile.jpg',
+      };
+  
+      groupedComments[postId].push(userComment);
+      commentsCount[postId]++;
+    }));
+  
+    // Simpan data komentar ke dalam state
+    setComments(groupedComments);
+    setCommentsCount(commentsCount);
+  };
 
   const getPostingId = async () => {
     const cookies = document.cookie;
@@ -199,6 +267,15 @@ const Home: React.FC = () => {
     return originalEmail;
   }
 
+  function autoGrow(event: React.ChangeEvent<HTMLTextAreaElement>) {
+    const element = event.target;
+    element.style.height = "1vw";
+    element.style.height = (element.scrollHeight) + "px";
+    element.style.paddingBottom = "1.5vw"
+    element.style.paddingTop = "1.5vw"
+    setText(event.target.value);
+  }
+
   const getTimeAgoString = (createdAt: string): string => {
     const createdDate = new Date(createdAt);
     const currentDate = new Date();
@@ -215,6 +292,50 @@ const Home: React.FC = () => {
     } else {
       return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
     }
+  };
+
+  const handleCommentClick = (postId: string) => {
+    // Set the comment clicked ID
+    setCommentClickedId(postId === commentClickedId ? null : postId);
+  };
+  
+  const sendComment = async () => {
+    // Mendapatkan ID pengguna
+    const userId = await getUserId();
+    
+    if (!userId) {
+      console.error('Failed to get user id');
+      return;
+    }
+  
+    // Mendapatkan ID posting yang sedang dikomentari
+    let postingId = await getPostingId(); // Await the result
+    
+    if (!postingId) {
+      console.error('Failed to get posting id');
+      return;
+    }
+  
+    // Kurangi 1 dari postingId
+    postingId -= 1;
+  
+    // Mengirim komentar ke database
+    const { error } = await supabase
+      .from('comment')
+      .insert({ id_user: userId, id_posting: postingId, message: text });
+  
+    if (error) {
+      console.error('Error sending comment:', error.message);
+      return;
+    }
+  
+    // Reset nilai text
+    setText('');
+  };
+  
+  const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    sendComment();
   };
 
   useEffect(() => {
@@ -360,6 +481,7 @@ const Home: React.FC = () => {
     setPosts(postData);
   };
   fetchData();
+  fetchComments();
 }, []);
 
   return (
@@ -424,13 +546,42 @@ const Home: React.FC = () => {
                     {likeCounts[post.id] !== undefined ? `${likeCounts[post.id]} likes` : '0 likes'}
                   </p>
                 </div>
-                <div className="comment">
+                <div className="comment" onClick={() => handleCommentClick(post.id)}>
                   <img src="/assets/main/icon/comment.svg" alt="" className="iconLikeComment" />
                   <p className="countComment">
-                    378 replies
+                    {commentsCount[post.id] || 0} replies
                   </p>
                 </div>
               </div>
+              {comments[post.id] && comments[post.id].map((comment, commentIndex) => (
+                <div key={commentIndex} className={`isiComment ${commentClickedId === post.id ? 'unhide' : ''}`}>
+                  <div className="commentProfileUser">
+                    {/* Display user profile picture */}
+                    <img src={comment.foto_profile} alt="" className="fotoComment" />
+                    <div className="UserHour">
+                      {/* Display username */}
+                      <p className="username">{comment.username}</p>
+                      {/* Display time */}
+                      <p className="time">{getTimeAgoString(comment.created_at)}</p>
+                    </div>
+                  </div>
+                  {/* Display comment message */}
+                  <p className="pesanComment">{comment.message}</p>
+                </div>
+              ))}
+              <form className={`formSend ${commentClickedId === post.id ? 'unhide2' : ''}`} onSubmit={handleFormSubmit} action="">
+                <textarea
+                  placeholder="Ask a question"
+                  value={text}
+                  onChange={autoGrow}
+                  className="inputComment"
+                  required
+                  onBeforeInput={autoGrow}
+                />
+                <button type="submit" className="sendIcon">
+                  <FaPaperPlane size={15} />
+                </button>
+              </form>
             </div>
           ))}
         </div>

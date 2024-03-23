@@ -280,6 +280,7 @@
     justify-content: flex-start;
     font-size: 2.5vw;
     align-items: center;
+    margin-bottom: 5vw;
 }
 
 .like, .comment {
@@ -291,4 +292,69 @@
 .countLike, .countComment {
     display: flex;  
     font-size: 3vw;
+}
+
+.commentProfileUser {
+    display: flex;
+    align-items: center;
+    /* border: 1px solid red; */
+    margin-bottom: 3vw;
+}
+
+.fotoComment {
+    border-radius: 100%;
+    object-fit: cover;
+    aspect-ratio: 1;
+    width: 7vw;
+    margin-right: 2.5vw;
+}
+
+.pesanComment {
+    font-size: 2vw;
+}
+
+.isiComment {
+    display: none;
+    box-shadow: 0vw 0.1vw 1vw 0vw rgba(0, 0, 0, 0.25);
+    background-color: #ffffff;
+    border-radius: 4vw;
+    padding: 2.5vw;
+    margin-bottom: 3vw;
+}
+
+.user{
+    justify-content: flex-end;
+    margin-right: 2vw;
+}
+
+.inputComment {
+    font-size: 2vw;
+    height: 6vw;
+    outline: none;
+    box-shadow: 0vw 0.1vw 1vw 0vw rgba(0, 0, 0, 0.25);
+    width: 70vw;
+    margin-top: 1.5vw;
+    padding-left: 2vw;
+    border-radius: 2vw;
+    padding-top: 1.5vw;
+    margin-right: 4vw;
+}
+
+.formSend {
+    display: none;
+    align-items: end;
+    padding-bottom: 4vw;
+}
+
+.sendIcon {
+    font-size: 4vw;
+    color: #141421;
+}
+
+.unhide {
+    display: block;
+}
+
+.unhide2 {
+    display: flex;
 }
