@@ -1,5 +1,6 @@
 'use client'
 
+import Skeleton from 'react-loading-skeleton';
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FaPaperPlane, FaHouse, FaMagnifyingGlass, FaPlus, FaBell, FaRegUser } from "react-icons/fa6";
@@ -19,8 +20,15 @@ const Home: React.FC = () => {
   const [commentClickedId, setCommentClickedId] = useState<string | null>(null);
   const [commentsCount, setCommentsCount] = useState<Record<string, number>>({});
   const [comments, setComments] = useState<Record<string, Comment[]>>({});
+  const [userId, setUserId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => setIsLoading(false), 1000);
+  }, []);
 
   interface Comment {
+    id: string;
     id_posting: string;
     message: string;
     created_at: string;
@@ -28,11 +36,32 @@ const Home: React.FC = () => {
     username: string;
     foto_profile: string;
   }
+  
+  const handleDeleteComment = async (commentId: string) => {
+    if (!commentId) {
+      // console.error('Comment ID is undefined');
+      return;
+    }
+    
+    // Kirim permintaan untuk menghapus komentar dari database
+    const { error } = await supabase
+      .from('comment')
+      .delete()
+      .eq('id', commentId);
+  
+    if (error) {
+      console.error('Error deleting comment:', error.message);
+      return;
+    }
+  
+    // Perbarui tampilan komentar setelah menghapus
+    fetchComments();
+  };
 
   const fetchComments = async () => {
     const { data: commentsData, error: commentsError } = await supabase
       .from('comment')
-      .select('id_posting, message, created_at, id_user')
+      .select('id, id_posting, message, created_at, id_user')
       .order('created_at', { ascending: true });
   
     if (commentsError) {
@@ -41,7 +70,7 @@ const Home: React.FC = () => {
     }
   
     commentsData.forEach(comment => {
-      console.log("Message dari comment:", comment.message);
+      // console.log("Message dari comment:", comment.message);
     });
   
     // Kelompokkan komentar berdasarkan id postingan
@@ -116,19 +145,19 @@ const Home: React.FC = () => {
                 post.id = post.id + 1;
                 return post;
             });
-            console.log('Modified Data:', modifiedData);
+            // console.log('Modified Data:', modifiedData);
         } else {
-            console.error('No posting data found.');
+            // console.error('No posting data found.');
         }
     }
 
     if (error) {
-        console.error('Error fetching posting id:', error.message);
+        // console.error('Error fetching posting id:', error.message);
         return null;
     }
 
     if (data.length === 0) {
-        console.error('Posting not found');
+        // console.error('Posting not found');
         return null;
     }
 
@@ -159,12 +188,12 @@ const Home: React.FC = () => {
             .eq('email', decryptedEmail);
 
         if (error) {
-            console.error('Error fetching user id:', error.message);
+            // console.error('Error fetching user id:', error.message);
             return null;
         }
 
         if (data.length === 0) {
-            console.error(error);
+            // console.error(error);
             return null;
         }
 
@@ -177,7 +206,7 @@ const Home: React.FC = () => {
     const userId = await getUserId();
     
     if (!userId) {
-      console.error('Failed to get user id');
+      // console.error('Failed to get user id');
       return;
     }
 
@@ -189,7 +218,7 @@ const Home: React.FC = () => {
       .eq('id_posting', postId);
 
     if (likeError) {
-      console.error('Error fetching likes:', likeError.message);
+      // console.error('Error fetching likes:', likeError.message);
       return;
     }
 
@@ -202,7 +231,7 @@ const Home: React.FC = () => {
         .eq('id_posting', postId);
 
       if (error) {
-        console.error('Error unliking post:', error.message);
+        // console.error('Error unliking post:', error.message);
         return;
       }
 
@@ -225,7 +254,7 @@ const Home: React.FC = () => {
         .insert({ id_user: userId, id_posting: postId });
 
       if (error) {
-        console.error('Error liking post:', error.message);
+        // console.error('Error liking post:', error.message);
         return;
       }
 
@@ -269,10 +298,10 @@ const Home: React.FC = () => {
 
   function autoGrow(event: React.ChangeEvent<HTMLTextAreaElement>) {
     const element = event.target;
-    element.style.height = "1vw";
+    element.style.height = "1.5vw";
     element.style.height = (element.scrollHeight) + "px";
-    element.style.paddingBottom = "1.5vw"
-    element.style.paddingTop = "1.5vw"
+    element.style.paddingBottom = "2vw"
+    element.style.paddingTop = "2vw"
     setText(event.target.value);
   }
 
@@ -304,7 +333,7 @@ const Home: React.FC = () => {
     const userId = await getUserId();
     
     if (!userId) {
-      console.error('Failed to get user id');
+      // console.error('Failed to get user id');
       return;
     }
   
@@ -312,7 +341,7 @@ const Home: React.FC = () => {
     let postingId = await getPostingId(); // Await the result
     
     if (!postingId) {
-      console.error('Failed to get posting id');
+      // console.error('Failed to get posting id');
       return;
     }
   
@@ -325,18 +354,29 @@ const Home: React.FC = () => {
       .insert({ id_user: userId, id_posting: postingId, message: text });
   
     if (error) {
-      console.error('Error sending comment:', error.message);
+      // console.error('Error sending comment:', error.message);
       return;
     }
   
     // Reset nilai text
     setText('');
+  
+    // Reload komentar setelah berhasil mengirim
+    fetchComments();
   };
   
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     sendComment();
   };
+
+  const fetchUserData = async () => {
+    const id = await getUserId();
+    if (id) {
+      setUserId(id);
+    }
+  };
+  fetchUserData();
 
   useEffect(() => {
     const cookies = document.cookie;
@@ -363,12 +403,12 @@ const Home: React.FC = () => {
         .eq('email', decryptedEmail);
 
       if (userError) {
-        console.error('Error fetching user:', userError.message);
+        // console.error('Error fetching user:', userError.message);
         return;
       }
 
       if (!userDataa || userDataa.length === 0) {
-        console.error('User data not found');
+        // console.error('User data not found');
         return;
       }
 
@@ -391,7 +431,7 @@ const Home: React.FC = () => {
         .select('id_posting, id_tag');
     
       if (tagPostingError) {
-      console.error('Error fetching tag_posting:', tagPostingError.message);
+      // console.error('Error fetching tag_posting:', tagPostingError.message);
       return;
     }
     
@@ -416,7 +456,7 @@ const Home: React.FC = () => {
           .eq('id', idPosting);
     
         if (postError) {
-          console.error('Error fetching posting:', postError.message);
+          // console.error('Error fetching posting:', postError.message);
           continue;
         }
     
@@ -426,7 +466,7 @@ const Home: React.FC = () => {
           .eq('id', postDataResult[0]?.id_user);
     
         if (userError) {
-          console.error('Error fetching user:', userError.message);
+          // console.error('Error fetching user:', userError.message);
           continue;
         }
     
@@ -438,7 +478,7 @@ const Home: React.FC = () => {
           .eq('id', tagId);
 
         if (tagError) {
-          console.error('Error fetching tag:', tagError.message);
+          // console.error('Error fetching tag:', tagError.message);
           return '';
         }
 
@@ -462,7 +502,7 @@ const Home: React.FC = () => {
         .eq('id_posting', idPosting);
 
       if (likeError) {
-        console.error('Error fetching likes:', likeError.message);
+        // console.error('Error fetching likes:', likeError.message);
         continue;
       }
 
@@ -489,6 +529,7 @@ const Home: React.FC = () => {
       <div className="container">
         <div className="searchProfil">
           <div className="search">
+          <Skeleton height={40} width={40} circle={true} />
             <div className="searchIcon" onClick={handleSearchIconClick}>
               <FontAwesomeIcon
                 style={{ fontSize: '3.5vw' }}
@@ -553,22 +594,32 @@ const Home: React.FC = () => {
                   </p>
                 </div>
               </div>
-              {comments[post.id] && comments[post.id].map((comment, commentIndex) => (
-                <div key={commentIndex} className={`isiComment ${commentClickedId === post.id ? 'unhide' : ''}`}>
-                  <div className="commentProfileUser">
-                    {/* Display user profile picture */}
-                    <img src={comment.foto_profile} alt="" className="fotoComment" />
-                    <div className="UserHour">
-                      {/* Display username */}
-                      <p className="username">{comment.username}</p>
-                      {/* Display time */}
-                      <p className="time">{getTimeAgoString(comment.created_at)}</p>
+              {comments[post.id] &&
+                comments[post.id]
+                  .slice()
+                  .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
+                  .map((comment, commentIndex) => (
+                    <div key={commentIndex} className={`isiComment ${commentClickedId === post.id ? 'unhide' : ''}`}>
+                      {userId === comment.id_user && ( // Tampilkan tombol hapus hanya jika pengguna adalah pemilik komentar
+                        <button className="deleteComment" onClick={() => handleDeleteComment(comment.id)}>
+                          Delete
+                        </button>
+                      )}
+                      <div className="commentProfileUser">
+                        <img src={comment.foto_profile} alt="" className="fotoComment" />
+                        <div className="UserHour">
+                          <p className="username">
+                            {comment.username}
+                          </p>
+                          <p className="time">
+                            {getTimeAgoString(comment.created_at)}
+                          </p>
+                        </div>
+                      </div>
+                      <p className="pesanComment">{comment.message}</p>
                     </div>
-                  </div>
-                  {/* Display comment message */}
-                  <p className="pesanComment">{comment.message}</p>
-                </div>
-              ))}
+                ))
+              }
               <form className={`formSend ${commentClickedId === post.id ? 'unhide2' : ''}`} onSubmit={handleFormSubmit} action="">
                 <textarea
                   placeholder="Ask a question"

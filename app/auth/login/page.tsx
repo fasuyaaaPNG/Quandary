@@ -48,13 +48,13 @@ export default function Login() {
       maxAge: 30 * 24 * 60 * 60,
       path: '/',
     });
-    window.location.href = '/main/profile';
+    window.location.href = '/main';
   }
 
   useEffect(() => {
     const isLoggedIn = parseCookies().is_login;
     if (isLoggedIn) {
-      window.location.href = '/main/profile';
+      window.location.href = '/main';
     }
     const handleResize = () => {
       const screenWidth = window.innerWidth;
