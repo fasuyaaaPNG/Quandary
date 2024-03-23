@@ -108,56 +108,7 @@ const Home: React.FC = () => {
     setCommentsCount(commentsCount);
   };
 
-  const getPostingId = async () => {
-    const cookies = document.cookie;
-    const cookieArray = cookies.split(';');
-    const cookieObject: Record<string, string> = {};
-
-    cookieArray.forEach(cookie => {
-        const [name, value] = cookie.trim().split('=');
-        cookieObject[name] = decodeURIComponent(value);
-    });
-
-    const isLogin = cookieObject['is_login'];
-    const decryptedEmail = isLogin ? decryptEmail(isLogin) : '';
-
-    if (!isLogin || !decryptedEmail) {
-        window.location.href = '/auth/login';
-        return null;
-    }
-
-    const { data, error } = await supabase
-        .from('posting')
-        .select('*')
-        .order('id', { ascending: false })
-        .limit(1);
-
-    if (error) {
-        console.error('Error fetching posting data:', error.message);
-    } else {
-        if (data && data.length > 0) {
-            const modifiedData = data.map(post => {
-                post.id = post.id + 1;
-                return post;
-            });
-            // console.log('Modified Data:', modifiedData);
-        } else {
-            // console.error('No posting data found.');
-        }
-    }
-
-    if (error) {
-        // console.error('Error fetching posting id:', error.message);
-        return null;
-    }
-
-    if (data.length === 0) {
-        // console.error('Posting not found');
-        return null;
-    }
-
-    return data[0].id;
-};
+  
 
       const getUserId = async () => {
         const cookies = document.cookie;

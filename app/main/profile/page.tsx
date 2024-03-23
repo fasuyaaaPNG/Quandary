@@ -150,7 +150,7 @@ export default function Profile() {
         return data[0].id;
     };
     
-      const fetchComments = async () => {
+    const fetchComments = async () => {
         const { data: commentsData, error: commentsError } = await supabase
           .from('comment')
           .select('id, id_posting, message, created_at, id_user')
@@ -160,10 +160,6 @@ export default function Profile() {
           console.error('Error fetching comments:', commentsError.message);
           return;
         }
-      
-        commentsData.forEach(comment => {
-          // console.log("Message dari comment:", comment.message);
-        });
       
         // Kelompokkan komentar berdasarkan id postingan
         const groupedComments: Record<string, any[]> = {};
@@ -203,14 +199,15 @@ export default function Profile() {
         // Simpan data komentar ke dalam state
         setComments(groupedComments);
         setCommentsCount(commentsCount);
-      };
+    };
+    
 
       const handleCommentClick = (postId: string) => {
         // Set the comment clicked ID
         setCommentClickedId(postId === commentClickedId ? null : postId);
       };
 
-      const sendComment = async () => {
+      const sendComment = async (postId: string) => {
         // Mendapatkan ID pengguna
         const userId = await getUserId();
         
@@ -226,30 +223,25 @@ export default function Profile() {
           // console.error('Failed to get posting id');
           return;
         }
-      
-        // Kurangi 1 dari postingId
+
         postingId -= 1;
-      
-        // Mengirim komentar ke database
+
         const { error } = await supabase
           .from('comment')
-          .insert({ id_user: userId, id_posting: postingId, message: text });
+          .insert({ id_user: userId, id_posting: postId, message: text });
       
         if (error) {
           // console.error('Error sending comment:', error.message);
           return;
         }
       
-        // Reset nilai text
         setText('');
-      
-        // Reload komentar setelah berhasil mengirim
         fetchComments();
       };
 
-      const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+      const handleFormSubmit = (postId: string) => (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        sendComment();
+        sendComment(postId);
       };
     
       const fetchUserData = async () => {
@@ -702,7 +694,7 @@ export default function Profile() {
                                 </div>
                             ))
                         }
-                        <form className={`formSend ${commentClickedId === post.id ? 'unhide2' : ''}`} onSubmit={handleFormSubmit} action="">
+                        <form className={`formSend ${commentClickedId === post.id ? 'unhide2' : ''}`} onSubmit={handleFormSubmit(post.id)} action="">
                             <textarea
                                 placeholder="Ask a question"
                                 value={text}
