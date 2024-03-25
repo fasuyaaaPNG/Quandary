@@ -9,9 +9,69 @@ import 'react-toastify/dist/ReactToastify.css';
 import { motion } from "framer-motion";
 
 const Home = () => {
+  const [photoURL, setPhotoURL] = useState('');
   const [name_sender, setName_sender  ] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [isLogin, setIsLogin] = useState(false)
+
+  
+  const decryptEmail = (encryptedEmail: string): string => {
+    const reversedEncryptedEmail = encryptedEmail.split('').reverse().join('');
+    const originalEmail = Buffer.from(reversedEncryptedEmail, 'base64').toString();
+    return originalEmail;
+  }
+
+  const directProfile = () => {
+    window.location.href = '/main';
+  }
+
+  useEffect(() => {
+    const cookies = document.cookie;
+    const cookieArray = cookies.split(';');
+    const cookieObject: Record<string, string> = {};
+
+    cookieArray.forEach(cookie => {
+      const [name, value] = cookie.trim().split('=');
+      cookieObject[name] = decodeURIComponent(value);
+    });
+
+    const islogin = cookieObject['is_login'];
+    const decryptedEmail = islogin ? decryptEmail(islogin) : '';
+
+    const fetchUserProfile = async () => {
+      const { data: userData, error: userError } = await supabase
+        .from('Users')
+        .select('foto_profile')
+        .eq('email', decryptedEmail);
+
+      if (userError) {
+        // console.error('Error fetching user:', userError.message);
+        return;
+      }
+
+      if (!userData || userData.length === 0) {
+        // console.error('User data not found');
+        return;
+      }
+
+      const userProfile = userData[0];
+      if (!userProfile.foto_profile) {
+        setPhotoURL('https://tyldtyivzeqiedyvaulp.supabase.co/storage/v1/object/public/foto_profile/profile.png');
+      } else {
+        setPhotoURL(`https://tyldtyivzeqiedyvaulp.supabase.co/storage/v1/object/public/foto_profile/${userProfile.foto_profile}`);
+      }
+
+    };
+        
+    const checkLoginStatus = () => {
+      const isLoginCookie = document.cookie.split(';').some((item) => item.trim().startsWith('is_login'));
+      setIsLogin(isLoginCookie);
+    };
+
+    fetchUserProfile();
+    checkLoginStatus();
+  }, []);
 
   const notifySuccsess = () => toast.success('😋 opinion successfully sent!', {
     position: "top-right",
@@ -56,17 +116,29 @@ const Home = () => {
       <div className="backHitam">
         <div className="headerLogoNav">
           <img src="/assets/Landing/Logo.png" className="headerLogo" alt="" />
-          <div className="headerNav">
-            <a className="navHome" href="/">
-              Home
-            </a>
-            <a className="navAbout" href="#About">
-              About
-            </a>  
-            <a className="navLogin" href="/auth/login">
-              Log in
-            </a>
-          </div>
+          {isLogin ? ( 
+            <div className="headerNav">
+              <a className="navHome" href="/">
+                Home
+              </a>
+              <a className="navAbout" href="#About">
+                About
+              </a>  
+              <img src={photoURL} onClick={directProfile} loading="lazy" alt="" className="navImage" />
+            </div>
+          ) : (
+            <div className="headerNav2">
+              <a className="navHome" href="/">
+                Home
+              </a>
+              <a className="navAbout" href="#About">
+                About
+              </a>  
+              <a className="navLogin" href="/auth/login">
+                Log in
+              </a>
+            </div>
+          )}
         </div>
         <div className="container1">
           <div className="content1">
