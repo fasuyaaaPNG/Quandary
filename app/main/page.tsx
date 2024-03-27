@@ -230,7 +230,7 @@ const Home: React.FC = () => {
   const clearInput = () => {
     setInputValue(''); // Mengatur nilai input menjadi string kosong
   };
-  const handleInputChange = async (event: ChangeEvent<HTMLInputElement>) => {
+ const handleInputChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setInputValue(value);
 
