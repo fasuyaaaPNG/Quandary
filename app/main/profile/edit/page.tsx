@@ -264,7 +264,7 @@ export default function Edit() {
                             Home
                         </motion.p>
                     </a>
-                    <a href="/main/search" className="iconDesc">
+                    <a href="/main/user" className="iconDesc">
                         <div className="iconImage" id="iconImage2">
                             <FaMagnifyingGlass size={15} />
                         </div>

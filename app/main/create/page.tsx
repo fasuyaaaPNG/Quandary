@@ -459,7 +459,7 @@ export default function Create() {
                             Home
                         </motion.p>
                     </a>
-                    <a href="/main/search" className="iconDesc">
+                    <a href="/main/user" className="iconDesc">
                         {/* <img src="/assets/main/icon/icon_search.png" className='iconImage' id='iconImage2' alt="" /> */}
                         <div className="iconImage" id="iconImage2">
                             <FaMagnifyingGlass size={15} />

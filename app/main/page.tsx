@@ -250,7 +250,7 @@ const Home: React.FC = () => {
             const { data: userData, error: userError } = await supabase
                 .from('Users')
                 .select('username, name_profile, bio, foto_profile')
-                .eq('id', post.id_user);
+                .eq('id', allPostData[0].id_user);
             
             if (userError) {
                 console.error('Error fetching user:', userError.message);
@@ -355,7 +355,7 @@ const Home: React.FC = () => {
           const { data: userData, error: userError } = await supabase
               .from('Users')
               .select('username, name_profile, bio, foto_profile')
-              .eq('id', postDataResult[0]?.id_user);
+              .eq('id', postDataResult[0].id_user);
   
           if (userError) {
               console.error('Error fetching user:', userError.message);
@@ -585,19 +585,25 @@ const Home: React.FC = () => {
           .from('posting')
           .select('id, pesan, thumbnail, created_at, id_user')
           .eq('id', idPosting);
-    
+
         if (postError) {
-          // console.error('Error fetching posting:', postError.message);
+          console.error('Error fetching posting:', postError.message);
           continue;
         }
-    
+
+        // Periksa apakah postDataResult tidak kosong
+        if (!postDataResult || postDataResult.length === 0) {
+          // console.error('No data found for idPosting:', idPosting);
+          continue;
+        }
+
         const { data: userData, error: userError } = await supabase
           .from('Users')
           .select('username, name_profile, bio, foto_profile')
-          .eq('id', postDataResult[0]?.id_user);
-    
+          .eq('id', postDataResult[0].id_user);
+
         if (userError) {
-          // console.error('Error fetching user:', userError.message);
+          console.error('Error fetching user:', userError.message);
           continue;
         }
     
@@ -778,7 +784,7 @@ const Home: React.FC = () => {
             Home
           </motion.p>
         </a>
-        <a href="/main/search" className="iconDesc">
+        <a href="/main/user" className="iconDesc">
           {/* <img src="/assets/main/icon/icon_search.png" className='iconImage' id='iconImage2' alt="" /> */}
           <div className="iconImage" id="iconImage2">
             <FaMagnifyingGlass size={15} />
