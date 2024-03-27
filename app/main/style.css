@@ -312,6 +312,7 @@
 .pesanComment {
     font-size: 3vw;
     word-break: keep-all;
+    padding-left: 3vw;
 }
 
 .isiComment {

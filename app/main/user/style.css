@@ -81,6 +81,7 @@ input[type="search"].dark::-webkit-search-cancel-button {
     border-radius: 6vw;  
     box-shadow: 0vw 0.1vw 1vw 0vw rgba(0, 0, 0, 0.25);
     margin-bottom: 6vw;
+    overflow-wrap: break-word;
 }
 
 .content {
@@ -112,7 +113,6 @@ input[type="search"].dark::-webkit-search-cancel-button {
     font-weight: 300;
     opacity: 0.9;
     font-style: italic;
-    overflow-wrap: break-word;
     margin-top: 2vw;
     word-break: break-all;
 }
