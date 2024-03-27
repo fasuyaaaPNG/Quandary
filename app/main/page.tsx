@@ -228,13 +228,206 @@ const Home: React.FC = () => {
   };
 
   const clearInput = () => {
-    setInputValue('');
+    setInputValue(''); // Mengatur nilai input menjadi string kosong
   };
-
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setInputValue(value);
-  };
+
+    if (value.trim() === '') {
+        // Jika input kosong, ambil semua posting
+        const { data: allPostData, error: allPostError } = await supabase
+            .from('posting')
+            .select('id, pesan, thumbnail, created_at, id_user');
+        
+        if (allPostError) {
+            console.error('Error fetching all posts:', allPostError.message);
+            return;
+        }
+
+        // Ambil detail pengguna untuk setiap posting
+        const postData = await Promise.all(allPostData.map(async (post) => {
+            const { data: userData, error: userError } = await supabase
+                .from('Users')
+                .select('username, name_profile, bio, foto_profile')
+                .eq('id', post.id_user);
+            
+            if (userError) {
+                console.error('Error fetching user:', userError.message);
+                return null;
+            }
+
+            // Ambil tag untuk posting
+            const { data: tagData, error: tagError } = await supabase
+                .from('tag_posting')
+                .select('id_tag')
+                .eq('id_posting', post.id);
+            
+            if (tagError) {
+                console.error('Error fetching tag data:', tagError.message);
+                return null;
+            }
+
+            // Mengelompokkan tag berdasarkan idPosting
+            const tagIds = tagData.map(tag => tag.id_tag);
+
+            // Ambil detail tag dari tagIds
+            const tagDetails = await Promise.all(tagIds.map(async (tagId) => {
+                const { data: tagDataResult, error: tagDataError } = await supabase
+                    .from('tag')
+                    .select('tag')
+                    .eq('id', tagId);
+
+                if (tagDataError) {
+                    console.error('Error fetching tag data:', tagDataError.message);
+                    return '';
+                }
+
+                return tagDataResult[0]?.tag || '';
+            }));
+
+            return {
+                id: post.id,
+                pesan: post.pesan,
+                thumbnail: post.thumbnail,
+                created_at: post.created_at,
+                username: userData[0]?.username || '',
+                foto_profile: `https://tyldtyivzeqiedyvaulp.supabase.co/storage/v1/object/public/foto_profile/${userData[0]?.foto_profile || ''}`,
+                tag: tagDetails.join(', ')
+            };
+        }));
+
+        // Hapus posting yang null (jika ada)
+        const filteredPostData = postData.filter(post => post !== null);
+
+        // Setel data posting ke dalam state
+        setPosts(filteredPostData);
+    } else {
+  
+    // Cari tag yang cocok dengan nilai input
+    const { data: tagData, error: tagError } = await supabase
+      .from('tag')
+      .select('id')
+      .eq('tag', value); // Memastikan tag dicari dalam huruf kecil
+        
+    if (tagError) {
+      console.error('Error fetching tag:', tagError.message);
+      return;
+    }
+    
+    // Ambil ID tag dari hasil pencarian tag
+    const tagIds = tagData.map(tag => tag.id);
+      
+    // Cari posting berdasarkan ID tag di tabel tag_posting
+    const { data: tagPostingData, error: tagPostingError } = await supabase
+      .from('tag_posting')
+      .select('id_posting')
+      .in('id_tag', tagIds); // Mengambil posting yang memiliki ID tag sesuai hasil pencarian
+      
+    if (tagPostingError) {
+      console.error('Error fetching tag_posting:', tagPostingError.message);
+      return;
+    }
+  
+    // Ambil ID posting dari hasil pencarian tag_posting
+    const postIds = tagPostingData.map(tagPosting => tagPosting.id_posting);
+      
+    // Ambil detail posting berdasarkan ID yang ditemukan
+    const postData = [];
+    for (const idPosting of postIds) {
+      const { data: postDataResult, error: postError } = await supabase
+        .from('posting')
+        .select('id, pesan, thumbnail, created_at, id_user')
+        .eq('id', idPosting); // Mengambil posting yang memiliki ID sesuai hasil pencarian
+      
+      if (postError) {
+        console.error('Error fetching posting:', postError.message);
+        continue; // Lanjutkan ke posting berikutnya jika terjadi kesalahan
+      }
+  
+      // Ambil data pengguna yang membuat posting
+      const { data: userData, error: userError } = await supabase
+        .from('Users')
+        .select('username, name_profile, bio, foto_profile')
+        .eq('id', postDataResult[0]?.id_user);
+      
+      if (userError) {
+        console.error('Error fetching user:', userError.message);
+        continue; // Lanjutkan ke posting berikutnya jika terjadi kesalahan
+      }
+
+      const groupedTags: Record<string, string[]> = {};
+
+      for (const idPosting of postIds) {
+        const { data: tagData, error: tagError } = await supabase
+          .from('tag_posting')
+          .select('id_tag')
+          .eq('id_posting', idPosting);
+      
+        if (tagError) {
+          console.error('Error fetching tag data:', tagError.message);
+          continue; // Lanjutkan ke posting berikutnya jika terjadi kesalahan
+        }
+      
+        // Mengelompokkan tag berdasarkan idPosting
+        groupedTags[idPosting] = tagData.map(tag => tag.id_tag);
+      }
+      
+      // Ambil tag dari posting dan gabungkan menjadi satu string
+      const tagIds = groupedTags[idPosting];
+      const tagData = await Promise.all(tagIds.map(async (tagId: string) => {
+        const { data: tagDataResult, error: tagError } = await supabase
+          .from('tag')
+          .select('tag')
+          .eq('id', tagId);
+
+        if (tagError) {
+          console.error('Error fetching tag:', tagError.message);
+          return '';
+        }
+
+        return tagDataResult[0]?.tag || ''; 
+      }));
+  
+      // Buat objek posting dengan data yang diperoleh
+      const post = {
+        id: postDataResult[0].id,
+        pesan: postDataResult[0].pesan,
+        thumbnail: postDataResult[0].thumbnail,
+        created_at: postDataResult[0].created_at,
+        username: userData[0].username,
+        tag: tagData.join(', '),
+        foto_profile: `https://tyldtyivzeqiedyvaulp.supabase.co/storage/v1/object/public/foto_profile/${userData[0].foto_profile}`
+      };
+  
+      // Ambil jumlah "likes" dari tabel "like" untuk posting saat ini
+      const { data: likeData, error: likeError } = await supabase
+        .from('like')
+        .select('id_posting')
+        .eq('id_posting', idPosting);
+  
+      if (likeError) {
+        console.error('Error fetching likes:', likeError.message);
+        continue; // Lanjutkan ke posting berikutnya jika terjadi kesalahan
+      }
+  
+      const likeCount = likeData ? likeData.length : 0;
+  
+      // Simpan jumlah "likes" ke dalam state
+      setLikeCounts((prevCounts) => ({
+        ...prevCounts,
+        [idPosting]: likeCount,
+      }));
+  
+      // Tambahkan posting ke array data posting
+      postData.push(post);
+    }
+  
+    // Setel data posting ke dalam state
+    setPosts(postData);
+  }
+};
+  
 
   const decryptEmail = (encryptedEmail: string): string => {
     const reversedEncryptedEmail = encryptedEmail.split('').reverse().join('');
@@ -472,12 +665,12 @@ const Home: React.FC = () => {
                 icon={faMagnifyingGlass}
               />
             </div>
-            <input type="text" ref={inputRef} value={inputValue} onChange={handleInputChange} placeholder="Search post" className="searchBar"/>
-            {inputValue !== '' && (
+            <input type="search" ref={inputRef} value={inputValue} onChange={handleInputChange} placeholder="Search post from tag" className="searchBar"/>
+            {/* {inputValue !== '' && (
               <button className="clear-input" onClick={clearInput}>
                 X
               </button>
-            )}
+            )} */}
           </div>
           <a href="/main/profile" className="profilImage">
             <img loading="lazy" src={photoURL} className="profil" alt="" />
@@ -505,7 +698,7 @@ const Home: React.FC = () => {
                 </p>
               </div>  
               <div className="kategori">
-                {post.tag.split(',').map((tag: any, tagIndex: any) => (
+                {post.tag && post.tag.split(',').map((tag: any, tagIndex: any) => (
                   <div key={tagIndex} className="kategori1">
                     {tag}
                   </div>
