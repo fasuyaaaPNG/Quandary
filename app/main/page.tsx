@@ -303,128 +303,130 @@ const Home: React.FC = () => {
         // Setel data posting ke dalam state
         setPosts(filteredPostData);
     } else {
-  
-    // Cari tag yang cocok dengan nilai input
-    const { data: tagData, error: tagError } = await supabase
-      .from('tag')
-      .select('id')
-      .eq('tag', value); // Memastikan tag dicari dalam huruf kecil
-        
-    if (tagError) {
-      console.error('Error fetching tag:', tagError.message);
-      return;
-    }
-    
-    // Ambil ID tag dari hasil pencarian tag
-    const tagIds = tagData.map(tag => tag.id);
-      
-    // Cari posting berdasarkan ID tag di tabel tag_posting
-    const { data: tagPostingData, error: tagPostingError } = await supabase
-      .from('tag_posting')
-      .select('id_posting')
-      .in('id_tag', tagIds); // Mengambil posting yang memiliki ID tag sesuai hasil pencarian
-      
-    if (tagPostingError) {
-      console.error('Error fetching tag_posting:', tagPostingError.message);
-      return;
-    }
-  
-    // Ambil ID posting dari hasil pencarian tag_posting
-    const postIds = tagPostingData.map(tagPosting => tagPosting.id_posting);
-      
-    // Ambil detail posting berdasarkan ID yang ditemukan
-    const postData = [];
-    for (const idPosting of postIds) {
-      const { data: postDataResult, error: postError } = await supabase
-        .from('posting')
-        .select('id, pesan, thumbnail, created_at, id_user')
-        .eq('id', idPosting); // Mengambil posting yang memiliki ID sesuai hasil pencarian
-      
-      if (postError) {
-        console.error('Error fetching posting:', postError.message);
-        continue; // Lanjutkan ke posting berikutnya jika terjadi kesalahan
-      }
-  
-      // Ambil data pengguna yang membuat posting
-      const { data: userData, error: userError } = await supabase
-        .from('Users')
-        .select('username, name_profile, bio, foto_profile')
-        .eq('id', postDataResult[0]?.id_user);
-      
-      if (userError) {
-        console.error('Error fetching user:', userError.message);
-        continue; // Lanjutkan ke posting berikutnya jika terjadi kesalahan
-      }
+      // Pisahkan kata-kata dari input
+      const keywords = value.trim().split(" ");
 
-      const groupedTags: Record<string, string[]> = {};
+      // Buat daftar tag yang sesuai dengan setiap kata
+      const tagLists = await Promise.all(keywords.map(async (keyword) => {
+          const { data: tagData, error: tagError } = await supabase
+              .from('tag')
+              .select('id')
+              .eq('tag', keyword);
 
-      for (const idPosting of postIds) {
-        const { data: tagData, error: tagError } = await supabase
-          .from('tag_posting')
-          .select('id_tag')
-          .eq('id_posting', idPosting);
-      
-        if (tagError) {
-          console.error('Error fetching tag data:', tagError.message);
-          continue; // Lanjutkan ke posting berikutnya jika terjadi kesalahan
-        }
-      
-        // Mengelompokkan tag berdasarkan idPosting
-        groupedTags[idPosting] = tagData.map(tag => tag.id_tag);
-      }
-      
-      // Ambil tag dari posting dan gabungkan menjadi satu string
-      const tagIds = groupedTags[idPosting];
-      const tagData = await Promise.all(tagIds.map(async (tagId: string) => {
-        const { data: tagDataResult, error: tagError } = await supabase
-          .from('tag')
-          .select('tag')
-          .eq('id', tagId);
+          if (tagError) {
+              console.error('Error fetching tag:', tagError.message);
+              return [];
+          }
 
-        if (tagError) {
-          console.error('Error fetching tag:', tagError.message);
-          return '';
-        }
-
-        return tagDataResult[0]?.tag || ''; 
+          return tagData.map(tag => tag.id);
       }));
   
-      // Buat objek posting dengan data yang diperoleh
-      const post = {
-        id: postDataResult[0].id,
-        pesan: postDataResult[0].pesan,
-        thumbnail: postDataResult[0].thumbnail,
-        created_at: postDataResult[0].created_at,
-        username: userData[0].username,
-        tag: tagData.join(', '),
-        foto_profile: `https://tyldtyivzeqiedyvaulp.supabase.co/storage/v1/object/public/foto_profile/${userData[0].foto_profile}`
-      };
+      // Gabungkan semua tag yang sesuai menjadi satu set tag unik
+      const tagIds = tagLists.flat();
   
-      // Ambil jumlah "likes" dari tabel "like" untuk posting saat ini
-      const { data: likeData, error: likeError } = await supabase
-        .from('like')
+      // Cari posting yang memiliki setidaknya satu dari tag tersebut
+      const { data: tagPostingData, error: tagPostingError } = await supabase
+        .from('tag_posting')
         .select('id_posting')
-        .eq('id_posting', idPosting);
+        .in('id_tag', tagIds);
+
+      if (tagPostingError) {
+          console.error('Error fetching tag_posting:', tagPostingError.message);
+          return;
+      }
+
+      // Ambil ID posting dari hasil pencarian tag_posting
+      const postIds = tagPostingData.map(tagPosting => tagPosting.id_posting);
+
+      // Ambil detail posting berdasarkan ID yang ditemukan
+      const postData = [];
+      for (const idPosting of postIds) {
+          const { data: postDataResult, error: postError } = await supabase
+              .from('posting')
+              .select('id, pesan, thumbnail, created_at, id_user')
+              .eq('id', idPosting); // Mengambil posting yang memiliki ID sesuai hasil pencarian
   
-      if (likeError) {
-        console.error('Error fetching likes:', likeError.message);
-        continue; // Lanjutkan ke posting berikutnya jika terjadi kesalahan
+          if (postError) {
+              console.error('Error fetching posting:', postError.message);
+              continue; // Lanjutkan ke posting berikutnya jika terjadi kesalahan
+          }
+  
+          // Ambil data pengguna yang membuat posting
+          const { data: userData, error: userError } = await supabase
+              .from('Users')
+              .select('username, name_profile, bio, foto_profile')
+              .eq('id', postDataResult[0]?.id_user);
+  
+          if (userError) {
+              console.error('Error fetching user:', userError.message);
+              continue; // Lanjutkan ke posting berikutnya jika terjadi kesalahan
+          }
+  
+          // Ambil tag dari posting
+          const { data: tagData, error: tagError } = await supabase
+              .from('tag_posting')
+              .select('id_tag')
+              .eq('id_posting', idPosting);
+  
+          if (tagError) {
+              console.error('Error fetching tag data:', tagError.message);
+              continue; // Lanjutkan ke posting berikutnya jika terjadi kesalahan
+          }
+  
+          // Mengelompokkan tag berdasarkan idPosting
+          const tagIds = tagData.map(tag => tag.id_tag);
+  
+          // Ambil detail tag dari tagIds
+          const tagDetails = await Promise.all(tagIds.map(async (tagId) => {
+              const { data: tagDataResult, error: tagDataError } = await supabase
+                  .from('tag')
+                  .select('tag')
+                  .eq('id', tagId);
+  
+              if (tagDataError) {
+                  console.error('Error fetching tag data:', tagDataError.message);
+                  return '';
+              }
+  
+              return tagDataResult[0]?.tag || '';
+          }));
+  
+          // Buat objek posting dengan data yang diperoleh
+          const post = {
+              id: postDataResult[0].id,
+              pesan: postDataResult[0].pesan,
+              thumbnail: postDataResult[0].thumbnail,
+              created_at: postDataResult[0].created_at,
+              username: userData[0].username,
+              tag: tagDetails.join(', '),
+              foto_profile: `https://tyldtyivzeqiedyvaulp.supabase.co/storage/v1/object/public/foto_profile/${userData[0].foto_profile}`
+          };
+  
+          // Ambil jumlah "likes" dari tabel "like" untuk posting saat ini
+          const { data: likeData, error: likeError } = await supabase
+              .from('like')
+              .select('id_posting')
+              .eq('id_posting', idPosting);
+  
+          if (likeError) {
+              console.error('Error fetching likes:', likeError.message);
+              continue; // Lanjutkan ke posting berikutnya jika terjadi kesalahan
+          }
+  
+          const likeCount = likeData ? likeData.length : 0;
+  
+          // Simpan jumlah "likes" ke dalam state
+          setLikeCounts((prevCounts) => ({
+              ...prevCounts,
+              [idPosting]: likeCount,
+          }));
+  
+          // Tambahkan posting ke array data posting
+          postData.push(post);
       }
   
-      const likeCount = likeData ? likeData.length : 0;
-  
-      // Simpan jumlah "likes" ke dalam state
-      setLikeCounts((prevCounts) => ({
-        ...prevCounts,
-        [idPosting]: likeCount,
-      }));
-  
-      // Tambahkan posting ke array data posting
-      postData.push(post);
-    }
-  
-    // Setel data posting ke dalam state
-    setPosts(postData);
+      // Setel data posting ke dalam state
+      setPosts(postData);
   }
 };
   
