@@ -22,6 +22,27 @@ export default function Login() {
   async function handleSignIn(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
+    const { data: adminData, error: adminError } = await supabase
+      .from('admin')
+      .select('*')
+      .eq('email', email)
+      .eq('password', password);
+
+    if (adminError) {
+      console.error('Error retrieving admin data:', adminError.message);
+      return;
+    }
+
+    if (adminData && adminData.length > 0) {
+      const encryptedEmail = encryptEmail(email);
+      setCookie(null, 'is_admin', encryptedEmail, {
+        maxAge: 30 * 24 * 60 * 60,
+        path: '/',
+      });
+      window.location.href = '/admin'; 
+      return;
+    }
+
     const { data: usersData, error: usersError } = await supabase
       .from('Users')
       .select('*')
@@ -53,8 +74,11 @@ export default function Login() {
 
   useEffect(() => {
     const isLoggedIn = parseCookies().is_login;
+    const isLoggedInAdmin = parseCookies().is_admin;
     if (isLoggedIn) {
       window.location.href = '/main';
+    } if (isLoggedInAdmin) {
+      window.location.href = '/admin'
     }
     const handleResize = () => {
       const screenWidth = window.innerWidth;

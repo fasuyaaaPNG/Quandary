@@ -8,6 +8,7 @@ import supabase from '@/app/server/supabaseClient';
 
 export default function Create() {
     const [text, setText] = useState("");
+    const [formDisabled, setFormSubmitted] = useState(false);
     const [inputCount, setInputCount] = useState(1);
     const [isShareable, setIsShareable] = useState(false);
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -106,7 +107,7 @@ export default function Create() {
         }
 
         return data[0].id;
-    };
+    }; 
 
     const getPostingId = async () => {
         const cookies = document.cookie;
@@ -128,26 +129,12 @@ export default function Create() {
     
         const { data, error } = await supabase
             .from('posting')
-            .select('*')
+            .select('id')
             .order('id', { ascending: false })
             .limit(1);
-
-        if (error) {
-            console.error('Error fetching posting data:', error.message);
-        } else {
-            if (data && data.length > 0) {
-                const modifiedData = data.map(post => {
-                    post.id = post.id + 1;
-                    return post;
-                });
-                console.log('Modified Data:', modifiedData);
-            } else {
-                console.error('No posting data found.');
-            }
-        }
     
         if (error) {
-            console.error('Error fetching posting id:', error.message);
+            console.error('Error fetching posting data:', error.message);
             return null;
         }
     
@@ -156,9 +143,24 @@ export default function Create() {
             return null;
         }
     
-        return data[0].id;
-    };
+        const postingId = data[0].id+1;
 
+        const insertTagPosting = async (postingId: number) => {
+            const { error } = await supabase
+                .from('tag_posting')
+                .insert([{ id_posting: postingId }]);
+    
+            if (error) {
+                console.error('Error inserting tag posting:', error.message);
+                return null;
+            }
+        };
+
+        await insertTagPosting(postingId);
+
+    return postingId;
+    };
+    
     const getTagId = async () => {
         const cookies = document.cookie;
         const cookieArray = cookies.split(';');
@@ -197,16 +199,15 @@ export default function Create() {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-
+        setFormSubmitted(true);
+        
         const userId = await getUserId();
-        const postingId = await getPostingId();
         const tagId = await getTagId();
-        // const userPost = await getIdUserPost();
-
-        if (!userId || !postingId || !tagId) {
+    
+        if (!userId || !tagId) {
             return;
         }
-
+    
         // Menghapus file dari bucket jika sudah ada dengan nama yang sama
         let thumbnailFileName = '';
         if (selectedImage) {
@@ -214,110 +215,148 @@ export default function Create() {
             const { data: existingFiles, error: existingFilesError } = await supabase.storage
                 .from('foto_post')
                 .list();
-    
+        
             if (existingFilesError) {
                 console.error('Error listing existing files:', existingFilesError.message);
                 return;
             }    
-
+    
             const existingFile = existingFiles?.find(file => file.name === fileName);
-
-        if (existingFile) {
-            const { error: deleteError } = await supabase.storage
+    
+            if (existingFile) {
+                const { error: deleteError } = await supabase.storage
+                    .from('foto_post')
+                    .remove([selectedImage.name]);
+    
+                if (deleteError) {
+                    console.error('Error deleting existing file:', deleteError.message);
+                    return;
+                }
+            }
+    
+            // Mengunggah file baru ke bucket penyimpanan
+            const { data, error } = await supabase.storage
                 .from('foto_post')
-                .remove([selectedImage.name]);
-
-            if (deleteError) {
-                console.error('Error deleting existing file:', deleteError.message);
+                .upload(selectedImage.name, selectedImage);
+    
+            if (error) {
+                console.error('Error uploading image:', error.message);
+                return;
+            }
+    
+            thumbnailFileName = "https://tyldtyivzeqiedyvaulp.supabase.co/storage/v1/object/public/foto_post/"+fileName;
+        }
+    
+        // Insert posting to database
+        const { data: postingData, error: insertError } = await supabase
+            .from('posting')
+            .insert([{ pesan: text, id_user: userId, thumbnail: thumbnailFileName }]);
+    
+        if (insertError) {
+            console.error('Error inserting posting:', insertError.message);
+            return;
+        }
+    
+        // Mendapatkan ID dari posting yang baru saja dimasukkan
+        const { data: latestPostingIdData, error: latestPostingIdError } = await supabase
+            .from('posting')
+            .select('id')
+            .order('id', { ascending: false })
+            .limit(1);
+    
+        if (latestPostingIdError) {
+            console.error('Error fetching latest posting ID:', latestPostingIdError.message);
+            return;
+        }
+    
+        if (!latestPostingIdData || latestPostingIdData.length === 0) {
+            console.error('Latest posting ID not found');
+            return;
+        }
+    
+        const postingId = latestPostingIdData[0].id;
+    
+        const existingTags = await Promise.all(tags.map(async (tag) => {
+            const { data, error } = await supabase
+                .from('tag')
+                .select('id')
+                .eq('tag', tag);
+    
+            if (error) {
+                console.error('Error fetching tag:', error.message);
+                return null;
+            }
+    
+            return data.length > 0 ? data[0].id : null;
+        }));
+    
+        // Filter tag yang tidak ada di tabel tag
+        const newTags = tags.filter((tag, index) => existingTags[index] === null);
+    
+        // Insert tag baru ke tabel tag
+        if (newTags.length > 0) {
+            const { error: tagInsertError } = await supabase
+                .from('tag')
+                .insert(newTags.map(tag => ({ tag })));
+    
+            if (tagInsertError) {
+                console.error('Error inserting new tags:', tagInsertError.message);
                 return;
             }
         }
+    
+        // Ambil kembali ID tag yang sudah ada dan ID tag baru
+        const tagIds = existingTags.filter(tagId => tagId !== null) as number[];
+        const newTagIds = await Promise.all(newTags.map(async (tag) => {
+            const { data, error } = await supabase
+                .from('tag')
+                .select('id')
+                .eq('tag', tag);
+    
+            if (error) {
+                console.error('Error fetching new tag id:', error.message);
+                return null;
+            }
+    
+            return data.length > 0 ? data[0].id : null;
+        }));
+    
+        newTagIds.forEach(tagId => {
+            if (tagId !== null) {
+                tagIds.push(tagId);
+            }
+        });
 
-        // Mengunggah file baru ke bucket penyimpanan
-        const { data, error } = await supabase.storage
-            .from('foto_post')
-            .upload(selectedImage.name, selectedImage);
+       // Insert tag_posting to database
+        const tagPostingInsertPromises = tagIds.map(tagId => 
+            supabase.from('tag_posting').insert([{ id_posting: postingId, id_tag: tagId }])
+        );
 
-        if (error) {
-            console.error('Error uploading image:', error.message);
-            return;
-        }
+        const tagPostingInsertResults = await Promise.all(tagPostingInsertPromises);
 
-        thumbnailFileName = "https://tyldtyivzeqiedyvaulp.supabase.co/storage/v1/object/public/foto_post/"+fileName;
-    }
+        // Cek apakah ada kesalahan saat memasukkan data ke dalam tabel tag_posting
+        tagPostingInsertResults.forEach((result, index) => {
+            if (result.error) {
+                console.error(`Error inserting tag ${tagIds[index]} into tag_posting:`, result.error.message);
+            }
+        });
 
-        // Insert posting to database
-    const { error: insertError } = await supabase
-        .from('posting')
-        .insert([{ pesan: text, id_user: userId, thumbnail: thumbnailFileName }]);
+        // Insert tag_posting to database for new tags
+        const newTagPostingInsertPromises = newTagIds.map(tagId => 
+            supabase.from('tag_posting').insert([{ id_posting: postingId, id_tag: tagId }])
+        );
 
-    if (insertError) {
-        console.error('Error inserting posting:', insertError.message);
-        return;
-    }
+        const newTagPostingInsertResults = await Promise.all(newTagPostingInsertPromises);
 
-    const existingTags = await Promise.all(tags.map(async (tag) => {
-        const { data, error } = await supabase
-            .from('tag')
-            .select('id')
-            .eq('tag', tag);
+        // Cek apakah ada kesalahan saat memasukkan data ke dalam tabel tag_posting untuk tag baru
+        newTagPostingInsertResults.forEach((result, index) => {
+            if (result.error) {
+                console.error(`Error inserting new tag ${newTagIds[index]} into tag_posting:`, result.error.message);
+            }
+        });
 
-        if (error) {
-            console.error('Error fetching tag:', error.message);
-            return null;
-        }
-
-        return data.length > 0 ? data[0].id : null;
-    }));
-
-    // Filter tag yang tidak ada di tabel tag
-    const newTags = tags.filter((tag, index) => existingTags[index] === null);
-
-    // Insert tag baru ke tabel tag
-    if (newTags.length > 0) {
-        const { error: tagInsertError } = await supabase
-            .from('tag')
-            .insert(newTags.map(tag => ({ tag })));
-
-        if (tagInsertError) {
-            console.error('Error inserting new tags:', tagInsertError.message);
-            return;
-        }
-    }
-
-    // Ambil kembali ID tag yang sudah ada dan ID tag baru
-    const tagIds = existingTags.filter(tagId => tagId !== null) as number[];
-    const newTagIds = await Promise.all(newTags.map(async (tag) => {
-        const { data, error } = await supabase
-            .from('tag')
-            .select('id')
-            .eq('tag', tag);
-
-        if (error) {
-            console.error('Error fetching new tag id:', error.message);
-            return null;
-        }
-
-        return data.length > 0 ? data[0].id : null;
-    }));
-
-    newTagIds.forEach(tagId => {
-        if (tagId !== null) {
-            tagIds.push(tagId);
-        }
-    });
-
-    // Setelah posting dan tag terisi, baru masukkan ke tabel tag_posting
-    const { error: postingTagError } = await supabase
-        .from('tag_posting')
-        .insert(tagIds.map(tagId => ({ id_posting: postingId, id_tag: tagId })));
-
-    if (postingTagError) {
-        console.error('Error inserting tags:', postingTagError.message);
-        return;
-    }
         window.location.href = '/main'; // Redirect ke halaman utama setelah berhasil submit
-    };
+    };    
 
     React.useEffect(() => {
         const cookies = document.cookie;
@@ -429,7 +468,7 @@ export default function Create() {
                             {inputElements}
                         </div>
                         {/* <input type="hidden" value={inputCount} id="total_chq"/> */}
-                        <button className="share shareOke">
+                        <button disabled={formDisabled} className="share shareOke">
                             Share
                         </button>
                     </form>

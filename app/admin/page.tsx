@@ -8,6 +8,7 @@ import React, {useRef, useState, ChangeEvent, useEffect } from 'react';
 import supabase from '@/app/server/supabaseClient';
 import { motion } from "framer-motion";
 import './style.css';
+import { parseCookies } from 'nookies';
 
 const Home: React.FC = () => {
   const [photoURL, setPhotoURL] = useState('');
@@ -120,7 +121,7 @@ const Home: React.FC = () => {
             cookieObject[name] = decodeURIComponent(value);
         });
 
-        const isLogin = cookieObject['is_login'];
+        const isLogin = cookieObject['is_admin'];
         const decryptedEmail = isLogin ? decryptEmail(isLogin) : '';
 
         if (!isLogin || !decryptedEmail) {
@@ -129,7 +130,7 @@ const Home: React.FC = () => {
         }
 
         const { data, error } = await supabase
-            .from('Users')
+            .from('admin')
             .select('id')
             .eq('email', decryptedEmail);
 
@@ -231,10 +232,10 @@ const Home: React.FC = () => {
     setInputValue(''); // Mengatur nilai input menjadi string kosong
   };
  const handleInputChange = async (event: ChangeEvent<HTMLInputElement>) => {
-      const value = event.target.value.trim(); // Menghapus spasi dari awal dan akhir input
-      setInputValue(value);
+    const value = event.target.value;
+    setInputValue(value);
 
-      if (value === '') {
+    if (value.trim() === '') {
         // Jika input kosong, ambil semua posting
         const { data: allPostData, error: allPostError } = await supabase
           .from('posting')
@@ -355,7 +356,7 @@ const Home: React.FC = () => {
           const { data: userData, error: userError } = await supabase
               .from('Users')
               .select('username, name_profile, bio, foto_profile')
-              .eq('id', postDataResult[0].id_user);
+              .eq('id', postDataResult[0]?.id_user);
   
           if (userError) {
               console.error('Error fetching user:', userError.message);
@@ -495,6 +496,46 @@ const Home: React.FC = () => {
     // Reload komentar setelah berhasil mengirim
     fetchComments();
   };
+
+  const deletePost = async (postId: string) => {
+    // Hapus postingan dari tabel 'posting'
+    const { error: postError } = await supabase
+      .from('posting')
+      .delete()
+      .eq('id', postId);
+  
+    if (postError) {
+      // console.error('Error deleting post:', postError.message);
+      return;
+    }
+  
+    // Hapus entri tag terkait dengan postingan dari tabel 'tag_posting'
+    await deleteTagPosting(postId);
+  
+    // Perbarui daftar postingan setelah penghapusan berhasil dilakukan
+    setPosts(posts.filter(post => post.id !== postId));
+  };
+  
+  const deleteTagPosting = async (postId: string) => {
+    // Hapus entri tag dari tabel 'tag_posting' berdasarkan postId
+    const { error: tagPostingError } = await supabase
+      .from('tag_posting')
+      .delete()
+      .eq('id_posting', postId);
+  
+    if (tagPostingError) {
+      // console.error('Error deleting tag_posting entries:', tagPostingError.message);
+      return;
+    }
+  };
+  
+  const handleDeletePost = async (postId: string) => {
+    const confirmation = window.confirm('Are you sure you want to delete this post?');
+  
+    if (confirmation) {
+      await deletePost(postId);
+    }
+  };
   
   const handleFormSubmit = (postId: string) => (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -524,32 +565,32 @@ const Home: React.FC = () => {
       cookieObject[name] = decodeURIComponent(value);
     });
     
-    const isLogin = cookieObject['is_login'];
+    const isLogin = cookieObject['is_admin'];
     const decryptedEmail = isLogin ? decryptEmail(isLogin) : '';
 
     const fetchUserProfile = async () => {
-      const { data: userData, error: userError } = await supabase
+      const { data: userDataa, error: userError } = await supabase
         .from('Users')
         .select('username, name_profile, bio, foto_profile')
         .eq('email', decryptedEmail);
-    
+
       if (userError) {
-        console.error('Error fetching user:', userError.message);
+        // console.error('Error fetching user:', userError.message);
         return;
       }
-    
-      if (!userData || userData.length === 0) {
-        console.error('User data not found');
+
+      if (!userDataa || userDataa.length === 0) {
+        // console.error('User data not found');
         return;
       }
-    
-      const userProfile = userData[0];
+
+      const userProfile = userDataa[0];
       if (!userProfile.foto_profile) {
         setPhotoURL('https://tyldtyivzeqiedyvaulp.supabase.co/storage/v1/object/public/foto_profile/profile.png');
       } else {
         setPhotoURL(`https://tyldtyivzeqiedyvaulp.supabase.co/storage/v1/object/public/foto_profile/${userProfile.foto_profile}`);
       }
-    };    
+    };
   
     if (!isLogin || !decryptedEmail) {
       window.location.href = '/auth/login';
@@ -674,21 +715,16 @@ const Home: React.FC = () => {
               />
             </div>
             <input type="search" ref={inputRef} value={inputValue} onChange={handleInputChange} placeholder="Search post from tag" className="searchBar"/>
-            {/* {inputValue !== '' && (
-              <button className="clear-input" onClick={clearInput}>
-                X
-              </button>
-            )} */}
           </div>
-          <a href="/main/profile" className="profilImage">
-            <img loading="lazy" src={photoURL} className="profil" alt="" />
-          </a>
         </div>
         {/* content */}
         <div className="content">
           {posts.slice().reverse().map((post, index) => (
             <div key={index} className="content1">
               <div className="profilUser">
+                <button onClick={() => handleDeletePost(post.id)} className='delete'>
+                  Delete
+                </button>
                 <img loading="lazy" src={post.foto_profile} alt="" className="profilUserImage" />
                 <div className="userTime">
                   <p className="username">
@@ -737,11 +773,9 @@ const Home: React.FC = () => {
                   .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
                   .map((comment, commentIndex) => (
                     <div key={commentIndex} className={`isiComment ${commentClickedId === post.id ? 'unhide' : ''}`}>
-                      {userId === comment.id_user && ( // Tampilkan tombol hapus hanya jika pengguna adalah pemilik komentar
-                        <button className="deleteComment" onClick={() => handleDeleteComment(comment.id)}>
-                          Delete
-                        </button>
-                      )}
+                      <button className="deleteComment" onClick={() => handleDeleteComment(comment.id)}>
+                        Delete
+                      </button>
                       <div className="commentProfileUser">
                         <img src={comment.foto_profile} alt="" className="fotoComment" />
                         <div className="UserHour">
@@ -757,19 +791,7 @@ const Home: React.FC = () => {
                     </div>
                 ))
               }
-              <form className={`formSend ${commentClickedId === post.id ? 'unhide2' : ''}`} onSubmit={handleFormSubmit(post.id)} action="">
-                <textarea
-                  placeholder="Ask a question"
-                  value={text}
-                  onChange={autoGrow}
-                  className="inputComment"
-                  required
-                  onBeforeInput={autoGrow}
-                />
-                <button type="submit" className="sendIcon">
-                  <FaPaperPlane size={15} />
-                </button>
-              </form>
+              <div className="space"></div>
             </div>
           ))}
         </div>
@@ -784,15 +806,6 @@ const Home: React.FC = () => {
             Home
           </motion.p>
         </a>
-        <a href="/main/user" className="iconDesc">
-          {/* <img src="/assets/main/icon/icon_search.png" className='iconImage' id='iconImage2' alt="" /> */}
-          <div className="iconImage" id="iconImage2">
-            <FaMagnifyingGlass size={15} />
-          </div>
-          <p> 
-            Search
-          </p>
-        </a>
         <a href="/main/create" className="iconDesc">
           {/* <img src="/assets/main/icon/icon_new post.png" className='iconImage' alt="" /> */}
           <div className="iconImage" id="iconImage3">
@@ -800,15 +813,6 @@ const Home: React.FC = () => {
           </div>
           <p>
             New Post
-          </p>
-        </a>
-        <a href="/main/notify" className="iconDesc">
-          {/* <img src="/assets/main/icon/icon_notip.png" className='iconImage' alt="" /> */}
-          <div className="iconImage" id="iconImage4">
-            <FaBell size={15} />
-          </div>
-          <p>
-            Notify
           </p>
         </a>
         <a href="/main/profile" className="iconDesc">

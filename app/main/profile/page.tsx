@@ -333,27 +333,43 @@ export default function Profile() {
     }
 
     const deletePost = async (postId: string) => {
-        const { error } = await supabase
-            .from('posting')
-            .delete()
-            .eq('id', postId);
+      // Hapus postingan dari tabel 'posting'
+      const { error: postError } = await supabase
+        .from('posting')
+        .delete()
+        .eq('id', postId);
     
-        if (error) {
-            console.error('Error deleting post:', error.message);
-            return;
-        }
+      if (postError) {
+        console.error('Error deleting post:', postError.message);
+        return;
+      }
     
-        // Perbarui daftar postingan setelah penghapusan berhasil dilakukan
-        setPosts(posts.filter(post => post.id !== postId));
+      // Hapus entri tag terkait dengan postingan dari tabel 'tag_posting'
+      await deleteTagPosting(postId);
+    
+      // Perbarui daftar postingan setelah penghapusan berhasil dilakukan
+      setPosts(posts.filter(post => post.id !== postId));
     };
     
-    // Tambahkan event handler untuk menangani penghapusan postingan
-    const handleDeletePost = async (postId: string) => {
-        const confirmation = window.confirm('Are you sure you want to delete this post?');
+    const deleteTagPosting = async (postId: string) => {
+      // Hapus entri tag dari tabel 'tag_posting' berdasarkan postId
+      const { error: tagPostingError } = await supabase
+        .from('tag_posting')
+        .delete()
+        .eq('id_posting', postId);
     
-        if (confirmation) {
-            await deletePost(postId);
-        }
+      if (tagPostingError) {
+        console.error('Error deleting tag_posting entries:', tagPostingError.message);
+        return;
+      }
+    };
+    
+    const handleDeletePost = async (postId: string) => {
+      const confirmation = window.confirm('Are you sure you want to delete this post?');
+    
+      if (confirmation) {
+        await deletePost(postId);
+      }
     };
 
     const getLikedPostsFromLocalStorage = () => {
