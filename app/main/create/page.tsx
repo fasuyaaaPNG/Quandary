@@ -328,34 +328,34 @@ export default function Create() {
         });
 
        // Insert tag_posting to database
-        const tagPostingInsertPromises = tagIds.map(tagId => 
-            supabase.from('tag_posting').insert([{ id_posting: postingId, id_tag: tagId }])
-        );
+    const tagPostingInsertPromises = tagIds.map(tagId => 
+        supabase.from('tag_posting').insert([{ id_posting: postingId, id_tag: tagId }])
+    );
 
-        const tagPostingInsertResults = await Promise.all(tagPostingInsertPromises);
+    const tagPostingInsertResults = await Promise.all(tagPostingInsertPromises);
 
-        // Cek apakah ada kesalahan saat memasukkan data ke dalam tabel tag_posting
-        tagPostingInsertResults.forEach((result, index) => {
-            if (result.error) {
-                console.error(`Error inserting tag ${tagIds[index]} into tag_posting:`, result.error.message);
-            }
-        });
+    // Cek apakah ada kesalahan saat memasukkan data ke dalam tabel tag_posting
+    tagPostingInsertResults.forEach((result, index) => {
+        if (result.error) {
+            console.error(`Error inserting tag ${tagIds[index]} into tag_posting:`, result.error.message);
+        }
+    });
 
-        // Insert tag_posting to database for new tags
-        const newTagPostingInsertPromises = newTagIds.map(tagId => 
-            supabase.from('tag_posting').insert([{ id_posting: postingId, id_tag: tagId }])
-        );
+    // Insert tag_posting to database for new tags
+    const newTagPostingInsertPromises = newTagIds.map(tagId => 
+        supabase.from('tag_posting').insert([{ id_posting: postingId, id_tag: tagId }])
+    );
 
-        const newTagPostingInsertResults = await Promise.all(newTagPostingInsertPromises);
+    const newTagPostingInsertResults = await Promise.all(newTagPostingInsertPromises);
 
-        // Cek apakah ada kesalahan saat memasukkan data ke dalam tabel tag_posting untuk tag baru
-        newTagPostingInsertResults.forEach((result, index) => {
-            if (result.error) {
-                console.error(`Error inserting new tag ${newTagIds[index]} into tag_posting:`, result.error.message);
-            }
-        });
+    // Cek apakah ada kesalahan saat memasukkan data ke dalam tabel tag_posting untuk tag baru
+    newTagPostingInsertResults.forEach((result, index) => {
+        if (result.error) {
+            console.error(`Error inserting new tag ${newTagIds[index]} into tag_posting:`, result.error.message);
+        }
+    });
 
-        window.location.href = '/main'; // Redirect ke halaman utama setelah berhasil submit
+    window.location.href = '/main'; // Redirect ke halaman utama setelah berhasil submit
     };    
 
     React.useEffect(() => {
