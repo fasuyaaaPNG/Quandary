@@ -9,6 +9,7 @@ import supabase from '@/app/server/supabaseClient';
 export default function Create() {
     const [text, setText] = useState("");
     const [formDisabled, setFormSubmitted] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [inputCount, setInputCount] = useState(1);
     const [isShareable, setIsShareable] = useState(false);
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -33,8 +34,10 @@ export default function Create() {
     function removeInput() {
         if (inputCount > 1) {
             setInputCount(inputCount - 1);
-            setTags(tags.slice(0, -1));
-            checkShareable();
+            // Hapus tag terakhir dari state
+            setTags(tags.slice(0, -1)); // Hapus tag terakhir dari array tags
+            // Periksa apakah semua tag terisi setelah menghapus tag terakhir
+            checkIfAllTagsFilled(tags.slice(0, -1)); // Periksa apakah semua tag terisi dengan tag yang tersisa
         }
     }
 
@@ -46,14 +49,30 @@ export default function Create() {
         setText(event.target.value);
     }
 
+    function checkIfAllTagsFilled(updatedTags: string[]) {
+        const allFilled = updatedTags.every(tag => tag.trim() !== '');
+        setIsShareable(allFilled);
+    }
+
     function addInput() {
-        setInputCount(inputCount + 1);
+        if (inputCount < 3) {
+            setInputCount(inputCount + 1);
+            // Tambahkan tag kosong untuk input baru
+            setTags([...tags, '']); // Tambahkan tag kosong ke array tags
+            // Periksa apakah semua tag terisi setelah menambahkan tag baru
+            checkIfAllTagsFilled([...tags, '']); // Periksa apakah semua tag terisi dengan menambahkan tag kosong
+        }
     }
 
     const inputElements = [];
     for (let i = 0; i < inputCount; i++) {
         inputElements.push(
-            <input 
+            <input
+                onKeyDown={(event) => {
+                    if (event.key === " ") {
+                        event.preventDefault();
+                    }
+                }}
                 key={i} 
                 onInput={checkShareable} 
                 required 
@@ -65,7 +84,7 @@ export default function Create() {
                 onChange={(event) => handleTagChange(i, event)}
             />
         );
-    }
+    }       
 
     function decryptEmail(encryptedEmail: string): string {
         const reversedEncryptedEmail = encryptedEmail.split('').reverse().join('');
@@ -109,57 +128,57 @@ export default function Create() {
         return data[0].id;
     }; 
 
-    const getPostingId = async () => {
-        const cookies = document.cookie;
-        const cookieArray = cookies.split(';');
-        const cookieObject: Record<string, string> = {};
+    // const getPostingId = async () => {
+    //     const cookies = document.cookie;
+    //     const cookieArray = cookies.split(';');
+    //     const cookieObject: Record<string, string> = {};
     
-        cookieArray.forEach(cookie => {
-            const [name, value] = cookie.trim().split('=');
-            cookieObject[name] = decodeURIComponent(value);
-        });
+    //     cookieArray.forEach(cookie => {
+    //         const [name, value] = cookie.trim().split('=');
+    //         cookieObject[name] = decodeURIComponent(value);
+    //     });
     
-        const isLogin = cookieObject['is_login'];
-        const decryptedEmail = isLogin ? decryptEmail(isLogin) : '';
+    //     const isLogin = cookieObject['is_login'];
+    //     const decryptedEmail = isLogin ? decryptEmail(isLogin) : '';
     
-        if (!isLogin || !decryptedEmail) {
-            window.location.href = '/auth/login';
-            return null;
-        }
+    //     if (!isLogin || !decryptedEmail) {
+    //         window.location.href = '/auth/login';
+    //         return null;
+    //     }
     
-        const { data, error } = await supabase
-            .from('posting')
-            .select('id')
-            .order('id', { ascending: false })
-            .limit(1);
+    //     const { data, error } = await supabase
+    //         .from('posting')
+    //         .select('id')
+    //         .order('id', { ascending: false })
+    //         .limit(1);
     
-        if (error) {
-            console.error('Error fetching posting data:', error.message);
-            return null;
-        }
+    //     if (error) {
+    //         console.error('Error fetching posting data:', error.message);
+    //         return null;
+    //     }
     
-        if (data.length === 0) {
-            console.error('Posting not found');
-            return null;
-        }
+    //     if (data.length === 0) {
+    //         console.error('Posting not found');
+    //         return null;
+    //     }
     
-        const postingId = data[0].id+1;
+    //     const postingId = data[0].id+1;
 
-        const insertTagPosting = async (postingId: number) => {
-            const { error } = await supabase
-                .from('tag_posting')
-                .insert([{ id_posting: postingId }]);
+    //     const insertTagPosting = async (postingId: number) => {
+    //         const { error } = await supabase
+    //             .from('tag_posting')
+    //             .insert([{ id_posting: postingId }]);
     
-            if (error) {
-                console.error('Error inserting tag posting:', error.message);
-                return null;
-            }
-        };
+    //         if (error) {
+    //             console.error('Error inserting tag posting:', error.message);
+    //             return null;
+    //         }
+    //     };
 
-        await insertTagPosting(postingId);
+    //     await insertTagPosting(postingId);
 
-    return postingId;
-    };
+    // return postingId;
+    // };
     
     const getTagId = async () => {
         const cookies = document.cookie;
@@ -198,8 +217,13 @@ export default function Create() {
     };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
+        if (isSubmitting) {
+            return;
+        }
+        setIsSubmitting(true);
         setFormSubmitted(true);
+
+        event.preventDefault();
         
         const userId = await getUserId();
         const tagId = await getTagId();
@@ -328,34 +352,34 @@ export default function Create() {
         });
 
        // Insert tag_posting to database
-    const tagPostingInsertPromises = tagIds.map(tagId => 
-        supabase.from('tag_posting').insert([{ id_posting: postingId, id_tag: tagId }])
-    );
+        const tagPostingInsertPromises = tagIds.map(tagId => 
+            supabase.from('tag_posting').insert([{ id_posting: postingId, id_tag: tagId }])
+        );
 
-    const tagPostingInsertResults = await Promise.all(tagPostingInsertPromises);
+        const tagPostingInsertResults = await Promise.all(tagPostingInsertPromises);
 
-    // Cek apakah ada kesalahan saat memasukkan data ke dalam tabel tag_posting
-    tagPostingInsertResults.forEach((result, index) => {
-        if (result.error) {
-            console.error(`Error inserting tag ${tagIds[index]} into tag_posting:`, result.error.message);
-        }
-    });
+        // Cek apakah ada kesalahan saat memasukkan data ke dalam tabel 
+        tagPostingInsertResults.forEach((result, index) => {
+            if (result.error) {
+                console.error(`Error inserting tag ${tagIds[index]} into tag_posting:`, result.error.message);
+            }
+        });
 
-    // Insert tag_posting to database for new tags
-    const newTagPostingInsertPromises = newTagIds.map(tagId => 
-        supabase.from('tag_posting').insert([{ id_posting: postingId, id_tag: tagId }])
-    );
+        // Insert tag_posting to database for new tags
+        // const newTagPostingInsertPromises = newTagIds.map(tagId => 
+        //     supabase.from('tag_posting').insert([{ id_posting: postingId, id_tag: tagId }])
+        // );
 
-    const newTagPostingInsertResults = await Promise.all(newTagPostingInsertPromises);
+        // const newTagPostingInsertResults = await Promise.all(tagPostingInsertPromises);
 
-    // Cek apakah ada kesalahan saat memasukkan data ke dalam tabel tag_posting untuk tag baru
-    newTagPostingInsertResults.forEach((result, index) => {
-        if (result.error) {
-            console.error(`Error inserting new tag ${newTagIds[index]} into tag_posting:`, result.error.message);
-        }
-    });
+        // Cek apakah ada kesalahan saat memasukkan data ke dalam tabel tag_posting untuk tag baru
+        tagPostingInsertResults.forEach((result, index) => {
+            if (result.error) {
+                console.error(`Error inserting new tag ${newTagIds[index]} into tag_posting:`, result.error.message);
+            }
+        });
 
-    window.location.href = '/main'; // Redirect ke halaman utama setelah berhasil submit
+        window.location.href = '/main'; // Redirect ke halaman utama setelah berhasil submit
     };    
 
     React.useEffect(() => {
@@ -431,11 +455,16 @@ export default function Create() {
     
     
     
-    const handleTagChange = (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
-        const newTags = [...tags];
-        newTags[index] = event.target.value;
-        setTags(newTags);
-    };    
+    function handleTagChange(index: number, event: React.ChangeEvent<HTMLInputElement>) {
+        // Salin array tags
+        const updatedTags = [...tags];
+        // Perbarui nilai tag di indeks yang sesuai dengan nilai dari input
+        updatedTags[index] = event.target.value;
+        // Perbarui state tags dengan nilai yang baru
+        setTags(updatedTags);
+        // Periksa apakah semua tag terisi setelah perubahan tag
+        checkIfAllTagsFilled(updatedTags);
+    };
 
     return (
         <>
@@ -468,12 +497,12 @@ export default function Create() {
                             {inputElements}
                         </div>
                         {/* <input type="hidden" value={inputCount} id="total_chq"/> */}
-                        <button disabled={formDisabled} className="share shareOke">
-                            Share
+                        <button disabled={isSubmitting} className={`share ${isSubmitting ? 'submitting' : ''}`}>
+                            {isSubmitting ? 'Submitting...' : 'Share'}
                         </button>
                     </form>
                     <div className="button">
-                        {inputCount < 5 && ( 
+                        {inputCount < 3 && ( 
                             <button onClick={addInput}>
                                 <FaPlus className={"buttonIcon"} />
                                 Add tag

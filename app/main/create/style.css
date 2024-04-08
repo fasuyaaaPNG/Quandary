@@ -41,10 +41,14 @@ input[type=text] {
     position: fixed;
     background-color: transparent;
     border: none;
-    color: #2121217c;
+    color: #212121;
     top: 4.8vw;
     right: 7vw;
     font-size: 4vw;
+}
+
+.submitting {
+    color: #6F8AD2;
 }
 
 .shareOke {
