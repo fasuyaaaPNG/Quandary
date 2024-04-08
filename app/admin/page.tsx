@@ -3,14 +3,14 @@
 import Skeleton from 'react-loading-skeleton';
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FaPaperPlane, FaHouse, FaMagnifyingGlass, FaPlus, FaBell, FaRegUser } from "react-icons/fa6";
+import { FaDoorOpen , FaRocketchat , FaReceipt  } from "react-icons/fa6";
 import React, {useRef, useState, ChangeEvent, useEffect } from 'react';
 import supabase from '@/app/server/supabaseClient';
 import { motion } from "framer-motion";
 import './style.css';
 import { parseCookies } from 'nookies';
 
-const Home: React.FC = () => {
+const Admin: React.FC = () => {
   const [photoURL, setPhotoURL] = useState('');
   const [posts, setPosts] = useState<any[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -702,6 +702,11 @@ const Home: React.FC = () => {
   fetchComments();
 }, []);
 
+const handleLogout = () => {
+  document.cookie = 'is_admin=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+  window.location.href = '/auth/login';
+};
+
   return (
     <>
       <div className="container">
@@ -800,28 +805,28 @@ const Home: React.FC = () => {
       <div className="navbar">
         <a href="/main" className="iconDesc iconDesc1">
           <motion.div animate={{translateY: -28, opacity: 1}} className="round">
-            <FaHouse size={20}/>
+            <FaRocketchat  size={20}/>
           </motion.div>
           <motion.p animate={{color: "#7FA1F8"}} >
-            Home
+            Content
           </motion.p>
         </a>
-        <a href="/main/create" className="iconDesc">
+        <a onClick={handleLogout} className="iconDesc">
           {/* <img src="/assets/main/icon/icon_new post.png" className='iconImage' alt="" /> */}
           <div className="iconImage" id="iconImage3">
-            <FaPlus size={15} />
+            <FaDoorOpen size={15} />
           </div>
           <p>
-            New Post
+            Logout
           </p>
         </a>
         <a href="/main/profile" className="iconDesc">
           {/* <img src="/assets/main/icon/icon_profile.png" className='iconImage' alt="" /> */}
           <motion.div className="iconImage" id="iconImage5">
-            <FaRegUser size={15} />
+            <FaReceipt size={15} />
           </motion.div>
           <motion.p className='iconText1'>
-            Account
+            Advice
           </motion.p>
         </a>
       </div>
@@ -829,4 +834,4 @@ const Home: React.FC = () => {
   );
 }
 
-export default Home;
+export default Admin;
