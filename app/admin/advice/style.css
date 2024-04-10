@@ -1,0 +1,218 @@
+*{
+    font-family: 'Poppins', sans-serif;
+}
+
+.background {
+    background-color: #ffffff;
+    height: 100vh;
+}
+
+.searchIcon {   
+    position: absolute;
+    left: 17vw;
+}
+
+.search {
+    align-items: center;
+    display: flex;
+    /* border: 1px solid red; */
+    width: max-content;
+    margin: auto;
+    margin-bottom: 7vw;
+}
+
+.header {
+    /* border: 1px solid red; */
+    padding-top: 6vw;
+    background-color: #ffffff;
+    position: fixed;
+    width: 100%;
+    z-index: 8;
+}
+
+.fakeHeader {
+    height: 1vw;
+    margin-bottom: 8vw;
+}
+
+.deleteButton {
+    position: absolute;
+    font-size: 4.5vw;
+    left: 83vw;
+    margin-top: 3vw;
+}
+
+.searchBar {
+    width: 75vw;
+    height: 10vw;
+    border-radius: 3vw;
+    padding-left: 11vw;
+    font-size: 3vw;
+    padding-right: 6vw;
+    background-color: #FDFDFD;
+    box-shadow: 0vw 0.1vw 1vw 0vw rgba(0, 0, 0, 0.25);
+    margin: auto;
+    display: block;
+}
+
+input[type="search"]::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    height: 4vw;
+    width: 4vw;
+    border-radius: 50em;
+    background: url(https://pro.fontawesome.com/releases/v5.10.0/svgs/solid/times-circle.svg) no-repeat 50% 50%;
+    background-size: contain;
+    opacity: 0;
+    position: relative;
+    left: 3vw;
+    pointer-events: none;
+}
+  
+input[type="search"]:focus::-webkit-search-cancel-button {
+    opacity: .3;
+    pointer-events: all;
+}
+  
+input[type="search"].dark::-webkit-search-cancel-button {
+    filter: invert(1);
+}
+
+.profileAccount {
+    display: flex;
+    align-items: start;
+    gap: 6vw;
+    background-color: #F6F6F6;
+    width: 90vw;
+    margin: auto;
+    padding: 3vw 10vw 3vw 10vw;
+    border-radius: 6vw;  
+    box-shadow: 0vw 0.1vw 1vw 0vw rgba(0, 0, 0, 0.25);
+    margin-bottom: 6vw;
+    overflow-wrap: break-word;
+}
+
+.content {
+    /* border: 1px solid red; */
+    overflow-y: scroll; 
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+    padding-bottom: 45vw;
+    padding-top: 4vw;
+}
+
+.content::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
+}
+
+.usernameEmailPesan {
+    line-height: 6vw;
+}
+
+.username {
+    font-size: 4vw;
+}
+
+.email ,.pesan {
+    font-size: 3.5vw;
+}
+
+.pesan {
+    font-weight: 300;
+    opacity: 0.9;
+    margin-top: 2vw;
+    word-break: break-all;
+}
+
+.fotoAccount {
+    width: 13vw;
+    border-radius: 100%;
+    object-fit: cover;
+    aspect-ratio: 1;
+    height: 13vw;
+}
+
+.icon {
+    width: 3vw;
+}
+
+.userIcon {
+    opacity: 1 !important;    
+}
+
+.round {
+    position: relative;
+    background-color: #7FA1F8;
+    border: 1.5vw solid #141421;
+    width: 11vw;
+    border-radius: 9vw;
+    height: 11vw;
+    top: 4vw;
+    left: 0vw;
+    z-index: 1;
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.iconDesc1 {
+    position: relative;
+    bottom: 4vw;
+    left: 1vw;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.navbar {
+    border-top-right-radius: 4vw;
+    border-top-left-radius: 4vw;
+    display: flex;
+    padding-left: 7vw;
+    padding-right: 9vw;
+    justify-content: space-around;
+    background-color: #141421;
+    width: 100vw;
+    height: 20vw;
+    position: fixed;
+    bottom: 15vw;
+    z-index: 2;
+    transform: translate(0%, 75%);
+}
+
+.iconImage {
+    width: 6vw;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 3vw;
+    /* border: 1px solid red; */
+    width: max-content;
+}
+
+.iconDesc {
+    padding-top: 4vw;
+    text-align: center;
+    color: white;
+    font-size: 3vw;
+}
+
+.show {
+    display: flex !important;
+}
+
+.hide {
+    display: none;
+}
+
+#iconImage5 {
+    position: relative;
+    top: 0vw;
+}
+
+#iconText1 {
+    color: #ffffff;
+}
+
+.blue {
+    color: #7FA1F8;
+}

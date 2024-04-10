@@ -820,7 +820,7 @@ const handleLogout = () => {
             Logout
           </p>
         </a>
-        <a href="/main/profile" className="iconDesc">
+        <a href="/admin/advice" className="iconDesc">
           {/* <img src="/assets/main/icon/icon_profile.png" className='iconImage' alt="" /> */}
           <motion.div className="iconImage" id="iconImage5">
             <FaReceipt size={15} />
