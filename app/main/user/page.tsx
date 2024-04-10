@@ -65,8 +65,8 @@ export default function User() {
                 <div className="fakeHeader"></div>
                 <div className="content">
                 {userData.map((user, index) => (
-                    <div key={index} className="profileAccount">
-                        <a href={`/main/user/${user.id}`} className="profileLink">
+                    <a href={`/main/user/${user.id}`} className="profileLink">
+                        <div key={index} className="profileAccount">
                             <img src={user.foto_profile ? `https://tyldtyivzeqiedyvaulp.supabase.co/storage/v1/object/public/foto_profile/${user.foto_profile}` : 'https://tyldtyivzeqiedyvaulp.supabase.co/storage/v1/object/public/foto_profile/profile.png'} alt="" className="fotoAccount" />
                             <div className="usernameNameBio">
                                 <p className="username">
@@ -85,9 +85,9 @@ export default function User() {
                                         {user.bio}
                                     </p>
                                 )}
-                            </div>
-                        </a>
-                    </div>
+                            </div> 
+                        </div>
+                    </a>
                 ))}
                 </div>
             </div>
