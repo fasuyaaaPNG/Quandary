@@ -12,6 +12,11 @@
     left: 17vw;
 }
 
+.profileLink {
+    display: flex;
+    gap: 6vw;
+}
+
 .search {
     align-items: center;
     display: flex;
@@ -77,7 +82,7 @@ input[type="search"].dark::-webkit-search-cancel-button {
     background-color: #F6F6F6;
     width: 90vw;
     margin: auto;
-    padding: 3vw 10vw 3vw 10vw;
+    padding: 3vw 7vw 3vw 7vw;
     border-radius: 6vw;  
     box-shadow: 0vw 0.1vw 1vw 0vw rgba(0, 0, 0, 0.25);
     margin-bottom: 6vw;

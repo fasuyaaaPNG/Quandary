@@ -1,0 +1,378 @@
+*{
+    font-family: 'Poppins', sans-serif;
+}
+
+.profile {
+    font-size: 6vw;
+    font-weight: 500;
+    text-align: center;
+    padding-top: 5vw;
+    margin-bottom: 4vw;
+    width: 40vw;
+    margin: auto;
+}
+
+.fotoProfile {
+    width: 25vw;
+    margin: auto;
+    border-radius: 100%;
+    margin-bottom: 4vw;
+    margin-top: 4vw;
+    aspect-ratio: 1;
+    object-fit: cover;
+}
+
+.logoutButton {
+    position: absolute;
+    width: 8vw;
+    top: 5vw;
+    left: 87vw;
+}
+
+.namaAkun {
+    font-size: 5vw;
+    font-weight: 500;
+}
+
+.usernameAkun {
+    font-size: 3.5vw;
+    opacity: 0.7;
+}
+
+.bioAkun {
+    font-size: 4vw;
+    font-weight: 400;
+}
+
+.deskProfile {
+    line-height: 7vw;
+    width: 65vw;
+    margin: auto;
+    text-align: center;
+    word-wrap: break-word;
+    margin-bottom: 4vw;
+}
+
+.editProfile {
+    background-color: #7FA1F8;
+    height: 11vw;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    width: max-content;
+    margin: auto;
+    padding: 2vw 5vw 2vw 5vw;
+    border-radius: 2vw;
+    color: #ffffff;
+    justify-content: space-between;
+}
+
+.text {
+    font-size: 4vw;
+    margin-right: 2vw;
+}
+
+.icon {
+    width: 3vw;
+}
+
+.userIcon {
+    opacity: 1 !important;    
+}
+
+.round {
+    position: relative;
+    background-color: #7FA1F8;
+    border: 1.5vw solid #141421;
+    width: 11vw;
+    border-radius: 9vw;
+    height: 11vw;
+    top: 0vw;
+    left: 0vw;
+    z-index: 1;
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.iconDesc5 {
+    position: relative;
+    bottom: 4vw;
+}
+
+.navbar {
+    border-top-right-radius: 4vw;
+    border-top-left-radius: 4vw;
+    display: flex;
+    padding-left: 9vw;
+    padding-right: 9vw;
+    justify-content: space-between;
+    background-color: #141421;
+    width: 100vw;
+    height: 20vw;
+    position: fixed;
+    bottom: 15vw;
+    z-index: 2;
+    transform: translate(0%, 75%);
+}
+
+.iconImage {
+    width: 6vw;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 3vw;
+    /* border: 1px solid red; */
+    width: max-content;
+}
+
+.iconDesc {
+    padding-top: 4vw;
+    text-align: center;
+    color: white;
+    font-size: 3vw;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.show {
+    display: flex !important;
+}
+
+.hide {
+    display: none;
+}
+
+#iconImage5 {
+    position: relative;
+    top: 0vw;
+}
+
+#iconText1 {
+    color: #ffffff;
+}
+
+.blue {
+    color: #7FA1F8;
+}
+
+.optionMore {
+    background-color: #F6F6F6;
+    width: max-content;
+    align-items: end;
+    position: relative;
+    padding: 1vw 3vw 1vw 3vw;
+    border-radius: 4vw;
+    color: #141421;
+    font-size: 3vw;
+    left: 60vw;
+    bottom: 11vw;
+    display: flex;
+    height: 8vw;
+}
+
+.edit {
+    margin-right: 5vw;
+}
+
+.iconMore {
+    font-size: 6vw;
+    position: relative;
+    bottom: 10vw;
+    left: 70vw;
+    z-index: 9;
+}
+
+.content {
+    position: relative;
+    padding-left: 6vw;
+    padding-right: 6vw;
+    right: 0vw;
+    width: 100vw;
+    top: 10vw;
+    height: 175vw; 
+    z-index: 1;
+    overflow-y: auto; 
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+    /* border: 1px solid red; */
+    padding-bottom: 45vw;
+    padding-top: 2vw;
+}
+
+.content1 {
+    background-color: #F6F6F6;
+    border-radius: 6vw;
+    box-shadow: 0vw 0.1vw 1vw 0vw rgba(0, 0, 0, 0.25);
+    padding-left: 4.5vw;
+    padding-right: 4.5vw;
+    margin-bottom: 7vw;
+}
+
+.profilUser {
+    position: relative;
+    padding-top: 4vw;
+    width: 9vw;
+    display: flexbox;
+    margin-bottom: 3vw;
+}
+
+.profilUserImage {
+    border-radius: 100%;
+    width: 9vw;
+    aspect-ratio: 1;
+    object-fit: cover;
+}
+
+.userTime {
+    width: 63vw;
+    position: absolute;
+    left: 12vw;
+    bottom: 0.5vw;
+}
+
+.username {
+    font-weight: 500;
+    font-size: 3vw;
+}
+
+.time {
+    font-size: 2vw;
+    opacity: 50%;
+}
+
+.deskripsi {
+    font-size: 3.5vw;
+    margin-bottom: 8vw;
+}
+
+.kategori {
+    display: flex;
+    justify-content: start;
+    color: white;
+    margin-bottom: 4vw;
+    flex-wrap: wrap;
+}
+
+.thumbnail {
+    margin-bottom: 6vw;
+    margin-top: -5vw;
+}
+
+.kategori1{
+    margin-right: 2vw;
+    font-size: 3vw;
+    border: 1px solid #141421;
+    background-color: #141421;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    padding-top: 1vw;
+    padding-bottom: 1vw;
+    border-radius: 2vw;
+    margin-bottom: 2vw;
+}
+
+.garis {
+    width: 72vw;
+    border: 0.1vw solid #D5D5D566;
+    margin-bottom: 2vw;
+    margin-top: -2vw;
+    height: 0.1vw;
+}
+
+.iconLikeComment {
+    width: 4vw;
+    margin-right: 1vw;
+}
+
+.likeComment {
+    display: flex;
+    justify-content: flex-start;
+    font-size: 2.5vw;
+    align-items: center;
+}
+
+.like, .comment {
+    display: flex;
+    margin-right: 4vw;
+    margin-bottom: 4vw;
+}
+
+.countLike, .countComment {
+    display: flex;  
+    font-size: 3vw;
+}
+
+.commentProfileUser {
+    display: flex;
+    align-items: center;
+    /* border: 1px solid red; */
+    margin-bottom: 3vw;
+}
+
+.fotoComment {
+    border-radius: 100%;
+    object-fit: cover;
+    aspect-ratio: 1;
+    width: 7vw;
+    margin-right: 2.5vw;
+}
+
+.pesanComment {
+    font-size: 3vw;
+    word-break: keep-all;
+}
+
+.isiComment {
+    display: none;
+    box-shadow: 0vw 0.1vw 1vw 0vw rgba(0, 0, 0, 0.25);
+    background-color: #ffffff;
+    border-radius: 4vw;
+    padding: 2.5vw;
+    margin-bottom: 3vw;
+    overflow-wrap: break-word;
+}
+
+.user{
+    justify-content: flex-end;
+    margin-right: 2vw;
+}
+
+.inputComment {
+    font-size: 3vw;
+    height: 8vw;
+    outline: none;
+    box-shadow: 0vw 0.1vw 1vw 0vw rgba(0, 0, 0, 0.25);
+    width: 70vw;
+    margin-top: 2vw;
+    padding-left: 2vw;
+    border-radius: 2vw;
+    padding-top: 2vw;
+    margin-right: 4vw;
+}
+
+.formSend {
+    display: none;
+    align-items: end;
+    padding-bottom: 4vw;
+}
+
+.sendIcon {
+    font-size: 5vw;
+    color: #141421;
+}
+
+.unhide {
+    display: block;
+}
+
+.unhide2 {
+    display: flex;
+}
+
+.deleteComment {
+    font-size: 2.5vw;
+    position: absolute;
+    left: 75vw;
+}
