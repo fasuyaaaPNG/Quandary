@@ -112,6 +112,9 @@ export default function UserDetail() {
     };
 
     const getUserIdNow = async () => {
+      if (typeof document === 'undefined') {
+        return null;
+      }
       const cookies = document.cookie;
       const cookieArray = cookies.split(';');
       const cookieObject: Record<string, string> = {};
@@ -448,8 +451,6 @@ export default function UserDetail() {
     };
 
     useEffect(() => {
-      const id = getUserIdNow()
-      console.log(id)
         const fetchUserProfile = async () => {
             const cookies = document.cookie;
             const cookieArray = cookies.split(';');
