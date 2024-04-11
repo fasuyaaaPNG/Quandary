@@ -108,8 +108,6 @@ const Home: React.FC = () => {
     setCommentsCount(commentsCount);
   };
 
-  
-
       const getUserId = async () => {
         const cookies = document.cookie;
         const cookieArray = cookies.split(';');

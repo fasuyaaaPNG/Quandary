@@ -36,7 +36,7 @@
 }
 
 .fakeHeader {
-    height: 20vw;
+    height: 14vw;
     margin-bottom: 8vw;
 }
 
@@ -94,7 +94,7 @@ input[type="search"].dark::-webkit-search-cancel-button {
     overflow-y: scroll; 
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
     scrollbar-width: none;  /* Firefox */
-    padding-bottom: 45vw;
+    padding-bottom: 4vw;
     padding-top: 4vw;
 }
 
@@ -210,4 +210,21 @@ input[type="search"].dark::-webkit-search-cancel-button {
 
 .blue {
     color: #7FA1F8;
+}
+
+.pagination {
+    position: relative;
+    /* background-color: red; */
+    z-index: 12;
+    top: 1vw;
+    padding-bottom: 48vw;
+    width: max-content;
+    margin: auto;
+    display: flex;
+    gap: 20vw;
+}
+
+.pageIcon {
+    font-size: 5vw;
+    color: #141421;
 }

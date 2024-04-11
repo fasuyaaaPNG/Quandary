@@ -6,7 +6,6 @@ import { motion } from 'framer-motion';
 import supabase from '@/app/server/supabaseClient';
 import './style.css';
 import { usePathname } from 'next/navigation';
-import { get } from 'http';
 
 export default function UserDetail() {
   const [userData, setUserData] = useState<any>(null);
@@ -676,7 +675,7 @@ export default function UserDetail() {
     return (
         <>
             <h1 className="profile">
-                Profile
+                User
             </h1>
             <img loading='lazy' src={photoURL} alt="" className="fotoProfile" />
             <div className="deskProfile">
