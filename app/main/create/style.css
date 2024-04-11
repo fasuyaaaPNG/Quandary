@@ -2,6 +2,10 @@
     font-family: 'Poppins', sans-serif;
 }
 
+body {
+    background-color: #F1F1F1;
+}
+
 .background {
     background-color: #F1F1F1;
     height: 100vh;
