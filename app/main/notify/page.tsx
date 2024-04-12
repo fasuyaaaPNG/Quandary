@@ -198,7 +198,6 @@ export default function Notify() {
                 .from('notif')
                 .select('*')
                 .neq('id_user', idUser)
-                .eq('id_posting', idUserPost)
 
             if (error) {
                 // console.error('Error fetching user id:', error.message);
@@ -253,7 +252,9 @@ export default function Notify() {
                                     )}
                                 </div>
                             )}
-                            <img src={user.thumbnail} alt="" className="thumbnail" />
+                            {user.thumbnail && (
+                                <img src={user.thumbnail} alt="" className="thumbnail" />
+                            )}
                         </div>
                     ))}
                 </div>
