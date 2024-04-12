@@ -68,12 +68,12 @@ export default function Notify() {
             .eq('id_user', id);
 
         if (error) {
-            console.error('Error fetching user id:', error.message);
+            // console.error('Error fetching user id:', error.message);
             return null;
         }
 
         if (data.length === 0) {
-            console.error(error);
+            // console.error(error);
             return null;
         }
         return data[0].id;
@@ -201,7 +201,13 @@ export default function Notify() {
                 .eq('id_posting', idUserPost)
 
             if (error) {
-                return
+                // console.error('Error fetching user id:', error.message);
+                return null;
+            }
+        
+            if (data.length === 0) {
+                // console.error(error);
+                return null;
             }
 
             const userDataWithUsername = await Promise.all(data.map(async (user) => {
