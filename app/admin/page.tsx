@@ -515,6 +515,17 @@ const Admin: React.FC = () => {
       return;
     }
   
+    const { data } = await supabase
+        .from('posting')
+        .select('id_user')
+        .eq('id', postId);
+
+    if (!data || data.length === 0) {
+        // Handle the case where data is null or empty
+        // For example, you can return early or throw an error
+        return null;
+    }
+
     // Mengirim komentar ke database
     const { error: commentError } = await supabase
       .from('comment')
@@ -522,8 +533,8 @@ const Admin: React.FC = () => {
 
     const { error: notifError } = await supabase
       .from('notif')
-      .insert({ id_user: userId, id_posting: postId, comment: true,  like: false, message_comment: text });
-  
+      .insert({ id_adminPost: data[0].id_user,id_user: userId, id_posting: postId, comment: true,  like: false, message_comment: text });
+
     if (commentError || notifError) {
       // console.error('Error sending comment:', error.message);
       return;
