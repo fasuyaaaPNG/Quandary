@@ -214,19 +214,31 @@ const Admin: React.FC = () => {
         return updatedLikedPosts;
       });
     } else {
-      // If the user has not liked the post, like it
-      const { error: likeError } = await supabase
+      
+      const { data } = await supabase
+        .from('posting')
+        .select('id_user')
+        .eq('id', postId);
+
+    if (!data || data.length === 0) {
+        // Handle the case where data is null or empty
+        // For example, you can return early or throw an error
+        return null;
+    }
+
+    // If the user has not liked the post, like it
+    const { error: likeError } = await supabase
         .from('like')
         .insert({ id_user: userId, id_posting: postId });
-      
-      const { error: notifError } = await supabase
-        .from('notif')
-        .insert({ id_user: userId, id_posting: postId, comment: false,  like: true });
 
-      if (likeError || notifError) {
-        // console.error('Error liking post:', error.message);
+    const { error: notifError } = await supabase
+        .from('notif')
+        .insert({ id_adminPost: data[0].id_user, id_user: userId, id_posting: postId, comment: false, like: true });
+
+    if (likeError || notifError) {
+        // Handle errors if needed
         return;
-      }
+    }
 
       // Update like count in state by incrementing
       setLikeCounts((prevCounts) => ({

@@ -192,12 +192,14 @@ export default function Notify() {
     
     const fetchNotifData = async () => {
         const idUser = await getUserId();
-        const idUserPost = await getUserIdPost();
+        const idUserPost = await getUserId();
         try {
             const { data, error } = await supabase
                 .from('notif')
                 .select('*')
                 .neq('id_user', idUser)
+                .eq('id_adminPost', idUser)
+                
 
             if (error) {
                 // console.error('Error fetching user id:', error.message);
