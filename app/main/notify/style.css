@@ -123,6 +123,7 @@ input[type="search"].dark::-webkit-search-cancel-button {
     height: 12vw;
     object-fit: cover;
     border-radius: 3vw;
+    aspect-ratio: 1;
 
 }
 
