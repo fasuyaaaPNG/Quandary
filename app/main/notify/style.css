@@ -110,21 +110,26 @@ input[type="search"].dark::-webkit-search-cancel-button {
 }
 
 .username {
-    font-size: 3.5vw;
-    width: 50vw;
-    word-break: break-all;
+    font-size: 3vw;
+    width: 45vw;
+    word-break: keep-all;
 }
 
-.delete {
+.thumbnail {
     font-size: 4vw;
-    position: absolute;
-    left: 85vw;
+    position: relative;
+    right: 3vw;
+    width: 12vw;
+    height: 12vw;
+    object-fit: cover;
+    border-radius: 3vw;
+
 }
 
 .fullname ,.bio {
-    font-size: 3.5vw;
-    width: 50vw;
-    word-break: break-all;
+    font-size: 3vw;
+    width: 45vw;
+    word-break: keep-all;
 }
 
 .bio {

@@ -133,6 +133,25 @@ export default function Notify() {
         return data[0].username;
     }
 
+    const getThumbnailById = async (postingId: string) => {
+        const { data, error } = await supabase
+            .from('posting')
+            .select('thumbnail')
+            .eq('id', postingId);
+
+        if (error) {
+            console.error('Error fetching username:', error.message);
+            return null;
+        }
+
+        if (data.length === 0) {
+            console.error('User not found');
+            return null;
+        }
+
+        return data[0].thumbnail;
+    }
+
     const getUserLike = async() => {
         const { data, error } = await supabase
             .from('notif')
@@ -187,7 +206,8 @@ export default function Notify() {
 
             const userDataWithUsername = await Promise.all(data.map(async (user) => {
                 const username = await getUsernameById(user.id_user);
-                return { ...user, username };
+                const thumbnail = await getThumbnailById(user.id_posting); 
+                return { ...user, username, thumbnail };
             }));
 
             setUserData(userDataWithUsername);
@@ -196,26 +216,13 @@ export default function Notify() {
         }
     };  
     
-    const deleteNotification = async (notificationId: string) => {
-        try {
-            await supabase
-                .from('notif')
-                .delete()
-                .eq('id', notificationId);
-
-
-            await fetchNotifData();
-        } catch (error) {
-            console.error('Error deleting notification:', error);
-        }
-    };
 
     return (
         <>
             <div className="background">
                 <div className="fakeHeader"></div>
                 <div className="content">
-                    {userData.map((user, index) => (
+                    {userData.slice().reverse().map((user, index) => (
                         <div className="profileAccount" key={index}>
                             <img src={user.like ? `https://tyldtyivzeqiedyvaulp.supabase.co/storage/v1/object/public/foto_notif/liked.png` : 'https://tyldtyivzeqiedyvaulp.supabase.co/storage/v1/object/public/foto_notif/comment.png'} alt="" className="fotoAccount" />
                             {user.like ? (
@@ -240,9 +247,7 @@ export default function Notify() {
                                     )}
                                 </div>
                             )}
-                            <div className="delete" onClick={() => deleteNotification(user.id)}>
-                                <FaX/>
-                            </div>
+                            <img src={user.thumbnail} alt="" className="thumbnail" />
                         </div>
                     ))}
                 </div>
