@@ -554,8 +554,12 @@ const Admin: React.FC = () => {
       .delete()
       .eq('id', postId);
   
-    if (postError) {
-      // console.error('Error deleting post:', postError.message);
+    const { error: delError } = await supabase
+      .from('notif')
+      .delete()
+      .eq('id_posting', postId);
+
+    if (postError || delError) {
       return;
     }
   

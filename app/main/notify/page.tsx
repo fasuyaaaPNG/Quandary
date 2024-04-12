@@ -16,7 +16,6 @@ export default function Notify() {
     useEffect(() => {
         fetchNotifData();
         fetchState();
-        console.log(isLike)
     }, [isLike]);
 
     const getTimeAgoString = (createdAt: string): string => {
@@ -103,12 +102,12 @@ export default function Notify() {
             .eq('email', decryptedEmail);
 
         if (error) {
-            console.error('Error fetching user id:', error.message);
+            // console.error('Error fetching user id:', error.message);
             return null;
         }
 
         if (data.length === 0) {
-            console.error(error);
+            // console.error(error);
             return null;
         }
         return data[0].id;
@@ -121,7 +120,7 @@ export default function Notify() {
             .eq('id', userId);
 
         if (error) {
-            console.error('Error fetching username:', error.message);
+            // console.error('Error fetching username:', error.message);
             return null;
         }
 
@@ -140,7 +139,7 @@ export default function Notify() {
             .eq('id', postingId);
 
         if (error) {
-            console.error('Error fetching username:', error.message);
+            // console.error('Error fetching username:', error.message);
             return null;
         }
 
@@ -160,12 +159,12 @@ export default function Notify() {
             .neq('comment', true)
 
         if (error) {
-            console.error('Error fetching user id:', error.message);
+            // console.error('Error fetching user id:', error.message);
             return null;
         }
 
         if (data.length === 0) {
-            console.error(error);
+            // console.error(error);
             return null;
         }
         return data[0].like;
@@ -179,12 +178,12 @@ export default function Notify() {
             .neq('like', true)
 
         if (error) {
-            console.error('Error fetching user id:', error.message);
+            // console.error('Error fetching user id:', error.message);
             return null;
         }
 
         if (data.length === 0) {
-            console.error(error);
+            // console.error(error);
             return null;
         }
         return data[0];

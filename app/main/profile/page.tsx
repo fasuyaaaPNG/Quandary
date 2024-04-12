@@ -48,14 +48,27 @@ export default function Profile() {
           return;
         }
         
-        // Kirim permintaan untuk menghapus komentar dari database
-        const { error } = await supabase
+        const {data} = await supabase
+          .from('comment')
+          .select('message')
+          .eq('id', commentId)
+    
+        if (!data || data.length === 0 || !data[0].message) {
+          console.error('Data is empty or message is missing');
+          return;
+        }
+    
+        const { error: deleteComment } = await supabase
           .from('comment')
           .delete()
           .eq('id', commentId);
+        
+        const { error: deleteNotify } = await supabase
+          .from('notif')
+          .delete()
+          .eq('message_comment', data[0].message);
       
-        if (error) {
-          console.error('Error deleting comment:', error.message);
+        if (deleteComment || deleteNotify) {
           return;
         }
       
@@ -215,27 +228,36 @@ export default function Profile() {
           // console.error('Failed to get user id');
           return;
         }
-      
-        // Mendapatkan ID posting yang sedang dikomentari
-        let postingId = await getPostingId(); // Await the result
-        
-        if (!postingId) {
-          // console.error('Failed to get posting id');
-          return;
+    
+        const { data } = await supabase
+            .from('posting')
+            .select('id_user')
+            .eq('id', postId);
+    
+        if (!data || data.length === 0) {
+            // Handle the case where data is null or empty
+            // For example, you can return early or throw an error
+            return null;
         }
-
-        postingId -= 1;
-
-        const { error } = await supabase
+      
+        // Mengirim komentar ke database
+        const { error: commentError } = await supabase
           .from('comment')
           .insert({ id_user: userId, id_posting: postId, message: text });
+    
+        const { error: notifError } = await supabase
+          .from('notif')
+          .insert({ id_adminPost: data[0].id_user,id_user: userId, id_posting: postId, comment: true,  like: false, message_comment: text });
       
-        if (error) {
+        if (commentError || notifError) {
           // console.error('Error sending comment:', error.message);
           return;
         }
       
+        // Reset nilai text
         setText('');
+      
+        // Reload komentar setelah berhasil mengirim
         fetchComments();
       };
 
@@ -276,14 +298,20 @@ export default function Profile() {
     
         if (existingLikes.length > 0) {
           // If the user has already liked the post, unlike it
-          const { error } = await supabase
+          const { error: like } = await supabase
             .from('like')
             .delete()
             .eq('id_user', userId)
             .eq('id_posting', postId);
+          
+          const { error: notif } = await supabase
+            .from('notif')
+            .delete()
+            .eq('id_user', userId)
+            .eq('id_posting', postId);
     
-          if (error) {
-            console.error('Error unliking post:', error.message);
+          if (like || notif) {
+            // console.error('Error unliking post:', error.message);
             return;
           }
     
@@ -300,15 +328,31 @@ export default function Profile() {
             return updatedLikedPosts;
           });
         } else {
-          // If the user has not liked the post, like it
-          const { error } = await supabase
+
+          const { data } = await supabase
+            .from('posting')
+            .select('id_user')
+            .eq('id', postId);
+    
+        if (!data || data.length === 0) {
+            // Handle the case where data is null or empty
+            // For example, you can return early or throw an error
+            return null;
+        }
+    
+        // If the user has not liked the post, like it
+        const { error: likeError } = await supabase
             .from('like')
             .insert({ id_user: userId, id_posting: postId });
     
-          if (error) {
-            console.error('Error liking post:', error.message);
+        const { error: notifError } = await supabase
+            .from('notif')
+            .insert({ id_adminPost: data[0].id_user, id_user: userId, id_posting: postId, comment: false, like: true });
+    
+        if (likeError || notifError) {
+            // Handle errors if needed
             return;
-          }
+        }
     
           // Update like count in state by incrementing
           setLikeCounts((prevCounts) => ({
@@ -339,8 +383,12 @@ export default function Profile() {
         .delete()
         .eq('id', postId);
     
-      if (postError) {
-        console.error('Error deleting post:', postError.message);
+      const { error: delError } = await supabase
+        .from('notif')
+        .delete()
+        .eq('id_posting', postId);
+
+      if (postError || delError) {
         return;
       }
     
