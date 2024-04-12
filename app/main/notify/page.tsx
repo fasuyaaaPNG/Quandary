@@ -126,7 +126,7 @@ export default function Notify() {
         }
 
         if (data.length === 0) {
-            console.error('User not found');
+            // console.error('User not found');
             return null;
         }
 
@@ -145,7 +145,7 @@ export default function Notify() {
         }
 
         if (data.length === 0) {
-            console.error('User not found');
+            // console.error('User not found');
             return null;
         }
 

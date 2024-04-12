@@ -39,14 +39,27 @@ const Admin: React.FC = () => {
       return;
     }
     
-    // Kirim permintaan untuk menghapus komentar dari database
-    const { error } = await supabase
+    const {data} = await supabase
+      .from('comment')
+      .select('message')
+      .eq('id', commentId)
+
+    if (!data || data.length === 0 || !data[0].message) {
+      console.error('Data is empty or message is missing');
+      return;
+    }
+
+    const { error: deleteComment } = await supabase
       .from('comment')
       .delete()
       .eq('id', commentId);
+    
+    const { error: deleteNotify } = await supabase
+      .from('notif')
+      .delete()
+      .eq('message_comment', data[0].message);
   
-    if (error) {
-      console.error('Error deleting comment:', error.message);
+    if (deleteComment || deleteNotify) {
       return;
     }
   
@@ -171,13 +184,19 @@ const Admin: React.FC = () => {
 
     if (existingLikes.length > 0) {
       // If the user has already liked the post, unlike it
-      const { error } = await supabase
+      const { error: like } = await supabase
         .from('like')
         .delete()
         .eq('id_user', userId)
         .eq('id_posting', postId);
+      
+      const { error: notif } = await supabase
+        .from('notif')
+        .delete()
+        .eq('id_user', userId)
+        .eq('id_posting', postId);
 
-      if (error) {
+      if (like || notif) {
         // console.error('Error unliking post:', error.message);
         return;
       }
@@ -196,11 +215,15 @@ const Admin: React.FC = () => {
       });
     } else {
       // If the user has not liked the post, like it
-      const { error } = await supabase
+      const { error: likeError } = await supabase
         .from('like')
         .insert({ id_user: userId, id_posting: postId });
+      
+      const { error: notifError } = await supabase
+        .from('notif')
+        .insert({ id_user: userId, id_posting: postId, comment: false,  like: true });
 
-      if (error) {
+      if (likeError || notifError) {
         // console.error('Error liking post:', error.message);
         return;
       }
@@ -481,11 +504,15 @@ const Admin: React.FC = () => {
     }
   
     // Mengirim komentar ke database
-    const { error } = await supabase
+    const { error: commentError } = await supabase
       .from('comment')
       .insert({ id_user: userId, id_posting: postId, message: text });
+
+    const { error: notifError } = await supabase
+      .from('notif')
+      .insert({ id_user: userId, id_posting: postId, comment: true,  like: false, message_comment: text });
   
-    if (error) {
+    if (commentError || notifError) {
       // console.error('Error sending comment:', error.message);
       return;
     }
