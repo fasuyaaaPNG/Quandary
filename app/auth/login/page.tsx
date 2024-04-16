@@ -149,7 +149,7 @@ export default function Login() {
           <div className="iconback">
             <img src={google} alt="" className="icon"/>
           </div>
-          <button onClick={signInGoogle} className="with">
+          <button onClick={signInGithub} className="with">
             Login with Google
           </button>
         </div>
