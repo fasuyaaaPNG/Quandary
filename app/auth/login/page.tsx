@@ -3,7 +3,6 @@
 import supabase from "@/app/server/supabaseClient";
 import "./style.css";
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { setCookie, parseCookies } from 'nookies';
 
 export default function Login() {
@@ -12,11 +11,22 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [formError, setFormError] = useState<string | null>(null); // State untuk menampilkan pesan error
-  const router = useRouter();
 
   function encryptEmail(email: string): string {
     const encryptedEmail = Buffer.from(email).toString('base64');
     return encryptedEmail.split('').reverse().join('');
+  }
+
+  async function  signInGithub() {
+    await  supabase.auth.signInWithOAuth({
+      provider:  "github",
+    });
+  }
+
+  async function  signInGoogle() {
+    await  supabase.auth.signInWithOAuth({
+      provider:  "google",
+    });
   }
 
   async function handleSignIn(e: React.FormEvent<HTMLFormElement>) {
@@ -136,14 +146,12 @@ export default function Login() {
         </div>
       </form>
         <div className="google">
-          <a href="" className="withgoogle">
-            <div className="iconback">
-              <img src={google} alt="" className="icon"/>
-            </div>
-            <button className="with">
-              Login with Google
-            </button>
-          </a>
+          <div className="iconback">
+            <img src={google} alt="" className="icon"/>
+          </div>
+          <button onClick={signInGoogle} className="with">
+            Login with Google
+          </button>
         </div>
       </div>
       <div className="already">
