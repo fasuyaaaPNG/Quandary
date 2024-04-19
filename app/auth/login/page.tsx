@@ -7,7 +7,7 @@ import { setCookie, parseCookies } from 'nookies';
 
 export default function Login() {
   const [logo, setlogo] = useState('/assets/LoginRegister/QUANDARY.png');
-  const [google, setgoogle] = useState('/assets/LoginRegister/google.png');
+  const [github, setgoogle] = useState('/assets/LoginRegister/google.png');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [formError, setFormError] = useState<string | null>(null); // State untuk menampilkan pesan error
@@ -193,7 +193,7 @@ export default function Login() {
       </form>
         <div className="google">
           <div className="iconback">
-            <img src={google} alt="" className="icon"/>
+            <img src={github} alt="" className="icon"/>
           </div>
           <button onClick={signInGithub} className="with">
             Login with Github
