@@ -141,10 +141,10 @@ export default function Login() {
 
       if (screenWidth >= 1024 && screenWidth <= 1920) {
         setlogo('/assets/LoginRegister/QUANDARY_dark.png');
-        setgoogle('/assets/LoginRegister/google_dark.svg');
+        setgoogle('/assets/LoginRegister/git.svg');
       } else {
         setlogo('/assets/LoginRegister/QUANDARY.png');
-        setgoogle('/assets/LoginRegister/google.png');
+        setgoogle('/assets/LoginRegister/git.png');
       }
     };
 
@@ -196,7 +196,7 @@ export default function Login() {
             <img src={google} alt="" className="icon"/>
           </div>
           <button onClick={signInGithub} className="with">
-            Login with Google
+            Login with Github
           </button>
         </div>
       </div>
