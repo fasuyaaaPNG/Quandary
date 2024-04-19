@@ -194,7 +194,7 @@ export default function Profile() {
             .single();
       
           if (userError) {
-            console.error('Error fetching user profile:', userError.message);
+            // console.error('Error fetching user profile:', userError.message);
             return;
           }
       
@@ -659,8 +659,9 @@ export default function Profile() {
         fetchUserPosts();
     }, []);
 
-    const handleLogout = () => {
+    const handleLogout = async() => {
         document.cookie = 'is_login=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        await supabase.auth.signOut()
         window.location.href = '/auth/login';
     };
 

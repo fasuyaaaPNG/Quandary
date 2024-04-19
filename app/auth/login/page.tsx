@@ -17,11 +17,57 @@ export default function Login() {
     return encryptedEmail.split('').reverse().join('');
   }
 
-  async function  signInGithub() {
-    await  supabase.auth.signInWithOAuth({
-      provider:  "github",
-    });
-  }
+  async function signInGithub() {
+    try {
+        const { data, error } = await supabase.auth.signInWithOAuth({
+            provider: 'github',
+        });
+    
+        if (error) {
+            throw error;
+        }
+    
+        const { data: { user } } = await supabase.auth.getUser();
+        const metadata = user?.user_metadata;
+    
+        if (metadata) {
+            console.log("Avatar URL:", metadata.avatar_url);
+            console.log("Email:", metadata.email);
+            console.log('username:', metadata.username);
+    
+            // Cek apakah email sudah ada dalam tabel
+            const { data: existingUserData, error: existingUserError } = await supabase
+                .from('Users')
+                .select('*')
+                .eq('email', metadata.email);
+            
+            if (existingUserError) {
+                throw existingUserError;
+            }
+    
+            // Jika email belum ada dalam tabel, lakukan operasi insert
+            if (!existingUserData || existingUserData.length === 0) {
+                const { error: insertError } = await supabase
+                    .from('Users')
+                    .insert([{ username: metadata.username, email: metadata.email, foto_profile: metadata.avatar_url }]);
+    
+                if (insertError) {
+                    throw insertError;
+                }
+            } else {
+                console.log("User with this email already exists in the Users table.");
+            }
+             
+        const encryptedEmail = encryptEmail(metadata.email);
+        setCookie(null, 'is_login', encryptedEmail, {
+            maxAge: 30 * 24 * 60 * 60, // Durasi cookie
+            path: '/', // Jalur cookie
+        });
+        }
+    } catch (error) {
+        // console.error("Error signing in with GitHub:", error.message);
+    }
+}
 
   async function  signInGoogle() {
     await  supabase.auth.signInWithOAuth({

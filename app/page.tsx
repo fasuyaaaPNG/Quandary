@@ -7,6 +7,7 @@ import React, { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { motion } from "framer-motion";
+import { setCookie } from "nookies";
 
 const Home = () => {
   const [photoURL, setPhotoURL] = useState('');
@@ -14,7 +15,6 @@ const Home = () => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [isLogin, setIsLogin] = useState(false)
-
   
   const decryptEmail = (encryptedEmail: string): string => {
     const reversedEncryptedEmail = encryptedEmail.split('').reverse().join('');
@@ -26,7 +26,76 @@ const Home = () => {
     window.location.href = '/main';
   }
 
+  function encryptEmail(email: string): string {
+    const encryptedEmail = Buffer.from(email).toString('base64');
+    return encryptedEmail.split('').reverse().join('');
+  } 
+
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await supabase.auth.getUser();
+        if (data) {
+          const { user } = data;
+          if (user) {
+            const metadata = user.user_metadata;
+            console.log(metadata.user_name);
+
+            // Cek apakah email sudah ada dalam tabel
+            const { data: existingUserData, error: existingUserError } = await supabase
+              .from('Users')
+              .select('*')
+              .eq('email', metadata.email);
+
+            if (existingUserError) {
+              throw existingUserError;
+            }
+
+            // Jika email belum ada dalam tabel, lakukan operasi insert
+            if (!existingUserData || existingUserData.length === 0) {
+              // Unduh foto dari avatar_url
+              const response = await fetch(metadata.avatar_url);
+              const blob = await response.blob();
+
+              // Unggah foto ke storage bucket
+              const fileName = metadata.avatar_url.split('/').pop(); // Ambil nama file dari URL avatar
+              const { data: uploadData, error: uploadError } = await supabase.storage
+                .from('foto_profile')
+                .upload(fileName, blob); // Unggah foto dengan blob
+
+              if (uploadError) {
+                throw uploadError;
+              }
+
+              const photoURL = uploadData.path;
+
+              // Lakukan operasi insert ke tabel Users
+              const { error: insertError } = await supabase
+                .from('Users')
+                .insert([{ username: metadata.user_name, email: metadata.email, foto_profile: photoURL, password: metadata.sub }]);
+
+              if (insertError) {
+                throw insertError;
+              }
+            } else {
+              console.log("User with this email already exists in the Users table.");
+            }
+
+            // Set cookie is_login dengan email yang dienkripsi
+            const encryptedEmail = encryptEmail(metadata.email);
+            setCookie(null, 'is_login', encryptedEmail, {
+              maxAge: 30 * 24 * 60 * 60, // Durasi cookie
+              path: '/', // Jalur cookie
+            });
+          }
+        }
+      } catch (error) {
+        // console.error("Error fetching user data:", error.message);
+      }
+    };
+
+    fetchData();
+    
     const cookies = document.cookie;
     const cookieArray = cookies.split(';');
     const cookieObject: Record<string, string> = {};

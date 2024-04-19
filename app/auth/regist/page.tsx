@@ -43,6 +43,10 @@ const Regist = () => {
     }
   
     if (existingUser && existingUser.length > 0) {
+      const errorContainer = document.getElementById('error');
+      if (errorContainer) {
+        errorContainer.classList.add('error-show');
+      }
       setEmailExistsError(true);
       return;
     }
@@ -127,6 +131,7 @@ const Regist = () => {
           <div id="error">
             <img className="alert" src="/assets/LoginRegister/alert.png" alt="" />
             {formError && <p>{formError}</p>}
+            {emailExistsError && <p className="errorText">Email already exists!</p>}
           </div>
         </form>
         <div className="google">
