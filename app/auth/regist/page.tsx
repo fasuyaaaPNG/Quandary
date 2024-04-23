@@ -16,7 +16,59 @@ const Regist = () => {
     const encryptedEmail = Buffer.from(email).toString('base64');
     return encryptedEmail.split('').reverse().join('');
   }
-  
+
+  async function signInGithub() {
+    try {
+        const { data, error } = await supabase.auth.signInWithOAuth({
+            provider: 'github',
+        });
+    
+        if (error) {
+            throw error;
+        }
+    
+        const { data: { user } } = await supabase.auth.getUser();
+        const metadata = user?.user_metadata;
+    
+        if (metadata) {
+            console.log("Avatar URL:", metadata.avatar_url);
+            console.log("Email:", metadata.email);
+            console.log('username:', metadata.username);
+    
+            // Cek apakah email sudah ada dalam tabel
+            const { data: existingUserData, error: existingUserError } = await supabase
+                .from('Users')
+                .select('*')
+                .eq('email', metadata.email);
+            
+            if (existingUserError) {
+                throw existingUserError;
+            }
+    
+            // Jika email belum ada dalam tabel, lakukan operasi insert
+            if (!existingUserData || existingUserData.length === 0) {
+                const { error: insertError } = await supabase
+                    .from('Users')
+                    .insert([{ username: metadata.username, email: metadata.email, foto_profile: metadata.avatar_url }]);
+    
+                if (insertError) {
+                    throw insertError;
+                }
+            } else {
+                console.log("User with this email already exists in the Users table.");
+            }
+             
+        const encryptedEmail = encryptEmail(metadata.email);
+        setCookie(null, 'is_login', encryptedEmail, {
+            maxAge: 30 * 24 * 60 * 60, // Durasi cookie
+            path: '/', // Jalur cookie
+        });
+        }
+    } catch (error) {
+        // console.error("Error signing in with GitHub:", error.message);
+    }
+}
+ 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
   
@@ -73,7 +125,7 @@ const Regist = () => {
   };
   
   const [logo, setlogo] = useState('/assets/LoginRegister/QUANDARY.png');
-  const [google, setgoogle] = useState('/assets/LoginRegister/google.png');
+  const [github, setgoogle] = useState('/assets/LoginRegister/git.png');
       
   useEffect(() => {
     const handleResize = () => {
@@ -82,10 +134,10 @@ const Regist = () => {
      
       if (screenWidth >= 1024 && screenWidth <= 1920) {
         setlogo('/assets/LoginRegister/QUANDARY_dark.png');
-        setgoogle('/assets/LoginRegister/google_dark.svg');
+        setgoogle('/assets/LoginRegister/git.png');
       } else {
         setlogo('/assets/LoginRegister/QUANDARY.png');
-        setgoogle('/assets/LoginRegister/google.png');
+        setgoogle('/assets/LoginRegister/git.png');
       }
     };
 
@@ -135,14 +187,12 @@ const Regist = () => {
           </div>
         </form>
         <div className="google">
-          <a href="" className="withgoogle">
-            <div className="iconback">
-              <img src={google} alt="" className="icon"/>
-            </div>
-            <button className="with">
-              Sign up with Google
-            </button>
-          </a>
+          <div className="iconback">
+            <img src={github} alt="" className="icon"/>
+          </div>
+          <button onClick={signInGithub} className="with">
+            Sign up with Github
+          </button>
         </div>
       </div>
       <div className="already">

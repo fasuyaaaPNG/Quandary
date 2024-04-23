@@ -7,7 +7,7 @@ import { setCookie, parseCookies } from 'nookies';
 
 export default function Login() {
   const [logo, setlogo] = useState('/assets/LoginRegister/QUANDARY.png');
-  const [github, setgoogle] = useState('/assets/LoginRegister/google.png');
+  const [github, setgoogle] = useState('/assets/LoginRegister/git.png');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [formError, setFormError] = useState<string | null>(null); // State untuk menampilkan pesan error
@@ -141,7 +141,7 @@ export default function Login() {
 
       if (screenWidth >= 1024 && screenWidth <= 1920) {
         setlogo('/assets/LoginRegister/QUANDARY_dark.png');
-        setgoogle('/assets/LoginRegister/git.svg');
+        setgoogle('/assets/LoginRegister/git.png');
       } else {
         setlogo('/assets/LoginRegister/QUANDARY.png');
         setgoogle('/assets/LoginRegister/git.png');
