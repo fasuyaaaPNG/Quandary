@@ -3,7 +3,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { FaAnglesLeft , FaAnglesRight ,FaHouse, FaMagnifyingGlass, FaPlus, FaBell, FaRegUser } from "react-icons/fa6";
+import { FaHouse, FaMagnifyingGlass, FaPlus, FaBell, FaRegUser } from "react-icons/fa6";
 import { motion } from 'framer-motion';
 import supabase from "@/app/server/supabaseClient";
 import './style.css'
@@ -11,16 +11,10 @@ import './style.css'
 export default function User() {
     const inputRef = useRef<HTMLInputElement>(null);
     const [userData, setUserData] = useState<any[]>([]);
-    const [totalPages, setTotalPages] = useState(0);
-    const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
         fetchUserData();
-    }, [currentPage]);
-    
-    useEffect(() => {
-        // console.log("Total Pages:", totalPages);
-    }, [totalPages]);
+    }, []);
 
     function decryptEmail(encryptedEmail: string): string {
         const reversedEncryptedEmail = encryptedEmail.split('').reverse().join('');
@@ -66,18 +60,14 @@ export default function User() {
     const fetchUserData = async () => {
         const idUser = await getUserId();
         try {
-            const { data, error, count } = await supabase
+            const { data, error } = await supabase
                 .from('Users')
-                .select('*', { count: 'exact' })
-                .neq('id', idUser)
-                .range((currentPage - 1) * 10, currentPage * 10 - 1);
+                .select('*')
+                .neq('id', idUser);
             if (error) {
                 throw new Error('Failed to fetch user data');
             }
             setUserData(data);
-
-            const totalPages = Math.ceil((count ?? 0) / 10); 
-            setTotalPages(totalPages);
         } catch (error) {
             console.error('Error fetching user data:', error);
         }
@@ -97,10 +87,6 @@ export default function User() {
             const filteredUsers = userData.filter(user => user.username.includes(searchTerm));
             setUserData(filteredUsers);
         }
-    };
-
-    const handlePageChange = (page: number) => {
-        setCurrentPage(page);
     };
 
     return (
@@ -144,18 +130,6 @@ export default function User() {
                             </div>
                         </a>
                     ))}
-                </div>
-                <div className="pagination">
-                    {currentPage > 1 && (
-                        <button onClick={() => handlePageChange(currentPage - 1)}>
-                            <FaAnglesLeft className='pageIcon'/>
-                        </button>
-                    )}
-                    {currentPage < totalPages && (
-                        <button onClick={() => handlePageChange(currentPage + 1)}>
-                            <FaAnglesRight className='pageIcon'/>
-                        </button>
-                    )}
                 </div>
             </div>
             {/* navbar */}

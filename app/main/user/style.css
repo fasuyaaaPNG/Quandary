@@ -94,7 +94,7 @@ input[type="search"].dark::-webkit-search-cancel-button {
     overflow-y: scroll; 
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
     scrollbar-width: none;  /* Firefox */
-    padding-bottom: 4vw;
+    padding-bottom: 40vw;
     padding-top: 4vw;
 }
 
